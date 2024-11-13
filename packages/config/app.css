@@ -1,0 +1,35 @@
+@import '@fontsource/fira-code';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.full-screen {
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+.center-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.round-btn {
+	@apply center-content size-12 rounded-full text-xl;
+}
+
+html {
+	font-family: 'Fira Code', monospace;
+}
+
+::selection {
+	@apply bg-primary text-primary-content;
+}
+
+::-moz-selection {
+	@apply bg-primary text-primary-content;
+}

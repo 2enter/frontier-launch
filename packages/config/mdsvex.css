@@ -1,0 +1,41 @@
+table {
+	@apply table;
+}
+
+.shiki {
+	@apply mt-0 max-w-full rounded-tl-none;
+}
+
+div[data-remark-code-title='true'] {
+	@apply w-fit rounded-t-md bg-secondary px-2 py-1 text-sm text-secondary-content;
+}
+
+.toc-wrapper {
+	@apply max-h-72 w-[20vw] overflow-y-auto rounded-lg bg-base-100/60 px-4 py-2 text-xs shadow-md shadow-base-content/15 backdrop-blur-sm;
+}
+
+.toc-list {
+	@apply my-0 list-decimal;
+}
+
+.toc-link {
+	@apply link-hover link link-primary hover:text-secondary;
+}
+
+.toc-list-2 {
+	@apply list-disc;
+}
+
+#contents {
+	@apply mb-0;
+}
+
+html.dark .shiki,
+html.dark .shiki span {
+	color: var(--shiki-dark) !important;
+	background-color: var(--shiki-dark-bg) !important;
+	/* Optional, if you also want font styles */
+	font-style: var(--shiki-dark-font-style) !important;
+	font-weight: var(--shiki-dark-font-weight) !important;
+	text-decoration: var(--shiki-dark-text-decoration) !important;
+}

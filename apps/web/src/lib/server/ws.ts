@@ -29,10 +29,10 @@ const ws = new BunWS<WSData>({
 	onopen: () => {
 		console.log(`open, clients: ${ws.clients.size}`);
 	},
-	onmessage: (ws, message) => {
+	onmessage: (_, message) => {
 		console.log(`received message: ${message}`);
 	},
-	onclose: (ws, code, message) => {
+	onclose: (_, code, message) => {
 		console.log(code, message);
 	}
 });

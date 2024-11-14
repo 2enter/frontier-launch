@@ -42,10 +42,16 @@ export enum SuppliesTypeOptions {
 	"E4" = "4",
 	"E5" = "5",
 }
+
+export enum SuppliesStatusOptions {
+	"shipping" = "shipping",
+	"shipped" = "shipped",
+	"launched" = "launched",
+}
 export type SuppliesRecord = {
 	draw_duration: number
 	paint: string
-	shipped?: boolean
+	status: SuppliesStatusOptions
 	supply?: string
 	type: SuppliesTypeOptions
 }

@@ -18,5 +18,5 @@
 		<Page />
 	{/key}
 
-	<NavBtn action={1} />
+	<!--	<NavBtn action={1} />-->
 </div>

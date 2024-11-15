@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { sysState } from '@/states';
 	import { Pages } from './pages';
-	import { NavBtn } from '@/components/index.js';
+	// import { NavBtn } from '@/components/index.js';
 
 	let { data } = $props();
 	const { locale } = data;

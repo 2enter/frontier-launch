@@ -4,8 +4,9 @@ import { DEFAULT_LOCALE, localizations } from '@/localizations';
 class SysState {
 	processing = $state(false);
 	errorMessage = $state<string | null>(null);
-	pageNum = $state<PageNum>(0);
+	pageNum = $state<PageNum>(3);
 	dialog = $state<HTMLDialogElement>();
+	version = $state(0);
 
 	locale = $state<Locale>(DEFAULT_LOCALE);
 

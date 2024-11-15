@@ -3,6 +3,8 @@
 	import { onMount } from 'svelte';
 	import { type ColorName, COLORS } from '@/config';
 	import { dexie } from '@/dexie';
+	import { NavBtn } from '@/components/index.js';
+	import { sysState } from '@/states';
 
 	const TOOLS = ['pen', 'brush', 'eraser'] as const;
 	const MAX_VERSION = 20;
@@ -15,7 +17,6 @@
 	let weight = $state(20);
 	let trace = $state<[number, number][]>([]);
 	let canvas = $state<HTMLCanvasElement>();
-	let version = $state(0);
 	let latestVersion = $state(0);
 	let drawing = true;
 
@@ -35,16 +36,15 @@
 
 	async function modifyVersion(action: -1 | 1) {
 		if (!p5) return;
-		version += action;
-		if (version === 0) {
+		sysState.version += action;
+		if (sysState.version === 0) {
 			eraseAll();
 			return;
 		}
-		console.log(version);
-		const dataUrl = await dexie.versions.get(version).then((data) => data?.value ?? null);
+		const dataUrl = await dexie.versions.get(sysState.version).then((data) => data?.value ?? null);
 		if (!dataUrl) {
 			console.log('image not found');
-			version -= action;
+			sysState.version -= action;
 			return;
 		}
 		p5.loadImage(dataUrl, (img) => {
@@ -146,53 +146,71 @@
 
 		p.touchStarted = p.touchMoved;
 
-		p.touchEnded = () => {
+		p.touchEnded = async () => {
 			if (!drawing) {
-				console.log('not drawing');
 				drawing = true;
 				return;
 			}
-			if (latestVersion > version) {
-				for (let i = 1; i <= latestVersion; i++) {
-					console.log('deleting', version + i);
-					dexie.versions.delete(version + i);
+			if (trace.length < 2) return;
+			if (latestVersion >= MAX_VERSION) {
+				dexie.versions.delete(latestVersion - MAX_VERSION);
+			}
+			if (latestVersion > sysState.version) {
+				for (let i = sysState.version + 1; i <= latestVersion; i++) {
+					dexie.versions.delete(i);
 				}
+				latestVersion = sysState.version;
 			}
 			trace = [];
-			version++;
-			latestVersion = Math.max(version, latestVersion);
+			sysState.version++;
+			latestVersion = Math.max(sysState.version, latestVersion);
 			const screenshot = takeScreenshot();
 			if (!screenshot) return;
-			dexie.versions.add({ id: version, value: screenshot });
+			const old = await dexie.versions.get(sysState.version);
+			if (old && screenshot) dexie.versions.update(sysState.version, { value: screenshot });
+			else await dexie.versions.add({ id: sysState.version, value: screenshot });
 		};
 	};
 
 	onMount(() => {
-		for (let i = 0; i < 100; i++) {
-			dexie.versions.clear();
-		}
 		p5 = new P5(sketch);
-		return {
-			destroy() {
-				if (p5) p5.remove();
-			}
+
+		return () => {
+			if (p5) p5.remove();
+			dexie.versions.clear();
 		};
 	});
 </script>
 
 <canvas bind:this={canvas}></canvas>
 
-<div class="center-content fixed bottom-0 gap-2">
-	<div class="flex flex-row gap-2">
+<div class="center-content fixed bottom-3 gap-3">
+	{sysState.version}/{latestVersion}
+	<div class="flex flex-row gap-3">
 		{#each TOOLS as tool}
 			<input id={tool} type="radio" value={tool} hidden bind:group={selectedTool} />
-			<label for={tool} class="border-2 border-solid border-white bg-black p-1 text-white" class:border-opacity-0={tool !== selectedTool}>
+			<label for={tool} class="btn rounded-xl border-solid border-white bg-black text-white" class:bg-white={tool !== selectedTool}>
 				{tool}
 			</label>
 		{/each}
 	</div>
-	<button class="btn btn-primary" onclick={() => modifyVersion(-1)} ontouchstart={() => (drawing = false)}> undo </button>
-	<button class="btn btn-primary" onclick={() => modifyVersion(1)} ontouchstart={() => (drawing = false)}>redo</button>
+	<button
+		class="btn btn-primary"
+		class:opacity-50={sysState.version < latestVersion - MAX_VERSION || sysState.version === 0}
+		onclick={() => modifyVersion(-1)}
+		ontouchstart={() => (drawing = false)}
+	>
+		undo
+	</button>
+	<button
+		class="btn btn-primary"
+		class:opacity-50={sysState.version === latestVersion}
+		onclick={() => modifyVersion(1)}
+		ontouchstart={() => (drawing = false)}
+	>
+		redo
+	</button>
+	<NavBtn action={1} />
 </div>
 
 <div class="fixed left-1 flex flex-col gap-3">

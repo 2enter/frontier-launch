@@ -1,10 +1,9 @@
 import { getRecordsByFilter } from '@repo/lib/pb';
+import { LAUNCH_TIMEOUT } from '@/config';
 
 import { pb, ws } from '@/server';
 import { Timer } from '@/timer';
 import { getRaining } from '@/server/weather';
-
-const LAUNCH_TIMEOUT = 15 * 60 * 1000;
 
 class ServerConsole {
 	started = false;
@@ -30,13 +29,14 @@ class ServerConsole {
 		});
 	}
 
-	async getStoredSupplies() {
+	getStoredSupplies = async () => {
 		return await getRecordsByFilter({ pb, collection: 'supplies', filter: 'status="shipped"' });
-	}
+	};
 
-	async launch() {
+	launch = async () => {
 		const supplies = await this.getStoredSupplies();
-		const supply_amount = supplies?.length ?? 0;
+		console.log(supplies);
+		const supply_amount = supplies ? supplies.length : 0;
 
 		ws.broadcast({ data: { type: 'launch', supply_amount } });
 
@@ -48,19 +48,19 @@ class ServerConsole {
 
 		console.log('launched!');
 		this.timer.reset();
-	}
+	};
 
-	async start() {
+	start = async () => {
 		if (this.started) return;
 		this.started = true;
-	}
+	};
 
-	async getStatus() {
+	getStatus = async () => {
 		return {
 			duration: this.timer.duration,
 			supplies: await this.getStoredSupplies()
 		};
-	}
+	};
 }
 
 const serverConsole = new ServerConsole();

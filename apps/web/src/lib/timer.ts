@@ -1,3 +1,5 @@
+import { parseTime } from '@repo/lib/utils/calc';
+
 interface Trigger {
 	check: () => boolean;
 	action: () => Promise<any>;
@@ -13,10 +15,8 @@ class Timer {
 		this.startAt = Date.now();
 		this.interval = setInterval(async () => {
 			this.now = Date.now();
-			for (const trigger of triggers) {
-				if (trigger.check()) {
-					await trigger.action();
-				}
+			for (const { check, action } of triggers) {
+				if (check()) await action();
 			}
 		}, timeout ?? 1000);
 	}
@@ -32,6 +32,10 @@ class Timer {
 
 	get duration() {
 		return this.now - this.startAt;
+	}
+
+	get parsedTime() {
+		return parseTime(this.now);
 	}
 }
 

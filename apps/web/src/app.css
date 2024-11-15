@@ -1,7 +1,10 @@
-html {
-	@apply touch-pan-x touch-pan-y overflow-hidden;
+* {
+	@apply touch-pan-x touch-pan-y overflow-hidden !important;
+	-webkit-user-select: none; /* Safari */
+	-ms-user-select: none; /* IE 10 and IE 11 */
+	user-select: none; /* Standard syntax */
 }
 
 input {
-	@apply input text-center bg-white text-black;
+	@apply input bg-white text-center text-black;
 }

@@ -2,6 +2,7 @@
 	import P5 from 'p5';
 	import { onMount } from 'svelte';
 	import { type ColorName, COLORS } from '@/config';
+	import { dexie } from '@/dexie';
 
 	const TOOLS = ['pen', 'brush', 'eraser'] as const;
 	const MAX_VERSION = 20;
@@ -15,12 +16,43 @@
 	let trace = $state<[number, number][]>([]);
 	let canvas = $state<HTMLCanvasElement>();
 	let version = $state(0);
+	let latestVersion = $state(0);
+	let drawing = true;
 
 	const colorValue = $derived(COLORS.find((c) => c.name === color)?.value ?? '#262626');
 
-	function screenshot() {
+	function takeScreenshot() {
 		if (!canvas) return;
 		return canvas.toDataURL('image/png');
+	}
+
+	function eraseAll() {
+		if (!p5) return;
+		p5.erase();
+		p5.rect(0, 0, p5.windowWidth, p5.windowHeight);
+		p5.noErase();
+	}
+
+	async function modifyVersion(action: -1 | 1) {
+		if (!p5) return;
+		version += action;
+		if (version === 0) {
+			eraseAll();
+			return;
+		}
+		console.log(version);
+		const dataUrl = await dexie.versions.get(version).then((data) => data?.value ?? null);
+		if (!dataUrl) {
+			console.log('image not found');
+			version -= action;
+			return;
+		}
+		p5.loadImage(dataUrl, (img) => {
+			if (!p5) return;
+			console.log(img);
+			eraseAll();
+			p5.image(img, 0, 0, p5.windowWidth, p5.windowHeight);
+		});
 	}
 
 	const sketch = (p: P5) => {
@@ -28,7 +60,6 @@
 		const SPLIT_NUM = 100;
 		const DIFF = 2.4;
 
-		let forcing = false;
 		let [r, oldR, vx, vy, v] = [0, 0, 0, 0, 0.5];
 		let [smallX, smallY] = [0, 0];
 		let [oldX, oldY] = [0, 0];
@@ -45,13 +76,8 @@
 			p.stroke(colorValue);
 		};
 
-		function eraseAll() {
-			p.erase();
-			p.rect(0, 0, p.windowWidth, p.windowHeight);
-			p.noErase();
-		}
-
 		p.touchMoved = () => {
+			if (!drawing) return;
 			let { mouseX: x, mouseY: y } = p;
 			const last = trace.at(-1);
 			trace.push([x, y]);
@@ -61,10 +87,9 @@
 					p.line(...last, x, y);
 					break;
 				case 'brush':
-					if (!forcing) {
-						forcing = true;
-						smallX = trace[0][0];
-						smallY = trace[0][1];
+					if (trace.length === 2) {
+						smallX = x;
+						smallY = y;
 					}
 					vx += (x - smallX) * SPRING;
 					vy += (y - smallY) * SPRING;
@@ -76,6 +101,7 @@
 
 					oldR = r;
 					r = weight - v;
+
 					for (let i = 0; i < SPLIT_NUM; i++) {
 						oldX = smallX;
 						oldY = smallY;
@@ -99,17 +125,17 @@
 							oldY - DIFF * p.random(0.1, 2)
 						); // ADD
 					}
-					// const vector = p.createVector(x - last[0], y - last[1]);
-					// const verticalVector = vector.rotate(p.HALF_PI).normalize();
-					// p.beginShape();
-					// p.fill(colorValue);
-					// p.noStroke();
-					// p.vertex(last[0] - verticalVector.x * weight, last[1] - verticalVector.y * weight);
-					// p.vertex(last[0] + verticalVector.x * weight, last[1] + verticalVector.y * weight);
-					// p.vertex(x + verticalVector.x * weight, y + verticalVector.y * weight);
-					// p.vertex(x - verticalVector.x * weight, y - verticalVector.y * weight);
-					// p.endShape();
 					break;
+				// const vector = p.createVector(x - last[0], y - last[1]);
+				// const verticalVector = vector.rotate(p.HALF_PI).normalize();
+				// p.beginShape();
+				// p.fill(colorValue);
+				// p.noStroke();
+				// p.vertex(last[0] - verticalVector.x * weight, last[1] - verticalVector.y * weight);
+				// p.vertex(last[0] + verticalVector.x * weight, last[1] + verticalVector.y * weight);
+				// p.vertex(x + verticalVector.x * weight, y + verticalVector.y * weight);
+				// p.vertex(x - verticalVector.x * weight, y - verticalVector.y * weight);
+				// p.endShape();
 				case 'eraser':
 					p.erase();
 					p.line(...last, x, y);
@@ -117,17 +143,34 @@
 					break;
 			}
 		};
+
 		p.touchStarted = p.touchMoved;
 
 		p.touchEnded = () => {
+			if (!drawing) {
+				console.log('not drawing');
+				drawing = true;
+				return;
+			}
+			if (latestVersion > version) {
+				for (let i = 1; i <= latestVersion; i++) {
+					console.log('deleting', version + i);
+					dexie.versions.delete(version + i);
+				}
+			}
 			trace = [];
-			if (!forcing) return;
-			vx = vy = 0;
-			forcing = false;
+			version++;
+			latestVersion = Math.max(version, latestVersion);
+			const screenshot = takeScreenshot();
+			if (!screenshot) return;
+			dexie.versions.add({ id: version, value: screenshot });
 		};
 	};
 
 	onMount(() => {
+		for (let i = 0; i < 100; i++) {
+			dexie.versions.clear();
+		}
 		p5 = new P5(sketch);
 		return {
 			destroy() {
@@ -148,8 +191,8 @@
 			</label>
 		{/each}
 	</div>
-	<button class="btn btn-primary">undo</button>
-	<button class="btn btn-primary">redo</button>
+	<button class="btn btn-primary" onclick={() => modifyVersion(-1)} ontouchstart={() => (drawing = false)}> undo </button>
+	<button class="btn btn-primary" onclick={() => modifyVersion(1)} ontouchstart={() => (drawing = false)}>redo</button>
 </div>
 
 <div class="fixed left-1 flex flex-col gap-3">
@@ -157,6 +200,7 @@
 		{#each COLORS as { name, value }}
 			<input type="radio" bind:group={color} value={name} id="color-{name}" hidden />
 			<label
+				ontouchstart={() => (drawing = false)}
 				for="color-{name}"
 				class="size-12 rounded-full border-2 border-solid border-white"
 				class:border-opacity-0={name !== color}

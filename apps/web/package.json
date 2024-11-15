@@ -20,6 +20,7 @@
 	"devDependencies": {
 		"@repo/lib": "*",
 		"@types/p5": "^1.7.6",
+		"dexie": "^4.0.9",
 		"eruda": "^3.4.0",
 		"p5": "^1.11.1"
 	},

@@ -21,8 +21,7 @@ type WSData = {
 		| {
 				type: 'weather';
 				raining: boolean;
-		  }
-		| {};
+		  };
 };
 
 const ws = new BunWS<WSData>({

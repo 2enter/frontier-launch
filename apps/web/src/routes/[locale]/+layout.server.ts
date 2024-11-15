@@ -11,3 +11,5 @@ export const load = async ({ params }) => {
 	const localization = localizations[locale];
 	return { locale, localization };
 };
+
+export const ssr = false;

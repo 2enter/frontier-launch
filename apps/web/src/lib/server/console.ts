@@ -2,6 +2,7 @@ import { getRecordsByFilter } from '@repo/lib/pb';
 
 import { pb, ws } from '@/server';
 import { Timer } from '@/timer';
+import { getRaining } from '@/server/weather';
 
 const LAUNCH_TIMEOUT = 15 * 60 * 1000;
 
@@ -17,13 +18,24 @@ class ServerConsole {
 					// launch rocket
 					check: () => this.timer.duration > LAUNCH_TIMEOUT,
 					action: this.launch
+				},
+				{
+					// send weather data
+					check: () => this.timer.parsedTime.minute === 0 && this.timer.parsedTime.second === 0,
+					action: async () => {
+						ws.broadcast({ data: { type: 'weather', raining: await getRaining() } });
+					}
 				}
 			]
 		});
 	}
 
+	async getStoredSupplies() {
+		return await getRecordsByFilter({ pb, collection: 'supplies', filter: 'status="shipped"' });
+	}
+
 	async launch() {
-		const supplies = await getRecordsByFilter({ pb, collection: 'supplies', filter: 'status="shipped"' });
+		const supplies = await this.getStoredSupplies();
 		const supply_amount = supplies?.length ?? 0;
 
 		ws.broadcast({ data: { type: 'launch', supply_amount } });
@@ -41,6 +53,13 @@ class ServerConsole {
 	async start() {
 		if (this.started) return;
 		this.started = true;
+	}
+
+	async getStatus() {
+		return {
+			duration: this.timer.duration,
+			supplies: await this.getStoredSupplies()
+		};
 	}
 }
 

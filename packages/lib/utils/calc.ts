@@ -37,4 +37,16 @@ function randomItem<T>(arr: T[], targetAmount = 1, canRepeat = true) {
 	return result;
 }
 
-export { randomItem, shuffle, capitalize, toFixedDigit };
+function parseTime(time = Date.now()) {
+	const date = new Date(time);
+	return {
+		year: date.getFullYear(),
+		month: date.getMonth() + 1,
+		date: date.getDate(),
+		hour: date.getHours(),
+		minute: date.getMinutes(),
+		second: date.getSeconds()
+	};
+}
+
+export { randomItem, shuffle, capitalize, toFixedDigit, parseTime };

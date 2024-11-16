@@ -1,55 +1,55 @@
 {
-  "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write .",
-    "pb-typegen": "pocketbase-typegen --db apps/pb/pb_data/data.db --out packages/lib/pb/types.ts",
-    "redeploy": "cd ./apps/web; bun run build; cd ../../; pm2 reload ecosystem.config.cjs;",
-    "new-svelte-app": "bun run ./scripts/new-svelte-app.ts"
-  },
-  "devDependencies": {
-    "@fontsource/fira-code": "^5.1.0",
-    "@iconify/svelte": "^4.0.2",
-    "@sveltejs/adapter-node": "^5.2.9",
-    "@sveltejs/kit": "^2.8.1",
-    "@sveltejs/vite-plugin-svelte": "^4.0.0",
-    "@tailwindcss/typography": "^0.5.15",
-    "@types/bun": "^1.1.13",
-    "@types/fs-extra": "^11.0.4",
-    "@types/validator": "^13.12.2",
-    "commander": "^12.1.0",
-    "concurrently": "^9.1.0",
-    "inquirer": "^12.1.0",
-    "moment": "^2.30.1",
-    "pocketbase": "^0.21.5",
-    "pocketbase-typegen": "^1.2.1",
-    "prettier": "^3.3.3",
-    "prettier-plugin-svelte": "^3.2.8",
-    "publint": "^0.2.12",
-    "runed": "^0.15.3",
-    "svelte": "^5.2.0",
-    "svelte-adapter-bun": "^0.5.2",
-    "svelte-check": "^4.0.7",
-    "turbo": "^2.3.0",
-    "typescript": "^5.6.3",
-    "validator": "^13.12.0",
-    "vite": "^5.4.11"
-  },
-  "prettier": "@repo/config/prettier.config.js",
-  "engines": {
-    "node": ">=18"
-  },
-  "name": "frontier-launch",
-  "packageManager": "bun@1.1.24",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "fs": "^0.0.1-security",
-    "fs-extra": "^11.2.0"
-  }
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"lint": "turbo run lint",
+		"format": "prettier --write .",
+		"pb-typegen": "pocketbase-typegen --db apps/pb/pb_data/data.db --out packages/lib/pb/types.ts",
+		"redeploy": "cd ./apps/web; bun run build; cd ../../; pm2 reload ecosystem.config.cjs;",
+		"new-svelte-app": "bun run ./scripts/new-svelte-app.ts"
+	},
+	"devDependencies": {
+		"@fontsource/fira-code": "^5.1.0",
+		"@iconify/svelte": "^4.0.2",
+		"@sveltejs/adapter-node": "^5.2.9",
+		"@sveltejs/kit": "^2.8.1",
+		"@sveltejs/vite-plugin-svelte": "^4.0.1",
+		"@tailwindcss/typography": "^0.5.15",
+		"@types/bun": "^1.1.13",
+		"@types/fs-extra": "^11.0.4",
+		"@types/validator": "^13.12.2",
+		"commander": "^12.1.0",
+		"concurrently": "^9.1.0",
+		"inquirer": "^12.1.0",
+		"moment": "^2.30.1",
+		"pocketbase": "^0.21.5",
+		"pocketbase-typegen": "^1.2.1",
+		"prettier": "^3.3.3",
+		"prettier-plugin-svelte": "^3.2.8",
+		"publint": "^0.2.12",
+		"runed": "^0.15.3",
+		"svelte": "^5.2.1",
+		"svelte-adapter-bun": "^0.5.2",
+		"svelte-check": "^4.0.8",
+		"turbo": "^2.3.0",
+		"typescript": "^5.6.3",
+		"validator": "^13.12.0",
+		"vite": "^5.4.11"
+	},
+	"prettier": "@repo/config/prettier.config.js",
+	"engines": {
+		"node": ">=18"
+	},
+	"name": "frontier-launch",
+	"packageManager": "bun@1.1.34",
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"dependencies": {
+		"dotenv": "^16.4.5",
+		"fs": "^0.0.1-security",
+		"fs-extra": "^11.2.0"
+	}
 }

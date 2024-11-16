@@ -1,8 +1,10 @@
-class InputState {
-	name = $state<string | null>(null);
-	message = $state<string | null>(null);
+import type { ParseEnum } from '@repo/lib/types';
+import { SuppliesTypeOptions } from '@repo/lib/pb';
 
-	readonly submittable = $derived(this.name && this.message);
+class InputState {
+	supplyType = $state<ParseEnum<SuppliesTypeOptions> | null>(null);
+
+	readonly submittable = $derived(!!this.supplyType);
 }
 
 const inputState = new InputState();

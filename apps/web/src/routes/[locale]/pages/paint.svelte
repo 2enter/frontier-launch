@@ -3,8 +3,8 @@
 	import { onMount } from 'svelte';
 	import { type ColorName, COLORS } from '@/config';
 	import { dexie } from '@/dexie';
-	import { NavBtn } from '@/components/index.js';
-	import { sysState } from '@/states';
+	import { NavBtn } from '@/components';
+	import { inputState } from '@/states';
 
 	const TOOLS = ['pen', 'brush', 'eraser'] as const;
 	const MAX_VERSION = 20;
@@ -17,6 +17,7 @@
 	let weight = $state(20);
 	let trace = $state<[number, number][]>([]);
 	let canvas = $state<HTMLCanvasElement>();
+	let version = $state(0);
 	let latestVersion = $state(0);
 	let drawing = true;
 
@@ -36,15 +37,15 @@
 
 	async function modifyVersion(action: -1 | 1) {
 		if (!p5) return;
-		sysState.version += action;
-		if (sysState.version === 0) {
+		version += action;
+		if (version === 0) {
 			eraseAll();
 			return;
 		}
-		const dataUrl = await dexie.versions.get(sysState.version).then((data) => data?.value ?? null);
+		const dataUrl = await dexie.versions.get(version).then((data) => data?.value ?? null);
 		if (!dataUrl) {
 			console.log('image not found');
-			sysState.version -= action;
+			version -= action;
 			return;
 		}
 		p5.loadImage(dataUrl, (img) => {
@@ -155,20 +156,20 @@
 			if (latestVersion >= MAX_VERSION) {
 				dexie.versions.delete(latestVersion - MAX_VERSION);
 			}
-			if (latestVersion > sysState.version) {
-				for (let i = sysState.version + 1; i <= latestVersion; i++) {
+			if (latestVersion > version) {
+				for (let i = version + 1; i <= latestVersion; i++) {
 					dexie.versions.delete(i);
 				}
-				latestVersion = sysState.version;
+				latestVersion = version;
 			}
 			trace = [];
-			sysState.version++;
-			latestVersion = Math.max(sysState.version, latestVersion);
+			version++;
+			latestVersion = Math.max(version, latestVersion);
 			const screenshot = takeScreenshot();
 			if (!screenshot) return;
-			const old = await dexie.versions.get(sysState.version);
-			if (old && screenshot) dexie.versions.update(sysState.version, { value: screenshot });
-			else await dexie.versions.add({ id: sysState.version, value: screenshot });
+			const old = await dexie.versions.get(version);
+			if (old && screenshot) dexie.versions.update(version, { value: screenshot });
+			else await dexie.versions.add({ id: version, value: screenshot });
 		};
 	};
 
@@ -177,15 +178,17 @@
 
 		return () => {
 			if (p5) p5.remove();
-			dexie.versions.clear();
+			for (let i = 0; i < 1000; ++i) {
+				if (i !== version) dexie.versions.delete(i);
+			}
 		};
 	});
 </script>
 
-<canvas bind:this={canvas}></canvas>
+<canvas bind:this={canvas} class="bg-blend-difference"></canvas>
 
 <div class="center-content fixed bottom-3 gap-3">
-	{sysState.version}/{latestVersion}
+	{version}/{latestVersion}
 	<div class="flex flex-row gap-3">
 		{#each TOOLS as tool}
 			<input id={tool} type="radio" value={tool} hidden bind:group={selectedTool} />
@@ -196,7 +199,7 @@
 	</div>
 	<button
 		class="btn btn-primary"
-		class:opacity-50={sysState.version < latestVersion - MAX_VERSION || sysState.version === 0}
+		class:opacity-50={version < latestVersion - MAX_VERSION || version === 0}
 		onclick={() => modifyVersion(-1)}
 		ontouchstart={() => (drawing = false)}
 	>
@@ -204,16 +207,18 @@
 	</button>
 	<button
 		class="btn btn-primary"
-		class:opacity-50={sysState.version === latestVersion}
+		class:opacity-50={version === latestVersion}
 		onclick={() => modifyVersion(1)}
 		ontouchstart={() => (drawing = false)}
 	>
 		redo
 	</button>
-	<NavBtn action={1} />
+	{#if version !== 0}
+		<NavBtn action={1} />
+	{/if}
 </div>
 
-<div class="fixed left-1 flex flex-col gap-3">
+<div class="fixed left-1 z-[1000] flex flex-col gap-3">
 	<div class="flex flex-col gap-1">
 		{#each COLORS as { name, value }}
 			<input type="radio" bind:group={color} value={name} id="color-{name}" hidden />
@@ -227,3 +232,8 @@
 		{/each}
 	</div>
 </div>
+
+<div
+	class="full-screen center-content pointer-events-none bg-contain bg-center bg-no-repeat"
+	style:background-image="url(/supplies/{inputState.supplyType}_canva.png)"
+></div>

@@ -6,7 +6,6 @@ class SysState {
 	errorMessage = $state<string | null>(null);
 	pageNum = $state<PageNum>(3);
 	dialog = $state<HTMLDialogElement>();
-	version = $state(0);
 
 	locale = $state<Locale>(DEFAULT_LOCALE);
 

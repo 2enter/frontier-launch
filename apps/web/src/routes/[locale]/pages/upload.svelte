@@ -1,12 +1,19 @@
 <script lang="ts">
 	import { dexie } from '@/dexie';
-	import { sysState } from '@/states';
 
 	async function getImage() {
-		return dexie.versions.get(sysState.version);
+		const versions = await dexie.versions.toArray();
+		console.log(versions);
+		return versions[0];
 	}
 </script>
 
-{#await getImage() then img}
-	<img src={img.value} alt="" />
+{#await getImage()}
+	loading
+{:then img}
+	{#if img}
+		<img src={img.value} alt="" class="mix-blend-hard-light" />
+	{:else}
+		img not found
+	{/if}
 {/await}

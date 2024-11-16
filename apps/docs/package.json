@@ -3,12 +3,11 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "bunx --bun vite dev",
+		"dev": "vite dev",
 		"build": "bunx --bun vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"start": "concurrently 'bun run ./build' 'cd ../pb; bun run start'",
 		"lint": "prettier --check .",
 		"format": "prettier --write ."
 	},
@@ -19,7 +18,7 @@
 	"devDependencies": {
 		"@repo/lib": "*",
 		"@types/highlight.js": "^10.1.0",
-		"github-markdown-css": "^5.7.0",
+		"github-markdown-css": "^5.8.0",
 		"highlight.js": "^11.10.0",
 		"mdsvex": "^0.12.3",
 		"rehype-slug": "^6.0.0",
@@ -27,8 +26,7 @@
 		"remark-code-title": "^0.2.5",
 		"remark-toc": "^9.0.0",
 		"remark-unwrap-images": "^4.0.1",
-		"shiki": "^1.22.0",
-		"svelte-adapter-bun": "^0.5.2"
+		"shiki": "^1.23.0"
 	},
 	"type": "module"
 }

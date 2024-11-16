@@ -13,6 +13,7 @@
 
 	import { sysState } from '@/states';
 	import { LAUNCH_TIMEOUT } from '@/config';
+	import { FullscreenChecker } from '@/components/index.js';
 
 	let { children } = $props();
 	let launchCountDown = $state<number>();
@@ -47,9 +48,12 @@
 		{toFixedDigit(minute)}:{toFixedDigit(second)}
 	{/if}
 </div>
+
 <div class="full-screen center-content">
 	{@render children()}
 </div>
+
+<FullscreenChecker />
 
 <dialog bind:this={sysState.dialog} class="modal modal-middle">
 	<div class="modal-box">

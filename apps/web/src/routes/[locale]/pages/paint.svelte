@@ -1,17 +1,21 @@
 <script lang="ts">
 	import P5 from 'p5';
 	import { onMount } from 'svelte';
-	import { type ColorName, COLORS } from '@/config';
-	import { dexie } from '@/dexie';
 	import { slide, fly } from 'svelte/transition';
-	import { inputState, sysState } from '@/states';
-	import { ImgBtn } from '@/components/index.js';
+
+	import { Timer } from '@repo/lib/utils/runtime';
 	import { randomItem } from '@repo/lib/utils/calc';
+
+	import { dexie } from '@/dexie';
+	import { type ColorName, COLORS } from '@/config';
+	import { inputState, sysState } from '@/states';
+	import { ImgBtn } from '@/components';
 
 	const TOOLS = ['pen', 'brush', 'eraser'] as const;
 	const WEIGHT_VALUES = [5, 15, 25, 35, 45, 55, 65, 75] as const;
 	const MAX_VERSION = 20;
 
+	let timer: Timer;
 	type Tool = (typeof TOOLS)[number];
 
 	let p5 = $state<P5>();
@@ -83,6 +87,7 @@
 
 		p.touchMoved = () => {
 			if (!drawing) return;
+
 			let { mouseX: x, mouseY: y } = p;
 			const last = trace.at(-1);
 			trace.push([x, y]);
@@ -183,8 +188,11 @@
 		dexie.versions.clear();
 		p5 = new P5(sketch);
 
+		timer = new Timer({});
+
 		return () => {
 			if (p5) p5.remove();
+			inputState.drawDuration = Math.floor(timer.duration / 1000);
 			for (let i = 0; i < 1000; ++i) {
 				if (i !== version) dexie.versions.delete(i);
 			}

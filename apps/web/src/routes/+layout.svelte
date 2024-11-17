@@ -78,3 +78,5 @@
 		<i class="fa-solid fa-loader fa-duotone animate-spin text-8xl"></i>
 	</div>
 {/if}
+
+<button class="btn btn-secondary fixed left-0 top-0 z-[3000]" onclick={() => window.location.reload()}>reload</button>

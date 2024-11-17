@@ -29,19 +29,14 @@ class ServerConsole {
 		});
 	}
 
-	getStoredSupplies = async () => {
-		return await getRecordsByFilter({ pb, collection: 'supplies', filter: 'status="shipped"' });
-	};
-
 	launch = async () => {
-		const supplies = await this.getStoredSupplies();
-		console.log(supplies);
-		const supply_amount = supplies ? supplies.length : 0;
+		const shipped = await getRecordsByFilter({ pb, collection: 'supplies', filter: `status="shipped"` });
+		const supply_amount = shipped ? shipped.length : 0;
 
 		ws.broadcast({ data: { type: 'launch', supply_amount } });
 
-		if (supplies) {
-			for (const { id } of supplies) {
+		if (shipped) {
+			for (const { id } of shipped) {
 				await pb.collection('supplies').update(id, { status: 'launched' });
 			}
 		}
@@ -53,13 +48,6 @@ class ServerConsole {
 	start = async () => {
 		if (this.started) return;
 		this.started = true;
-	};
-
-	getStatus = async () => {
-		return {
-			duration: this.timer.duration,
-			supplies: await this.getStoredSupplies()
-		};
 	};
 }
 

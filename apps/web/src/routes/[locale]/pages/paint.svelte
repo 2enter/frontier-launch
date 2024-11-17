@@ -9,14 +9,16 @@
 	import { randomItem } from '@repo/lib/utils/calc';
 
 	const TOOLS = ['pen', 'brush', 'eraser'] as const;
+	const WEIGHT_VALUES = [5, 15, 25, 35, 45, 55, 65, 75] as const;
 	const MAX_VERSION = 20;
 
 	type Tool = (typeof TOOLS)[number];
 
 	let p5 = $state<P5>();
-	let selectedTool = $state<Tool>('brush');
+	let selectedTool = $state<Tool>('pen');
+	let selectedWeight = $state(Math.floor(Math.random() * WEIGHT_VALUES.length));
 	let color = $state<ColorName>(randomItem(COLORS.map((c) => c.name))[0]);
-	let weight = $state(20);
+	let weight = $derived(WEIGHT_VALUES[selectedWeight]);
 	let trace = $state<[number, number][]>([]);
 	let canvas = $state<HTMLCanvasElement>();
 	let version = $state(0);
@@ -87,7 +89,9 @@
 			if (!last) return;
 			switch (selectedTool) {
 				case 'pen':
+					// p.blendMode('soft-light')
 					p.line(...last, x, y);
+					// p.blendMode('normal')
 					break;
 				case 'brush':
 					if (trace.length === 2) {
@@ -188,7 +192,7 @@
 	});
 </script>
 
-<canvas bind:this={canvas} class="bg-blend-difference"></canvas>
+<canvas bind:this={canvas}></canvas>
 
 <div
 	in:slide={{ axis: 'y' }}
@@ -201,6 +205,7 @@
 			for={tool}
 			class="bg-contain bg-center bg-no-repeat p-6"
 			style:background-image="url({tool === selectedTool ? '/ui/paint/frame.png' : ''})"
+			ontouchstart={() => (drawing = false)}
 		>
 			<img src="/ui/paint/{tool}.png" class="" alt="" />
 		</label>
@@ -216,8 +221,17 @@
 	{/if}
 </div>
 
-<div in:fly={{ x: -100}} class="fixed left-1 z-[1000] flex flex-col gap-3">
-	<div class="flex flex-col pl-2">
+<div in:fly={{ x: -100 }} class="fixed left-1 z-[1000] flex flex-col gap-3">
+	<div class="flex flex-col items-center pl-2">
+		<ImgBtn
+			src="/ui/paint/frame.png"
+			ontouchstart={() => (drawing = false)}
+			onclick={() => {
+				selectedWeight = (selectedWeight + 1) % WEIGHT_VALUES.length;
+			}}
+			class="w-16"
+		/>
+		{weight}
 		{#each COLORS as { name }}
 			<input type="radio" bind:group={color} value={name} id="color-{name}" hidden />
 			<label
@@ -226,7 +240,7 @@
 				class="transition-transform duration-100"
 				style:transform="scale({name === color ? 1.3 : 1})"
 			>
-				<img class="size-18 mix-blend-darken" src="/ui/paint/colors/{name}.png" alt="" />
+				<img class="size-18" src="/ui/paint/colors/{name}.png" alt="" />
 			</label>
 		{/each}
 	</div>

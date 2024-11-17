@@ -19,6 +19,7 @@
 
 <button
 	class="{className} "
+	aria-label="button"
 	{onclick}
 	ontouchstart={() => {
 		scaleImg(0.9);
@@ -29,5 +30,5 @@
 		ontouchend?.();
 	}}
 >
-	<img bind:this={img} {src} alt="" class="transition-transform duration-100" />
+	<img bind:this={img} {src} alt="" class="w-full transition-transform duration-100" />
 </button>

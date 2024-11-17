@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { inputState, sysState } from '@/states';
 	import { CargoesTypeOptions } from '@repo/lib/pb';
+
+	import { inputState, sysState } from '@/states';
+	import { ImgBtn } from '@/components';
 
 	const CARGO_TYPES = Object.values(CargoesTypeOptions);
 
@@ -10,8 +12,9 @@
 	}
 </script>
 
-<div class="center-content w-1/2 flex-wrap gap-3">
+<div class="center-content px-14 flex-wrap gap-3">
+	<img src="/ui/texts/select_cargo.png" alt="" />
 	{#each CARGO_TYPES as type}
-		<button aria-label="button" class="size-32 bg-black" onclick={() => choose(type)}></button>
+		<ImgBtn src="/cargoes/{type}_select.png" class="w-2/5" onclick={() => choose(type)}></ImgBtn>
 	{/each}
 </div>

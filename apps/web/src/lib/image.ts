@@ -13,7 +13,7 @@ async function makeTextureImage(paint: Buffer | ArrayBuffer, cargoType: CargoesT
 				// gravity: 'center'
 			}
 		])
-		.flatten({ background: '#ffffffff' })
+		.flatten({ background: '#ffdec1' })
 		.toFormat('jpg')
 		.toBuffer();
 

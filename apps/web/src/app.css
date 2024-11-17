@@ -9,7 +9,6 @@ input {
 	@apply input bg-white text-center text-black;
 }
 
-
 html {
-	background-image: url(/paper.jpg)
+	background-image: url(/ui/layouts/paper.jpg);
 }

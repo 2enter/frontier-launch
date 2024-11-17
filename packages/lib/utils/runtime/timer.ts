@@ -10,11 +10,12 @@ class Timer {
 	startAt: number;
 	interval: NodeJS.Timer;
 
-	constructor(args: { timeout?: number; triggers: Trigger[] }) {
+	constructor(args: { timeout?: number; triggers?: Trigger[] }) {
 		const { timeout, triggers } = args;
 		this.startAt = Date.now();
 		this.interval = setInterval(async () => {
 			this.now = Date.now();
+			if (!triggers) return;
 			for (const { check, action } of triggers) {
 				if (check()) await action();
 			}

@@ -3,11 +3,17 @@
 	import { dexie } from '@/dexie';
 	import { makeEnhanceHandler } from '@/form';
 	import { inputState, sysState } from '@/states';
+	import { ImgBtn } from '@/components/index.js';
+
+	let uploaded = $state(false);
 
 	const enhanceHandler = makeEnhanceHandler({
 		handlers: {
-			success: async () => {
+			success: async (data) => {
 				console.log('success');
+				if (!data) return;
+				inputState.result = data;
+				uploaded = true;
 			},
 			failure: async () => {
 				console.log('failure');
@@ -21,20 +27,43 @@
 		console.log(versions);
 		return versions[0];
 	}
+
+	const lightBeam = (node: HTMLImageElement) => {
+		let num = 2;
+		const interval = setInterval(() => {
+			num += num;
+			console.log('hello');
+			node.style.marginBottom = `${num}px`;
+			if (num > window.innerHeight * 1.5) {
+				console.log('navigating');
+				sysState.navigate(1);
+			}
+		}, 100);
+
+		return {
+			destroy() {
+				clearInterval(interval);
+			}
+		};
+	};
 </script>
 
 {#await getImage()}
 	loading
 {:then img}
 	{#if img}
-		{@const imgUrl = img.value}
-		<img src={imgUrl} alt="" class="pointer-events-none fixed h-auto w-full" />
-		<form id="dkd" hidden action="?/submit" method="post" use:enhance={enhanceHandler}>
-			<input type="text" name="paint" value={imgUrl} readonly />
-			<input type="text" name="cargo_type" value={inputState.cargoType} readonly />
-			<input type="number" name="draw_duration" value={inputState.drawDuration ?? 0} readonly />
-		</form>
-		<button class="btn btn-primary z-[1000]" form="dkd" type="submit">submit</button>
+		{#if !uploaded}
+			{@const imgUrl = img.value}
+			<img src={imgUrl} alt="" class="pointer-events-none fixed h-auto w-full" />
+			<form id="form" hidden action="?/submit" method="post" use:enhance={enhanceHandler}>
+				<input type="text" name="paint" value={imgUrl} readonly />
+				<input type="text" name="cargo_type" value={inputState.cargoType} readonly />
+				<input type="number" name="draw_duration" value={inputState.drawDuration ?? 0} readonly />
+			</form>
+			<ImgBtn src="/ui/buttons/upload.png" class="z-[2000]" form="form" type="submit" />
+		{:else}
+			<img use:lightBeam class="h-[50vh] w-screen" src="/ui/animations/light_beam.webp" alt="" />
+		{/if}
 	{:else}
 		img not found
 	{/if}

@@ -11,7 +11,7 @@
 	"exports": {
 		"./types": "./types.ts",
 		"./pb": "./pb/index.ts",
-		"./utils/*": "./utils/*.ts",
+		"./utils/*": "./utils/*/index.ts",
 		"./server": "./server/index.ts"
 	}
 }

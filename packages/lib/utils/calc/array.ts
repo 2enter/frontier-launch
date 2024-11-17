@@ -5,15 +5,6 @@ function shuffle(arr: any[]) {
 		.map(({ value }) => value);
 }
 
-function toFixedDigit(num: number, digit = 2, filler = '0') {
-	const zero = filler.repeat(digit);
-	return (num + '').padStart(digit, zero);
-}
-
-function capitalize(str: string) {
-	return `${str[0].toUpperCase()}${str.slice(1)}`;
-}
-
 function randomItem<T>(arr: T[], targetAmount = 1, canRepeat = true) {
 	targetAmount = Math.min(targetAmount, arr.length);
 	if (targetAmount === arr.length) return [...arr];
@@ -37,16 +28,4 @@ function randomItem<T>(arr: T[], targetAmount = 1, canRepeat = true) {
 	return result;
 }
 
-function parseTime(time = Date.now()) {
-	const date = new Date(time);
-	return {
-		year: date.getFullYear(),
-		month: date.getMonth() + 1,
-		date: date.getDate(),
-		hour: date.getHours(),
-		minute: date.getMinutes(),
-		second: date.getSeconds()
-	};
-}
-
-export { randomItem, shuffle, capitalize, toFixedDigit, parseTime };
+export { shuffle, randomItem };

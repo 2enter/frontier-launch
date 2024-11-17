@@ -1,4 +1,4 @@
-import { parseTime } from '@repo/lib/utils/calc';
+import { parseTime } from '../calc';
 
 interface Trigger {
 	check: () => boolean;

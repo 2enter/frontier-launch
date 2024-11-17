@@ -1,10 +1,10 @@
 import type { Action, Actions } from '@sveltejs/kit';
 import { fail } from '@sveltejs/kit';
-import { CargoesTypeOptions } from '@repo/lib/pb';
-import { pb } from '@/server';
+import { CargoesTypeOptions, PBFile } from '@repo/lib/pb';
+import { pb, ws } from '@/server';
 import { makeTextureImage } from '@/image';
 
-const submit: Action = async ({ request, fetch }) => {
+const submit: Action = async ({ request, fetch, url }) => {
 	const formData = await request.formData();
 	const draw_duration = +(formData.get('draw_duration') as string);
 	const type = formData.get('cargo_type') as CargoesTypeOptions;
@@ -29,9 +29,19 @@ const submit: Action = async ({ request, fetch }) => {
 		})
 		.catch((e) => {
 			console.error(e);
-			return fail(500, { message: 'fail' });
+			return null;
 		});
 
+	if (!result) return fail(500, { message: 'fail to upload' });
+
+	ws.broadcast({
+		data: {
+			type: 'cargo',
+			id: result.id,
+			cargo_type: type,
+			directory: `${url.origin}/api/texture/${result.id}`
+		}
+	});
 	return result;
 };
 

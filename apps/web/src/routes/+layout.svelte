@@ -49,6 +49,10 @@
 	{/if}
 </div>
 
+<div class="center-content fixed bottom-0 z-[1000] w-full">
+	<img src="/ui/texts/2enter.png" class="h-10" alt="" />
+</div>
+
 <div class="full-screen center-content">
 	{@render children()}
 </div>

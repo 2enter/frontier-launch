@@ -15,7 +15,7 @@
 </script>
 
 {#key sysState.pageNum}
-	<div in:fade class="center-content flex-col">
+	<div in:fade class="center-content flex-col mix-blend-multiply">
 		<Page />
 	</div>
 {/key}

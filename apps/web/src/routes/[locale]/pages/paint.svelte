@@ -174,6 +174,7 @@
 	};
 
 	onMount(() => {
+		dexie.versions.clear();
 		p5 = new P5(sketch);
 
 		return () => {

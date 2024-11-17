@@ -1,9 +1,12 @@
 import type { ActionResult, SubmitFunction } from '@sveltejs/kit';
 import { inputState, sysState } from '@/states';
-
-function makeEnhanceHandler(handlers: Partial<Record<ActionResult['type'], (data?: SubmitResult) => Promise<any>>>): SubmitFunction {
+function makeEnhanceHandler(args: {
+	handlers: Partial<Record<ActionResult['type'], (data?: SubmitResult) => Promise<any>>>;
+	confirmMessage?: string;
+}): SubmitFunction {
+	const { handlers, confirmMessage } = args;
 	return ({ cancel }) => {
-		if (!inputState.submittable || !confirm('')) {
+		if (!inputState.submittable || confirmMessage ? confirm(confirmMessage) : false) {
 			cancel();
 			return;
 		}

@@ -11,7 +11,7 @@
 			line++;
 			console.log(line);
 			if (line === 7) clearInterval(interval);
-		}, 2000);
+		}, 1500);
 
 		return () => {
 			clearInterval(interval);

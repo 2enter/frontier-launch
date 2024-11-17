@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { sysState } from '@/states';
 	import { Pages } from './pages';
+	import { fade } from 'svelte/transition';
 	// import { NavBtn } from '@/components/index.js';
 
 	let { data } = $props();
@@ -13,10 +14,10 @@
 	});
 </script>
 
-<div class="center-content flex-col">
-	{#key sysState.pageNum}
+{#key sysState.pageNum}
+	<div in:fade class="center-content flex-col">
 		<Page />
-	{/key}
+	</div>
+{/key}
 
-	<!--	<NavBtn action={1} />-->
-</div>
+<!--	<NavBtn action={1} />-->

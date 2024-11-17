@@ -3,8 +3,10 @@
 	import { onMount } from 'svelte';
 	import { type ColorName, COLORS } from '@/config';
 	import { dexie } from '@/dexie';
-	import { NavBtn } from '@/components';
-	import { inputState } from '@/states';
+	import { slide, fly } from 'svelte/transition';
+	import { inputState, sysState } from '@/states';
+	import { ImgBtn } from '@/components/index.js';
+	import { randomItem } from '@repo/lib/utils/calc';
 
 	const TOOLS = ['pen', 'brush', 'eraser'] as const;
 	const MAX_VERSION = 20;
@@ -118,13 +120,13 @@
 							smallY + DIFF * p.random(0.1, 2),
 							oldX + DIFF * p.random(0.1, 2),
 							oldY + DIFF * p.random(0.1, 2)
-						); // ADD
+						);
 						p.line(
 							smallX - DIFF * p.random(0.1, 2),
 							smallY - DIFF * p.random(0.1, 2),
 							oldX - DIFF * p.random(0.1, 2),
 							oldY - DIFF * p.random(0.1, 2)
-						); // ADD
+						);
 					}
 					break;
 				// const vector = p.createVector(x - last[0], y - last[1]);
@@ -188,48 +190,44 @@
 
 <canvas bind:this={canvas} class="bg-blend-difference"></canvas>
 
-<div class="center-content fixed bottom-3 gap-3">
-	{version}/{latestVersion}
-	<div class="flex flex-row gap-3">
-		{#each TOOLS as tool}
-			<input id={tool} type="radio" value={tool} hidden bind:group={selectedTool} />
-			<label for={tool} class="btn rounded-xl border-solid border-white bg-black text-white" class:bg-white={tool !== selectedTool}>
-				{tool}
-			</label>
-		{/each}
-	</div>
-	<button
-		class="btn btn-primary"
-		class:opacity-50={version < latestVersion - MAX_VERSION || version === 0}
-		onclick={() => modifyVersion(-1)}
-		ontouchstart={() => (drawing = false)}
-	>
-		undo
-	</button>
-	<button
-		class="btn btn-primary"
-		class:opacity-50={version === latestVersion}
-		onclick={() => modifyVersion(1)}
-		ontouchstart={() => (drawing = false)}
-	>
-		redo
-	</button>
+<div
+	in:slide={{ axis: 'y' }}
+	class="fixed bottom-0 flex h-[12vh] w-screen items-center justify-evenly gap-3 bg-cover bg-center bg-no-repeat px-10 py-5"
+	style:background-image="url(/ui/paint/tools.png)"
+>
+	{#each TOOLS as tool}
+		<input id={tool} type="radio" value={tool} hidden bind:group={selectedTool} />
+		<label
+			for={tool}
+			class="bg-contain bg-center bg-no-repeat p-6"
+			style:background-image="url({tool === selectedTool ? '/ui/paint/frame.png' : ''})"
+		>
+			<img src="/ui/paint/{tool}.png" class="" alt="" />
+		</label>
+	{/each}
+	<ImgBtn src="/ui/paint/undo.png" class="" onclick={() => modifyVersion(-1)} ontouchstart={() => (drawing = false)}></ImgBtn>
+	<ImgBtn src="/ui/paint/redo.png" class="" onclick={() => modifyVersion(1)} ontouchstart={() => (drawing = false)}></ImgBtn>
+	<ImgBtn src="/ui/paint/help.png" class="" onclick={() => {}} ontouchstart={() => (drawing = false)}></ImgBtn>
+</div>
+
+<div class="fixed right-0 top-0">
 	{#if version !== 0}
-		<NavBtn action={1} />
+		<ImgBtn src="/ui/buttons/done.png" class="w-[30vw]" ontouchstart={() => (drawing = false)} onclick={() => sysState.navigate(1)} />
 	{/if}
 </div>
 
-<div class="fixed left-1 z-[1000] flex flex-col gap-3">
-	<div class="flex flex-col gap-1">
-		{#each COLORS as { name, value }}
+<div in:fly={{ x: -100}} class="fixed left-1 z-[1000] flex flex-col gap-3">
+	<div class="flex flex-col pl-2">
+		{#each COLORS as { name }}
 			<input type="radio" bind:group={color} value={name} id="color-{name}" hidden />
 			<label
 				ontouchstart={() => (drawing = false)}
 				for="color-{name}"
-				class="size-12 rounded-full border-2 border-solid border-white"
-				class:border-opacity-0={name !== color}
-				style:background-color={value}
-			></label>
+				class="transition-transform duration-100"
+				style:transform="scale({name === color ? 1.3 : 1})"
+			>
+				<img class="size-18 mix-blend-darken" src="/ui/paint/colors/{name}.png" alt="" />
+			</label>
 		{/each}
 	</div>
 </div>

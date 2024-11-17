@@ -1,11 +1,11 @@
 import type { ParseEnum } from '@repo/lib/types';
-import { SuppliesTypeOptions } from '@repo/lib/pb';
+import { CargoesTypeOptions } from '@repo/lib/pb';
 
 class InputState {
-	supplyType = $state<ParseEnum<SuppliesTypeOptions> | null>(null);
-	draw_duration = $state(1);
+	cargoType = $state<ParseEnum<CargoesTypeOptions> | null>(null);
+	drawDuration = $state(1);
 
-	readonly submittable = $derived(this.supplyType && this.draw_duration);
+	readonly submittable = $derived(this.cargoType && this.drawDuration);
 }
 
 const inputState = new InputState();

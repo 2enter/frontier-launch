@@ -26,17 +26,17 @@ class ServerConsole {
 					}
 				},
 				{
-					// ship unshipped supplies
+					// ship unshipped cargoes
 					check: () => this.timer.parsedTime.second % 5 === 0,
 					action: async () => {
 						const unshipped = await getRecordsByFilter({
 							pb,
-							collection: 'supplies',
+							collection: 'cargoes',
 							filter: `status="shipping"&&created<"${new Date(Date.now() - SHIPPING_SECOND * 1000).toISOString().replace('T', ' ')}"`
 						});
 						if (!unshipped) return;
 						for (const { id } of unshipped) {
-							await pb.collection('supplies').update(id, { status: 'shipped' });
+							await pb.collection('cargoes').update(id, { status: 'shipped' });
 						}
 					}
 				}
@@ -45,14 +45,14 @@ class ServerConsole {
 	}
 
 	launch = async () => {
-		const shipped = await getRecordsByFilter({ pb, collection: 'supplies', filter: `status="shipped"` });
-		const supply_amount = shipped ? shipped.length : 0;
+		const shipped = await getRecordsByFilter({ pb, collection: 'cargoes', filter: `status="shipped"` });
+		const cargo_amount = shipped ? shipped.length : 0;
 
-		ws.broadcast({ data: { type: 'launch', supply_amount } });
+		ws.broadcast({ data: { type: 'launch', cargo_amount } });
 
 		if (shipped) {
 			for (const { id } of shipped) {
-				await pb.collection('supplies').update(id, { status: 'launched' });
+				await pb.collection('cargoes').update(id, { status: 'launched' });
 			}
 		}
 

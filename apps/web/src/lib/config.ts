@@ -1,4 +1,5 @@
 const LAUNCH_TIMEOUT = 5 * 60 * 1000;
+const SHIPPING_SECOND = 15;
 const RESULT_SIZE = 1000;
 const COLORS = [
 	{ name: 'red', value: '#EB0018' },
@@ -17,5 +18,6 @@ const COLORS = [
 
 type ColorName = (typeof COLORS)[number]['name'];
 
-export { COLORS, LAUNCH_TIMEOUT, RESULT_SIZE };
+export { COLORS, LAUNCH_TIMEOUT, SHIPPING_SECOND, RESULT_SIZE };
+
 export type { ColorName };

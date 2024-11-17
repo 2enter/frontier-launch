@@ -1,7 +1,7 @@
 import type { ParseEnum } from '@repo/lib/types';
 
 import { BunWS, startHelperServer } from '@repo/lib/server';
-import { SuppliesTypeOptions } from '@repo/lib/pb';
+import { CargoesTypeOptions } from '@repo/lib/pb';
 
 import { WS_HELPER_PORT } from '$env/static/private';
 
@@ -9,14 +9,14 @@ type WSData = {
 	message?: string;
 	data?:
 		| {
-				type: 'supply';
-				supply_type: ParseEnum<SuppliesTypeOptions>;
+				type: 'cargo';
+				cargo_type: ParseEnum<CargoesTypeOptions>;
 				id: string;
 				directory: string;
 		  }
 		| {
 				type: 'launch';
-				supply_amount: number;
+				cargo_amount: number;
 		  }
 		| {
 				type: 'weather';

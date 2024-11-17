@@ -13,7 +13,7 @@
 
 	let p5 = $state<P5>();
 	let selectedTool = $state<Tool>('brush');
-	let color = $state<ColorName>('black');
+	let color = $state<ColorName>(randomItem(COLORS.map((c) => c.name))[0]);
 	let weight = $state(20);
 	let trace = $state<[number, number][]>([]);
 	let canvas = $state<HTMLCanvasElement>();

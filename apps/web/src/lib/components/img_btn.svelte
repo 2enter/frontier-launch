@@ -4,10 +4,12 @@
 		onclick?: () => void;
 		ontouchstart?: () => void;
 		ontouchend?: () => void;
+		type?: 'button' | 'submit' | 'reset' | null;
+		form?: string;
 		class?: string;
 	}
 
-	let { class: className, src, onclick = () => {}, ontouchstart, ontouchend }: Props = $props();
+	let { class: className, src, onclick = () => {}, ontouchstart, ontouchend, ...others }: Props = $props();
 
 	let img = $state<HTMLImageElement>();
 
@@ -20,6 +22,7 @@
 <button
 	class="{className} "
 	aria-label="button"
+	{...others}
 	{onclick}
 	ontouchstart={() => {
 		scaleImg(0.9);

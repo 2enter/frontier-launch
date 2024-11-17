@@ -1,5 +1,5 @@
 const LAUNCH_TIMEOUT = 5 * 60 * 1000;
-const RESULT_SIZE = 500;
+const RESULT_SIZE = 1000;
 const COLORS = [
 	{ name: 'red', value: '#EB0018' },
 	{ name: 'orange', value: '#ED6A19' },

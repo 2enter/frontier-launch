@@ -23,7 +23,9 @@
 
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		const light = new THREE.PointLight('white', 80);
-		light.position.z = 5;
+		light.position.z = 4.5;
+		light.position.x = 2;
+		light.position.y = 2;
 		scene.add(light);
 
 		if (threeDom) threeDom.appendChild(renderer.domElement);

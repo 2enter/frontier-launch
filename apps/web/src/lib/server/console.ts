@@ -8,6 +8,7 @@ import { getRaining } from '@/server/weather';
 class ServerConsole {
 	started = false;
 	timer: Timer;
+	news: string[] = [];
 
 	constructor() {
 		this.timer = new Timer({
@@ -38,6 +39,15 @@ class ServerConsole {
 						for (const { id } of unshipped) {
 							await pb.collection('cargoes').update(id, { status: 'shipped' });
 						}
+					}
+				},
+				{
+					// update news
+					check: () => this.timer.parsedTime.second === 0,
+					action: async () => {
+						const { items: news } = await pb.collection('news').getList(1, 20, { sort: '-created' });
+						const sorted = news.sort((a, b) => a.hype - b.hype);
+						this.news = sorted.slice(0, 10).map(({ title }) => title);
 					}
 				}
 			]

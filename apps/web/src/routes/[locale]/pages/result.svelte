@@ -6,9 +6,10 @@
 
 	const loader = new GLTFLoader();
 	const textureLoader = new THREE.TextureLoader();
+	const scene = new THREE.Scene();
+
 	let threeDom = $state<HTMLDivElement>();
 	let frame = 0;
-	const scene = new THREE.Scene();
 
 	onMount(async () => {
 		if (!inputState.result) {

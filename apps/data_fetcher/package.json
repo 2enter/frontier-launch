@@ -3,7 +3,9 @@
 	"module": "index.ts",
 	"type": "module",
 	"devDependencies": {
-		"@types/bun": "latest"
+		"@types/bun": "latest",
+		"@types/selenium-webdriver": "^4.1.27",
+		"selenium-webdriver": "^4.26.0"
 	},
 	"peerDependencies": {
 		"typescript": "^5.0.0"

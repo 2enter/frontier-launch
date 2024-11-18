@@ -7,6 +7,7 @@ import type { RecordService } from 'pocketbase'
 
 export enum Collections {
 	Cargoes = "cargoes",
+	News = "news",
 	Users = "users",
 }
 
@@ -34,12 +35,6 @@ export type AuthSystemFields<T = never> = {
 
 // Record types for each collection
 
-export enum CargoesStatusOptions {
-	"shipping" = "shipping",
-	"shipped" = "shipped",
-	"launched" = "launched",
-}
-
 export enum CargoesTypeOptions {
 	"water" = "water",
 	"spring" = "spring",
@@ -47,6 +42,12 @@ export enum CargoesTypeOptions {
 	"star" = "star",
 	"cake" = "cake",
 	"diamond" = "diamond",
+}
+
+export enum CargoesStatusOptions {
+	"shipping" = "shipping",
+	"shipped" = "shipped",
+	"launched" = "launched",
 }
 export type CargoesRecord = {
 	draw_duration: number
@@ -56,6 +57,11 @@ export type CargoesRecord = {
 	type: CargoesTypeOptions
 }
 
+export type NewsRecord = {
+	hype: number
+	title?: string
+}
+
 export type UsersRecord = {
 	avatar?: string
 	name?: string
@@ -63,17 +69,20 @@ export type UsersRecord = {
 
 // Response types include system fields and match responses from the PocketBase API
 export type CargoesResponse<Texpand = unknown> = Required<CargoesRecord> & BaseSystemFields<Texpand>
+export type NewsResponse<Texpand = unknown> = Required<NewsRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
 // Types containing all Records and Responses, useful for creating typing helper functions
 
 export type CollectionRecords = {
 	cargoes: CargoesRecord
+	news: NewsRecord
 	users: UsersRecord
 }
 
 export type CollectionResponses = {
 	cargoes: CargoesResponse
+	news: NewsResponse
 	users: UsersResponse
 }
 
@@ -82,5 +91,6 @@ export type CollectionResponses = {
 
 export type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'cargoes'): RecordService<CargoesResponse>
+	collection(idOrName: 'news'): RecordService<NewsResponse>
 	collection(idOrName: 'users'): RecordService<UsersResponse>
 }

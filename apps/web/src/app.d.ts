@@ -1,6 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
-import type { CargoesResponse } from '@repo/lib/pb';
+import type { CargoesResponse, CargoesTypeOptions } from '@repo/lib/pb';
+import type { ParseEnum } from '@repo/lib/types';
 
 declare global {
 	namespace App {
@@ -12,6 +13,24 @@ declare global {
 	}
 	type PageNum = 0 | 1 | 2 | 3;
 	type SubmitResult = CargoesResponse;
+	type WSData = {
+		message?: string;
+		data?:
+			| {
+					type: 'cargo';
+					cargo_type: ParseEnum<CargoesTypeOptions>;
+					id: string;
+					directory: string;
+			  }
+			| {
+					type: 'launch';
+					cargo_amount: number;
+			  }
+			| {
+					type: 'weather';
+					raining: boolean;
+			  };
+	};
 }
 
 export {};

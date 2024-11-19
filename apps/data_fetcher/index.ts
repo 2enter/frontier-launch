@@ -1,5 +1,5 @@
+import moment from 'moment';
 import chalk from 'chalk';
-import { parseTime } from '@repo/lib/utils/calc';
 import { Timer } from '@repo/lib/utils/runtime';
 import { uploadNews, Scraper } from './news';
 
@@ -11,8 +11,8 @@ const timer = new Timer({
 	triggers: [
 		{
 			check: () => {
-				const now = parseTime(Date.now());
-				const currentTime = [now.minute, now.second];
+				const now = moment(Date.now());
+				const currentTime = [now.minute(), now.second()];
 
 				return JSON.stringify(currentTime) === JSON.stringify(UPDATE_TIME);
 			},

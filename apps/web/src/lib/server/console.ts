@@ -1,6 +1,8 @@
 import { getRecordsByFilter } from '@repo/lib/pb';
 import { Timer } from '@repo/lib/utils/runtime';
 
+import moment from 'moment';
+
 import { LAUNCH_TIMEOUT, SHIPPING_SECOND } from '@/config';
 import { pb, ws } from '@/server';
 import { getRaining } from '@/server/weather';
@@ -21,14 +23,14 @@ class ServerConsole {
 				},
 				{
 					// send weather data
-					check: () => this.timer.parsedTime.minute === 0 && this.timer.parsedTime.second === 0,
+					check: () => moment(this.timer.now).minute() === 0 && moment(this.timer.now).second() === 0,
 					action: async () => {
 						ws.broadcast({ data: { type: 'weather', raining: await getRaining() } });
 					}
 				},
 				{
 					// ship unshipped cargoes
-					check: () => this.timer.parsedTime.second % 5 === 0,
+					check: () => moment(this.timer.now).second() % 5 === 0,
 					action: async () => {
 						const unshipped = await getRecordsByFilter({
 							pb,
@@ -43,7 +45,7 @@ class ServerConsole {
 				},
 				{
 					// update news
-					check: () => this.timer.parsedTime.second === 0,
+					check: () => moment(this.timer.now).second() === 0,
 					action: async () => {
 						const { items: news } = await pb.collection('news').getList(1, 20, { sort: '-created' });
 						const sorted = news.sort((a, b) => a.hype - b.hype);

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { parseTime, toFixedDigit } from '@repo/lib/utils/calc';
+	import { toFixedDigit } from '@repo/lib/utils/calc';
 
+	import moment from 'moment';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-
 	import { navigating } from '$app/stores';
 	import { dev } from '$app/environment';
 
@@ -34,8 +34,8 @@
 
 <div class="fixed top-0 z-[1000] w-full text-center">
 	{#if launchCountDown}
-		{@const { minute, second } = parseTime(launchCountDown)}
-		{toFixedDigit(minute)}:{toFixedDigit(second)}
+		{@const time = moment(launchCountDown)}
+		{toFixedDigit(time.minute())}:{toFixedDigit(time.second())}
 	{/if}
 </div>
 

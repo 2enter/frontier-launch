@@ -1,23 +1,26 @@
 import { parseTime } from '../calc';
 
 interface Trigger {
-	check: () => boolean;
-	action: () => Promise<any>;
+	check?: () => boolean;
+	action: () => any;
 }
 
 class Timer {
 	now = 0;
 	startAt: number;
 	interval: NodeJS.Timer;
+	triggers: Trigger[];
 
 	constructor(args: { timeout?: number; triggers?: Trigger[] }) {
 		const { timeout, triggers } = args;
+		this.triggers = triggers ?? [];
 		this.startAt = Date.now();
+
 		this.interval = setInterval(async () => {
 			this.now = Date.now();
 			if (!triggers) return;
 			for (const { check, action } of triggers) {
-				if (check()) await action();
+				if (check?.() ?? true) await action();
 			}
 		}, timeout ?? 1000);
 	}

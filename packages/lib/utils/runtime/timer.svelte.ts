@@ -1,5 +1,3 @@
-import { parseTime } from '../calc';
-
 interface Trigger {
 	check?: () => boolean;
 	action: () => any;
@@ -38,16 +36,11 @@ class Timer {
 		return this.now - this.startAt;
 	}
 
-	get parsedTime() {
-		return parseTime(this.now);
-	}
-
 	get info() {
 		return {
 			now: this.now,
 			duration: this.duration,
-			startAt: this.startAt,
-			parsedTime: this.parsedTime
+			startAt: this.startAt
 		};
 	}
 }

@@ -6,15 +6,16 @@ interface Trigger {
 }
 
 class Timer {
-	now = 0;
-	startAt: number;
-	interval: NodeJS.Timer;
-	triggers: Trigger[];
+	readonly interval: NodeJS.Timer;
+	readonly triggers: Trigger[];
 
-	constructor(args: { timeout?: number; triggers?: Trigger[] }) {
+	startAt = $state(0);
+	now = $state(0);
+
+	constructor(args: { timeout?: number; triggers?: Trigger[] } = {}) {
 		const { timeout, triggers } = args;
 		this.triggers = triggers ?? [];
-		this.startAt = Date.now();
+		this.startAt = this.now = Date.now();
 
 		this.interval = setInterval(async () => {
 			this.now = Date.now();
@@ -26,7 +27,6 @@ class Timer {
 	}
 
 	stop() {
-		if (!this.interval) return;
 		clearInterval(this.interval);
 	}
 
@@ -40,6 +40,15 @@ class Timer {
 
 	get parsedTime() {
 		return parseTime(this.now);
+	}
+
+	get info() {
+		return {
+			now: this.now,
+			duration: this.duration,
+			startAt: this.startAt,
+			parsedTime: this.parsedTime
+		};
 	}
 }
 

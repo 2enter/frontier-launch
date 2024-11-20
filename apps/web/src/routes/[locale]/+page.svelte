@@ -14,7 +14,7 @@
 </script>
 
 {#key sysState.pageNum}
-	<div in:fade class="center-content flex-col mix-blend-multiply">
+	<div in:fade class="center-content flex-col" class:mix-blend-multiply={sysState.pageNum !== 5}>
 		<Page />
 	</div>
 {/key}

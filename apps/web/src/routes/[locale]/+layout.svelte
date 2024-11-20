@@ -32,10 +32,20 @@
 	});
 </script>
 
-<div class="fixed top-0 z-[1000] w-full text-center">
+<div class="center-content fixed top-0 z-[1000] w-full *:h-8">
 	{#if launchCountDown}
 		{@const time = moment(launchCountDown)}
-		{toFixedDigit(time.minute())}:{toFixedDigit(time.second())}
+		{@const minute = time.minute()}
+		{@const second = time.second()}
+		<img src="/ui/launch_time/distance.webp" alt="" />
+		{#each minute.toString() as digit}
+			<img class="py-2" src="/ui/launch_time/numbers/{digit}.webp" alt="" />
+		{/each}
+		<img src="/ui/launch_time/minute.webp" alt="" />
+		{#each second.toString() as digit}
+			<img class="py-2" src="/ui/launch_time/numbers/{digit}.webp" alt="" />
+		{/each}
+		<img src="/ui/launch_time/second.webp" alt="" />
 	{/if}
 </div>
 

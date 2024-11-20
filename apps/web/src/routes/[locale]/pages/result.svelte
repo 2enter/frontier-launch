@@ -59,3 +59,7 @@
 </script>
 
 <div bind:this={threeDom} class="full-screen z-[1000]"></div>
+<div class="full-screen flex flex-col justify-between px-12 py-32">
+	<img src="/ui/texts/upload_success.webp" alt="" />
+	<img src="/ui/texts/head_up.webp" alt="" />
+</div>

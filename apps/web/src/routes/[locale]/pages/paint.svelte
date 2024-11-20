@@ -28,6 +28,7 @@
 	let version = $state(0);
 	let latestVersion = $state(0);
 	let showUI = $state(true);
+	let showManual = $state(true);
 
 	let drawing = true;
 
@@ -261,3 +262,9 @@
 	class="full-screen center-content pointer-events-none bg-contain bg-center bg-no-repeat"
 	style:background-image="url(/cargoes/{inputState.cargoType}_canva.webp)"
 ></div>
+
+{#if showManual}
+	<button transition:fade class="full-screen center-content z-[2000] bg-black/60 px-8" ontouchstart={noDraw} onclick={() => (showManual = false)}>
+		<img src="/ui/paint/manual.webp" alt="" />
+	</button>
+{/if}

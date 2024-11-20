@@ -1,7 +1,9 @@
 import { sleep } from './sleep';
 import * as validator from 'validator';
 
-function makeWSClient<T>(args: { url: string; onmessage?: (data: T) => Promise<void>; onerror?: (e: Event) => Promise<void> }) {
+type Handler<T> = (data: T) => any | Promise<any>;
+
+function makeWSClient<T>(args: { url: string; onmessage?: Handler<T>; onerror?: Handler<Event> }) {
 	const { url, onmessage, onerror } = args;
 	let ws = new WebSocket(url);
 

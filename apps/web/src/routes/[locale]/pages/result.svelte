@@ -39,16 +39,17 @@
 		}
 		scene.add(cargo);
 
-		camera.position.z = 3.5;
-		camera.position.y = 0.1;
+		camera.position.z = 3.6;
+		camera.position.y = 1.5;
+		camera.lookAt(0, 0, 0);
 
 		function animate() {
 			setTimeout(() => {
-				rotation += 0.1;
+				rotation += 0.01;
 				frame = requestAnimationFrame(animate);
 				renderer.render(scene, camera);
 				cargo.rotation.y = rotation;
-			}, 80);
+			}, 10);
 		}
 		animate();
 	});

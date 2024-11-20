@@ -12,7 +12,7 @@
 	import { ImgBtn } from '@/components';
 
 	const TOOLS = ['pen', 'brush', 'eraser'] as const;
-	const WEIGHT_VALUES = [5, 15, 25, 35, 45, 55, 65, 75] as const;
+	const WEIGHT_VALUES = [5, 20, 35, 50, 65, 80] as const;
 	const MAX_VERSION = 20;
 
 	let timer: Timer;
@@ -20,7 +20,7 @@
 
 	let p5 = $state<P5>();
 	let selectedTool = $state<Tool>('pen');
-	let selectedWeight = $state(Math.floor(Math.random() * WEIGHT_VALUES.length));
+	let selectedWeight = $state(randomItem(Object.keys(WEIGHT_VALUES).map((i) => +i))[0]);
 	let color = $state<ColorName>(randomItem(COLORS.map((c) => c.name))[0]);
 	let weight = $derived(WEIGHT_VALUES[selectedWeight]);
 	let trace = $state<[number, number][]>([]);
@@ -186,7 +186,7 @@
 		dexie.versions.clear();
 		p5 = new P5(sketch);
 
-		timer = new Timer({});
+		timer = new Timer();
 
 		return () => {
 			if (p5) p5.remove();
@@ -223,21 +223,12 @@
 
 <div class="fixed right-0 top-0">
 	{#if version !== 0}
-		<ImgBtn src="/ui/buttons/done.png" class="w-[30vw]" ontouchstart={() => (drawing = false)} onclick={() => sysState.navigate(1)} />
+		<ImgBtn src="/ui/buttons/done.webp" class="w-[30vw]" ontouchstart={() => (drawing = false)} onclick={() => sysState.navigate(1)} />
 	{/if}
 </div>
 
-<div in:fly={{ x: -100 }} class="fixed left-1 z-[1000] flex flex-col gap-3">
-	<div class="flex flex-col items-center pl-2">
-		<ImgBtn
-			src="/ui/paint/frame.png"
-			ontouchstart={() => (drawing = false)}
-			onclick={() => {
-				selectedWeight = (selectedWeight + 1) % WEIGHT_VALUES.length;
-			}}
-			class="w-16"
-		/>
-		{weight}
+<div in:fly={{ x: -100 }} class="fixed left-1 z-[1000] flex flex-col justify-start gap-3">
+	<div class="flex w-fit flex-col items-start pl-2">
 		{#each COLORS as { name }}
 			<input type="radio" bind:group={color} value={name} id="color-{name}" hidden />
 			<label
@@ -249,10 +240,19 @@
 				<img class="size-18" src="/ui/paint/colors/{name}.webp" alt="" />
 			</label>
 		{/each}
+
+		<ImgBtn
+			src="/ui/paint/bold/{selectedWeight + 1}.webp"
+			ontouchstart={() => (drawing = false)}
+			onclick={() => {
+				selectedWeight = (selectedWeight + 1) % WEIGHT_VALUES.length;
+			}}
+			class="w-32"
+		/>
 	</div>
 </div>
 
 <div
 	class="full-screen center-content pointer-events-none bg-contain bg-center bg-no-repeat"
-	style:background-image="url(/cargoes/{inputState.cargoType}_canva.png)"
+	style:background-image="url(/cargoes/{inputState.cargoType}_canva.webp)"
 ></div>

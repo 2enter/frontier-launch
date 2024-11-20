@@ -6,6 +6,15 @@ class SysState {
 	errorMessage = $state<string | null>(null);
 	pageNum = $state<PageNum>(0);
 	dialog = $state<HTMLDialogElement>();
+	bg = $derived.by(() => {
+		switch (this.pageNum) {
+			case 0:
+			case 3:
+				return '/ui/layouts/paper.jpg';
+			default:
+				return '/ui/layouts/factory_bg.jpg';
+		}
+	});
 
 	locale = $state<Locale>(DEFAULT_LOCALE);
 

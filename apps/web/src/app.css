@@ -8,7 +8,3 @@
 input {
 	@apply input bg-white text-center text-black;
 }
-
-html {
-	background-image: url(/ui/layouts/paper.jpg);
-}

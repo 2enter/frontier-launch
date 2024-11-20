@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
 	import { page } from '$app/stores';
+	import { Previous } from 'runed';
 
 	let { data } = $props();
 
@@ -19,29 +20,61 @@
 		},
 		onFinish: (result) => {
 			const summary = result.getSummary();
-			info.windSpeed = summary.download ?? 0;
+			const { download } = summary;
+			if (download) {
+				info.windSpeed = +(download / 3000000).toFixed(1);
+			}
 		}
 	});
 
 	const timer: TimerState = new TimerState({
 		triggers: [
 			{
-				check: () => moment(timer.now).minute() % 10 === 0 && moment(timer.now).second() === 0,
-				action: () => (info.temperature = genTemp())
+				// update info.temperature
+				check: () => moment(timer.now).second() % 3 === 0,
+				action: async () => (info.temperature = await getTemp())
+			},
+			{
+				// update info.windSpeed
+				check: () => moment(timer.now).second() % 10 === 0,
+				action: () => speedTester.test()
 			}
+			// {
+			// 	// update info.raining
+			// 	check: () => moment(timer.now).seconds() % 8 === 0,
+			// 	action: () => (info.raining = !info.raining)
+			// }
 		]
 	});
 
-	const genTemp = () => ~~(Math.random() * 10);
+	async function getTemp() {
+		return await fetch('/api/sys-temp').then((res) => res.json().then((data) => data));
+	}
 
 	const info = $state({
 		raining: false,
-		temperature: genTemp(),
+		temperature: 0,
 		population: 0,
 		windSpeed: 0
 	});
 
+	const speedDegree = $derived.by<'slow' | 'medium' | 'fast'>(() => {
+		if (info.windSpeed > 6) return 'fast';
+		else if (info.windSpeed > 3) return 'medium';
+		else return 'slow';
+	});
+
 	let cargoIds = $state<string[]>(data.cargoes);
+	let weatherBg = $state<'sun_to_rain' | 'rain_to_sun'>('rain_to_sun');
+
+	const previousRaining = new Previous(() => info.raining);
+
+	$effect(() => {
+		if (info.raining !== previousRaining.current) {
+			console.log('switching weather');
+			weatherBg = previousRaining.current ? 'sun_to_rain' : 'rain_to_sun';
+		}
+	});
 
 	const wsUrl = dev
 		? `ws://${$page.url.hostname}:8001/ws`
@@ -50,10 +83,6 @@
 			: `ws://${$page.url.hostname}:3000/ws`;
 
 	onMount(() => {
-		timer.triggers.push({
-			check: () => moment(timer.now).second() % 5 === 0,
-			action: () => speedTester.test()
-		});
 		let ws = makeWSClient<WSData>({
 			url: wsUrl,
 			onmessage: ({ data, message }) => {
@@ -78,14 +107,19 @@
 
 		return () => {
 			ws.close();
+			timer.stop();
 		};
 	});
 </script>
 
-<div class="full-screen bg-contain bg-center bg-no-repeat" style:background-image="url(/ui/layouts/tv_bg.png)">
+<svelte:head>
+	<title>CCTV</title>
+</svelte:head>
+
+<div class="full-screen bg-contain bg-center bg-no-repeat" style:background-image="url(/ui/layouts/tv_bg.webp)">
 	{#if timer}
 		{@const time = moment(timer.now)}
-		<div class="fixed right-0 top-0 p-8 text-7xl font-bold tracking-widest">
+		<div class="fixed right-0 top-0 p-8 text-7xl font-bold tracking-wider">
 			{toFixedDigit(time.hour())}:{toFixedDigit(time.minute())}
 		</div>
 	{/if}
@@ -94,13 +128,35 @@
 			<img src="/api/texture/{cargoId}" alt="" />
 		{/each}
 	</div>
-	{info.temperature}
-	{info.windSpeed}
+
+	<div class="info-value center-content left-[68vw] top-[5vh] gap-4">
+		<i class="fa-solid fa-alien-8bit"></i>
+		{info.population}
+	</div>
+
+	<div class="info-value left-[74vw] top-[5vh] flex">
+		<img src="/ui/cctv/wind_{speedDegree}.webp" class="w-20" alt="" />{info.windSpeed} mph
+	</div>
+
+	<div class="fixed -right-16 top-[10vh]">
+		<img src="/ui/cctv/{weatherBg}.gif" class="h-64" alt="" />
+	</div>
+
+	<div class="info-value right-[2vw] top-[35vh] flex flex-col items-end justify-end gap-4 tracking-tighter">
+		<i class="fa-solid fa-temperature-list text-5xl"></i>
+		{info.temperature}°C
+	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	* {
 		color: white;
-		font-family: 'Avenir', Helvetica, Arial, sans-serif;
+		/*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
+	}
+
+	.info-value {
+		@apply tracking-tighter;
+		font-size: 1.8rem;
+		position: fixed;
 	}
 </style>

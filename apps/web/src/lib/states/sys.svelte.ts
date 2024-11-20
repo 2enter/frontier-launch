@@ -10,9 +10,9 @@ class SysState {
 		switch (this.pageNum) {
 			case 0:
 			case 3:
-				return '/ui/layouts/paper.jpg';
+				return '/ui/layouts/paper.webp';
 			default:
-				return '/ui/layouts/factory_bg.jpg';
+				return '/ui/layouts/factory_bg.webp';
 		}
 	});
 

@@ -20,7 +20,7 @@
 </script>
 
 {#each { length: line + 1 } as _, i}
-	<img in:fade src="/ui/texts/description_page/{i}.png" class="fixed w-11/12" alt={i.toString()} />
+	<img in:fade src="/ui/texts/description_page/{i}.webp" class="fixed w-11/12" alt={i.toString()} />
 {/each}
 
 <button

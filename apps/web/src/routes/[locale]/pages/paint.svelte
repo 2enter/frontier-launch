@@ -203,22 +203,22 @@
 <div
 	in:slide={{ axis: 'y' }}
 	class="fixed bottom-0 flex h-[12vh] w-screen items-center justify-evenly gap-3 bg-cover bg-center bg-no-repeat px-10 py-5"
-	style:background-image="url(/ui/paint/tools.png)"
+	style:background-image="url(/ui/paint/tools.webp)"
 >
 	{#each TOOLS as tool}
 		<input id={tool} type="radio" value={tool} hidden bind:group={selectedTool} />
 		<label
 			for={tool}
 			class="bg-contain bg-center bg-no-repeat p-6"
-			style:background-image="url({tool === selectedTool ? '/ui/paint/frame.png' : ''})"
+			style:background-image="url({tool === selectedTool ? '/ui/paint/frame.webp' : ''})"
 			ontouchstart={() => (drawing = false)}
 		>
-			<img src="/ui/paint/{tool}.png" class="" alt="" />
+			<img src="/ui/paint/{tool}.webp" class="" alt="" />
 		</label>
 	{/each}
-	<ImgBtn src="/ui/paint/undo.png" class="" onclick={() => modifyVersion(-1)} ontouchstart={() => (drawing = false)}></ImgBtn>
-	<ImgBtn src="/ui/paint/redo.png" class="" onclick={() => modifyVersion(1)} ontouchstart={() => (drawing = false)}></ImgBtn>
-	<ImgBtn src="/ui/paint/help.png" class="" onclick={() => {}} ontouchstart={() => (drawing = false)}></ImgBtn>
+	<ImgBtn src="/ui/paint/undo.webp" class="" onclick={() => modifyVersion(-1)} ontouchstart={() => (drawing = false)}></ImgBtn>
+	<ImgBtn src="/ui/paint/redo.webp" class="" onclick={() => modifyVersion(1)} ontouchstart={() => (drawing = false)}></ImgBtn>
+	<ImgBtn src="/ui/paint/help.webp" class="" onclick={() => {}} ontouchstart={() => (drawing = false)}></ImgBtn>
 </div>
 
 <div class="fixed right-0 top-0">
@@ -246,7 +246,7 @@
 				class="transition-transform duration-100"
 				style:transform="scale({name === color ? 1.3 : 1})"
 			>
-				<img class="size-18" src="/ui/paint/colors/{name}.png" alt="" />
+				<img class="size-18" src="/ui/paint/colors/{name}.webp" alt="" />
 			</label>
 		{/each}
 	</div>

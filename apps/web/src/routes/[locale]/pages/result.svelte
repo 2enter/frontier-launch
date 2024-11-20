@@ -40,6 +40,7 @@
 		scene.add(cargo);
 
 		camera.position.z = 3.5;
+		camera.position.y = 0.1;
 
 		function animate() {
 			setTimeout(() => {

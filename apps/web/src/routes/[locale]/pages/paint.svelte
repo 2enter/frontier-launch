@@ -38,6 +38,8 @@
 		return canvas.toDataURL('image/png');
 	}
 
+	const noDraw = () => (drawing = false);
+
 	function eraseAll() {
 		if (!p5) return;
 		p5.erase();
@@ -215,20 +217,20 @@
 			for={tool}
 			class="bg-contain bg-center bg-no-repeat p-6"
 			style:background-image="url({tool === selectedTool ? '/ui/paint/frame.webp' : ''})"
-			ontouchstart={() => (drawing = false)}
+			ontouchstart={noDraw}
 		>
 			<img src="/ui/paint/{tool}.webp" class="" alt="" />
 		</label>
 	{/each}
-	<ImgBtn src="/ui/paint/undo.webp" class="" onclick={() => modifyVersion(-1)} ontouchstart={() => (drawing = false)}></ImgBtn>
-	<ImgBtn src="/ui/paint/redo.webp" class="" onclick={() => modifyVersion(1)} ontouchstart={() => (drawing = false)}></ImgBtn>
-	<ImgBtn src="/ui/paint/help.webp" class="" onclick={() => {}} ontouchstart={() => (drawing = false)}></ImgBtn>
+	<ImgBtn src="/ui/paint/undo.webp" class="" onclick={() => modifyVersion(-1)} ontouchstart={noDraw}></ImgBtn>
+	<ImgBtn src="/ui/paint/redo.webp" class="" onclick={() => modifyVersion(1)} ontouchstart={noDraw}></ImgBtn>
+	<ImgBtn src="/ui/paint/help.webp" class="" onclick={() => (showManual = true)} ontouchstart={noDraw}></ImgBtn>
 </div>
 
 {#if showUI}
 	<div transition:fade class="fixed right-0 top-0">
 		{#if version !== 0}
-			<ImgBtn src="/ui/buttons/done.webp" class="w-[30vw]" ontouchstart={() => (drawing = false)} onclick={() => sysState.navigate(1)} />
+			<ImgBtn src="/ui/buttons/done.webp" class="w-[30vw]" ontouchstart={noDraw} onclick={() => sysState.navigate(1)} />
 		{/if}
 	</div>
 
@@ -236,24 +238,21 @@
 		<div class="flex w-fit flex-col items-start pl-2">
 			{#each COLORS as { name }}
 				<input type="radio" bind:group={color} value={name} id="color-{name}" hidden />
-				<label
-					ontouchstart={() => (drawing = false)}
-					for="color-{name}"
-					class="transition-transform duration-100"
-					style:transform="scale({name === color ? 1.3 : 1})"
-				>
+				<label ontouchstart={noDraw} for="color-{name}" class="transition-transform duration-100" style:transform="scale({name === color ? 1.3 : 1})">
 					<img class="size-18" src="/ui/paint/colors/{name}.webp" alt="" />
 				</label>
 			{/each}
 
-			<ImgBtn
-				src="/ui/paint/bold/{selectedWeight + 1}.webp"
-				ontouchstart={() => (drawing = false)}
-				onclick={() => {
-					selectedWeight = (selectedWeight + 1) % WEIGHT_VALUES.length;
-				}}
-				class="w-32 mt-8"
-			/>
+			<div class="mt-8 bg-contain bg-center bg-no-repeat" style:background-image="url(/ui/paint/bold/bg.png)">
+				<ImgBtn
+					src="/ui/paint/bold/{selectedWeight + 1}.webp"
+					ontouchstart={noDraw}
+					onclick={() => {
+						selectedWeight = (selectedWeight + 1) % WEIGHT_VALUES.length;
+					}}
+					class="w-40"
+				/>
+			</div>
 		</div>
 	</div>
 {/if}

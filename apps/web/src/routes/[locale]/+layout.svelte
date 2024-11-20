@@ -53,7 +53,7 @@
 	<img src="/ui/texts/2enter.png" class="h-10" alt="" />
 </div>
 
-<div class="full-screen center-content bg-contain bg-center bg-no-repeat" style:background-image="url({sysState.bg})">
+<div class="full-screen center-content bg-cover bg-center bg-no-repeat" style:background-image="url({sysState.bg})">
 	{@render children()}
 </div>
 
@@ -79,4 +79,6 @@
 	</div>
 {/if}
 
-<button class="btn btn-secondary fixed left-0 top-0 z-[3000]" onclick={() => window.location.reload()}>reload</button>
+{#if dev}
+	<button class="btn btn-secondary fixed left-0 top-0 z-[3000]" onclick={() => window.location.reload()}>reload</button>
+{/if}

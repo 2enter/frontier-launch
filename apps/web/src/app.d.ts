@@ -11,7 +11,7 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
-	type PageNum = 0 | 1 | 2 | 3;
+	type PageNum = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 	type SubmitResult = CargoesResponse;
 	type WSData = {
 		message?: string;
@@ -29,6 +29,10 @@ declare global {
 			| {
 					type: 'weather';
 					raining: boolean;
+			  }
+			| {
+					type: 'population';
+					amount: number;
 			  };
 	};
 }

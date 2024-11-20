@@ -1,7 +1,7 @@
 <script lang="ts">
 	import P5 from 'p5';
 	import { onMount } from 'svelte';
-	import { slide, fly } from 'svelte/transition';
+	import { slide, fly, fade } from 'svelte/transition';
 
 	import { Timer } from '@repo/lib/utils/runtime';
 	import { randomItem } from '@repo/lib/utils/calc';
@@ -27,6 +27,8 @@
 	let canvas = $state<HTMLCanvasElement>();
 	let version = $state(0);
 	let latestVersion = $state(0);
+	let showUI = $state(true);
+
 	let drawing = true;
 
 	const colorValue = $derived(COLORS.find((c) => c.name === color)?.value ?? '#262626');
@@ -87,6 +89,7 @@
 
 		p.touchMoved = () => {
 			if (!drawing) return;
+			showUI = false;
 
 			let { mouseX: x, mouseY: y } = p;
 			const last = trace.at(-1);
@@ -157,6 +160,7 @@
 		p.touchStarted = p.touchMoved;
 
 		p.touchEnded = async () => {
+			showUI = true;
 			if (!drawing) {
 				drawing = true;
 				return;
@@ -221,36 +225,38 @@
 	<ImgBtn src="/ui/paint/help.webp" class="" onclick={() => {}} ontouchstart={() => (drawing = false)}></ImgBtn>
 </div>
 
-<div class="fixed right-0 top-0">
-	{#if version !== 0}
-		<ImgBtn src="/ui/buttons/done.webp" class="w-[30vw]" ontouchstart={() => (drawing = false)} onclick={() => sysState.navigate(1)} />
-	{/if}
-</div>
-
-<div in:fly={{ x: -100 }} class="fixed left-1 z-[1000] flex flex-col justify-start gap-3">
-	<div class="flex w-fit flex-col items-start pl-2">
-		{#each COLORS as { name }}
-			<input type="radio" bind:group={color} value={name} id="color-{name}" hidden />
-			<label
-				ontouchstart={() => (drawing = false)}
-				for="color-{name}"
-				class="transition-transform duration-100"
-				style:transform="scale({name === color ? 1.3 : 1})"
-			>
-				<img class="size-18" src="/ui/paint/colors/{name}.webp" alt="" />
-			</label>
-		{/each}
-
-		<ImgBtn
-			src="/ui/paint/bold/{selectedWeight + 1}.webp"
-			ontouchstart={() => (drawing = false)}
-			onclick={() => {
-				selectedWeight = (selectedWeight + 1) % WEIGHT_VALUES.length;
-			}}
-			class="w-32"
-		/>
+{#if showUI}
+	<div transition:fade class="fixed right-0 top-0">
+		{#if version !== 0}
+			<ImgBtn src="/ui/buttons/done.webp" class="w-[30vw]" ontouchstart={() => (drawing = false)} onclick={() => sysState.navigate(1)} />
+		{/if}
 	</div>
-</div>
+
+	<div transition:fly={{ x: -100 }} class="fixed left-1 z-[1000] flex flex-col justify-start gap-3">
+		<div class="flex w-fit flex-col items-start pl-2">
+			{#each COLORS as { name }}
+				<input type="radio" bind:group={color} value={name} id="color-{name}" hidden />
+				<label
+					ontouchstart={() => (drawing = false)}
+					for="color-{name}"
+					class="transition-transform duration-100"
+					style:transform="scale({name === color ? 1.3 : 1})"
+				>
+					<img class="size-18" src="/ui/paint/colors/{name}.webp" alt="" />
+				</label>
+			{/each}
+
+			<ImgBtn
+				src="/ui/paint/bold/{selectedWeight + 1}.webp"
+				ontouchstart={() => (drawing = false)}
+				onclick={() => {
+					selectedWeight = (selectedWeight + 1) % WEIGHT_VALUES.length;
+				}}
+				class="w-32 mt-8"
+			/>
+		</div>
+	</div>
+{/if}
 
 <div
 	class="full-screen center-content pointer-events-none bg-contain bg-center bg-no-repeat"

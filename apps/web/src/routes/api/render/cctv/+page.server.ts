@@ -8,3 +8,5 @@ export const load = async () => {
 		.map((c) => c.id);
 	return { cargoes };
 };
+
+export const ssr = false;

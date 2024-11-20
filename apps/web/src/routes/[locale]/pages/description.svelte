@@ -8,9 +8,12 @@
 
 	onMount(() => {
 		const interval = setInterval(() => {
+			if (line === 7) {
+				clearInterval(interval);
+				return;
+			}
 			line++;
 			console.log(line);
-			if (line === 7) clearInterval(interval);
 		}, 1500);
 
 		return () => {

@@ -19,13 +19,13 @@
 	"prettier": "@repo/config/prettier.config.js",
 	"devDependencies": {
 		"@repo/lib": "*",
-		"@types/three": "^0.170.0",
-		"three": "^0.170.0",
 		"@types/p5": "^1.7.6",
-		"dexie": "^4.0.9",
-		"eruda": "^3.4.0",
+		"@types/three": "^0.170.0",
+		"dexie": "^4.0.10",
+		"eruda": "^3.4.1",
 		"p5": "^1.11.1",
-		"sharp": "^0.33.5"
+		"sharp": "^0.33.5",
+		"three": "^0.170.0"
 	},
 	"type": "module"
 }

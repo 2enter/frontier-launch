@@ -3,7 +3,6 @@
 	import { sysState } from '@/states';
 	import { Pages } from './pages';
 	import { fade } from 'svelte/transition';
-	// import { NavBtn } from '@/components/index.js';
 
 	let { data } = $props();
 	const { locale } = data;
@@ -19,5 +18,3 @@
 		<Page />
 	</div>
 {/key}
-
-<!--	<NavBtn action={1} />-->

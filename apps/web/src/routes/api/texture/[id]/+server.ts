@@ -1,5 +1,5 @@
 import { PBFile } from '@repo/lib/pb';
-import { pb } from '@/server/pb';
+import { pb } from '@/server';
 
 export const GET = async ({ params }) => {
 	const { id } = params;

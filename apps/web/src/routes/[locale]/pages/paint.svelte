@@ -94,9 +94,7 @@
 			if (!last) return;
 			switch (selectedTool) {
 				case 'pen':
-					// p.blendMode('soft-light')
 					p.line(...last, x, y);
-					// p.blendMode('normal')
 					break;
 				case 'brush':
 					if (trace.length === 2) {

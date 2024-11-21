@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
-import type { CargoesResponse, CargoesTypeOptions } from '@repo/lib/pb';
+import type {CargoesResponse, CargoesStatusOptions, CargoesTypeOptions } from '@repo/lib/pb';
 import type { ParseEnum } from '@repo/lib/types';
 
 declare global {
@@ -13,6 +13,10 @@ declare global {
 	}
 	type PageNum = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 	type SubmitResult = CargoesResponse;
+	type ConsoleInfo = {
+		duration: number;
+		cargoes: Partial<Record<CargoesStatusOptions, number>>;
+	};
 	type WSData = {
 		message?: string;
 		data?:

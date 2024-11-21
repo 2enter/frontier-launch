@@ -15,7 +15,7 @@
 		configs: {
 			measureUploadLoadedLatency: false,
 			measureDownloadLoadedLatency: false,
-			measurements: [{ type: 'download', bytes: 1e5, count: 10 }],
+			measurements: [{ type: 'download', bytes: 1e5, count: 17 }],
 			autoStart: false
 		},
 		onFinish: (result) => {
@@ -40,7 +40,7 @@
 				action: () => speedTester.test()
 			}
 			// {
-			// 	// update info.raining
+			// 	// update info.raining (only for testing)
 			// 	check: () => moment(timer.now).seconds() % 8 === 0,
 			// 	action: () => (info.raining = !info.raining)
 			// }
@@ -65,14 +65,14 @@
 	});
 
 	let cargoIds = $state<string[]>(data.cargoes);
-	let weatherBg = $state<'sun_to_rain' | 'rain_to_sun'>('rain_to_sun');
+	let weatherBg = $state<'sun' | 'rain'>('rain');
 
 	const previousRaining = new Previous(() => info.raining);
 
 	$effect(() => {
 		if (info.raining !== previousRaining.current) {
 			console.log('switching weather');
-			weatherBg = previousRaining.current ? 'sun_to_rain' : 'rain_to_sun';
+			weatherBg = previousRaining.current ? 'sun' : 'rain';
 		}
 	});
 

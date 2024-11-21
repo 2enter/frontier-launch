@@ -139,7 +139,7 @@
 	</div>
 
 	<div class="fixed -right-16 top-[10vh]">
-		<img src="/ui/cctv/{weatherBg}.gif" class="h-64" alt="" />
+		<img src="/ui/cctv/{weatherBg}.webp" class="h-64" alt="" />
 	</div>
 
 	<div class="info-value right-[2vw] top-[35vh] flex flex-col items-end justify-end gap-4 tracking-tighter">

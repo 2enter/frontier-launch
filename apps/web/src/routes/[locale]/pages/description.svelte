@@ -34,6 +34,6 @@
 			line = 7;
 			return;
 		}
-		sysState.navigate(1);
+		sysState.navigate();
 	}}
 ></button>

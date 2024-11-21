@@ -32,19 +32,19 @@ class SysState {
 		this.dialog.close();
 	};
 
-	navigate = (action: -1 | 1) => {
-		// if (this.pageNum === 2 && action === -1) {
-		// 	window.location.href = '/';
-		// 	return;
-		// }
-		//
-		let result = this.pageNum + action;
-		if (result < 0) {
-			window.location.href = '/';
+	navigate = (step?: any) => {
+		if (typeof step !== 'number') {
+			step = 1;
+		}
+
+		let result = this.pageNum + step;
+
+		if (result < 0 || result > 6) {
+			console.error('invalid page navigation');
 			return;
 		}
 
-		this.pageNum = result as 0 | 1 | 2 | 3;
+		this.pageNum = result as PageNum;
 	};
 }
 

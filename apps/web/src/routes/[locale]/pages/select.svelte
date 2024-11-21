@@ -8,11 +8,11 @@
 
 	function choose(type: CargoesTypeOptions) {
 		inputState.cargoType = type;
-		sysState.navigate(1);
+		sysState.navigate();
 	}
 </script>
 
-<div class="center-content px-14 flex-wrap gap-3">
+<div class="center-content flex-wrap gap-3 px-14">
 	<img src="/ui/texts/select_cargo.png" alt="" />
 	{#each CARGO_TYPES as type}
 		<ImgBtn src="/cargoes/{type}_select.png" class="w-2/5" onclick={() => choose(type)}></ImgBtn>

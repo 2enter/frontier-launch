@@ -232,7 +232,7 @@
 {#if showUI}
 	<div transition:fade class="fixed right-0 top-0">
 		{#if version !== 0}
-			<ImgBtn src="/ui/buttons/done.webp" class="w-[30vw]" ontouchstart={noDraw} onclick={() => sysState.navigate(1)} />
+			<ImgBtn src="/ui/buttons/done.webp" class="w-[30vw]" ontouchstart={noDraw} onclick={sysState.navigate} />
 		{/if}
 	</div>
 

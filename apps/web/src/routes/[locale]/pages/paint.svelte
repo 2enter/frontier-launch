@@ -15,10 +15,12 @@
 	const WEIGHT_VALUES = [5, 20, 35, 50, 65, 80] as const;
 	const MAX_VERSION = 20;
 
-	let timer: Timer;
 	type Tool = (typeof TOOLS)[number];
 
-	let p5 = $state<P5>();
+	let timer: Timer;
+	let p5: P5;
+	let drawing = true;
+
 	let selectedTool = $state<Tool>('pen');
 	let selectedWeight = $state(randomItem(Object.keys(WEIGHT_VALUES).map((i) => +i))[0]);
 	let color = $state<ColorName>(randomItem(COLORS.map((c) => c.name))[0]);
@@ -27,10 +29,9 @@
 	let canvas = $state<HTMLCanvasElement>();
 	let version = $state(0);
 	let latestVersion = $state(0);
+
 	let showUI = $state(true);
 	let showManual = $state(true);
-
-	let drawing = true;
 
 	const colorValue = $derived(COLORS.find((c) => c.name === color)?.value ?? '#262626');
 
@@ -209,14 +210,14 @@
 
 <div
 	in:slide={{ axis: 'y' }}
-	class="fixed bottom-0 flex h-[12vh] w-screen items-center justify-evenly gap-3 bg-cover bg-center bg-no-repeat px-10 py-5"
+	class="fixed bottom-0 flex h-[12vh] w-screen items-center justify-evenly bg-cover bg-center bg-no-repeat px-10 py-5"
 	style:background-image="url(/ui/paint/tools.webp)"
 >
 	{#each TOOLS as tool}
 		<input id={tool} type="radio" value={tool} hidden bind:group={selectedTool} />
 		<label
 			for={tool}
-			class="bg-contain bg-center bg-no-repeat p-6"
+			class="bg-contain bg-center bg-no-repeat"
 			style:background-image="url({tool === selectedTool ? '/ui/paint/frame.webp' : ''})"
 			ontouchstart={noDraw}
 		>

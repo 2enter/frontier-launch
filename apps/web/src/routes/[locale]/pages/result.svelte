@@ -1,8 +1,11 @@
 <script lang="ts">
 	import * as THREE from 'three';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 	import { sysState, inputState } from '@/states';
 	import { onDestroy, onMount } from 'svelte';
+
+	import { ImgBtn } from '@/components';
 
 	const loader = new GLTFLoader();
 	const textureLoader = new THREE.TextureLoader();
@@ -59,7 +62,9 @@
 </script>
 
 <div bind:this={threeDom} class="full-screen z-[1000]"></div>
-<div class="full-screen flex flex-col justify-between px-12 py-32">
+<div class="full-screen flex flex-col justify-between px-12 py-40">
 	<img src="/ui/texts/upload_success.webp" alt="" />
 	<img src="/ui/texts/head_up.webp" alt="" />
 </div>
+
+<ImgBtn class="fixed bottom-12 w-56 z-[3000]" src="/ui/buttons/start.webp" onclick={() => sysState.routeTo(0)} />

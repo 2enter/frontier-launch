@@ -1,4 +1,4 @@
-import { getRecordsByFilter } from '@repo/lib/pb';
+import { CargoesStatusOptions, getRecordsByFilter } from '@repo/lib/pb';
 import { Timer } from '@repo/lib/utils/runtime';
 
 import moment from 'moment';
@@ -76,6 +76,22 @@ class ServerConsole {
 		if (this.started) return;
 		this.started = true;
 	};
+
+	async getInfo(): Promise<ConsoleInfo> {
+		const todayCargoes = await getRecordsByFilter({ pb, collection: 'cargoes', filter: `created>=@todayStart` }).then((data) => data ?? []);
+
+		const statuses = Object.keys(CargoesStatusOptions) as CargoesStatusOptions[];
+		const cargoes: Partial<Record<CargoesStatusOptions, number>> = {};
+
+		for (const status of statuses) {
+			cargoes[status] = todayCargoes.filter((c) => c.status === status).length;
+		}
+
+		return {
+			duration: this.timer.duration,
+			cargoes
+		};
+	}
 }
 
 const serverConsole = new ServerConsole();

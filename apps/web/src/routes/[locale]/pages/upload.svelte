@@ -36,7 +36,7 @@
 			node.style.marginBottom = `${num}px`;
 			if (num > window.innerHeight * 1.5) {
 				console.log('navigating');
-				sysState.navigate(1);
+				sysState.navigate();
 			}
 		}, 100);
 

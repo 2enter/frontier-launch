@@ -46,6 +46,10 @@ class SysState {
 
 		this.pageNum = result as PageNum;
 	};
+
+	routeTo = (num: PageNum) => {
+		this.pageNum = num;
+	};
 }
 
 const sysState = new SysState();

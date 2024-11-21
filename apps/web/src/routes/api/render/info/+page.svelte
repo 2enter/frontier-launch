@@ -21,11 +21,11 @@
 	const timer: TimerState = new TimerState({
 		triggers: [
 			{
-				check: () => moment(timer.duration).second() % 2 === 0,
+				check: () => moment(timer.duration).second() % 10 === 0,
 				action: async () => {
 					const data = (await fetch('/api/console/info')
 						.then((res) => res.json().then((data) => data))
-						.catch((e) => null)) as ConsoleInfo | null;
+						.catch((_) => null)) as ConsoleInfo | null;
 
 					if (!data) return;
 					info = data;
@@ -36,7 +36,7 @@
 </script>
 
 {#if info}
-	<div class="full-screen font-dot-gothic flex items-center tracking-widest whitespace-nowrap bg-rose-800 text-[85vh] text-amber-500">
+	<div class="full-screen font-dot-gothic flex items-center whitespace-nowrap bg-rose-800 text-[85vh] tracking-widest text-amber-500">
 		<Marquee {text} timeout={500} />
 	</div>
 {/if}

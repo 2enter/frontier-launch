@@ -141,16 +141,6 @@
 						);
 					}
 					break;
-				// const vector = p.createVector(x - last[0], y - last[1]);
-				// const verticalVector = vector.rotate(p.HALF_PI).normalize();
-				// p.beginShape();
-				// p.fill(colorValue);
-				// p.noStroke();
-				// p.vertex(last[0] - verticalVector.x * weight, last[1] - verticalVector.y * weight);
-				// p.vertex(last[0] + verticalVector.x * weight, last[1] + verticalVector.y * weight);
-				// p.vertex(x + verticalVector.x * weight, y + verticalVector.y * weight);
-				// p.vertex(x - verticalVector.x * weight, y - verticalVector.y * weight);
-				// p.endShape();
 				case 'eraser':
 					p.erase();
 					p.line(...last, x, y);

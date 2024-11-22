@@ -19,12 +19,18 @@
 		},
 		onstart: () => (sysState.processing = true),
 		onfinish: () => (sysState.processing = false),
-		validate: () => inputState.submittable
+		validate: () => inputState.submittable,
+		getFiles: async () => {
+			const url = await getImage();
+			if (!url) return null;
+			const blob = await fetch(url).then((res) => res.blob());
+			return [{ name: 'paint', file: new File([blob], 'paint.png') }];
+		}
 	});
 
 	async function getImage() {
 		const versions = await dexie.versions.toArray();
-		return versions[0];
+		return versions[0].value;
 	}
 
 	const lightBeam = (node: HTMLImageElement) => {
@@ -50,10 +56,8 @@
 {:then img}
 	{#if img}
 		{#if !inputState.result}
-			{@const imgUrl = img.value}
-			<img src={imgUrl} alt="" class="pointer-events-none fixed h-auto w-full" />
-			<form id="form" hidden action="?/submit" method="post" use:enhance={enhanceHandler}>
-				<input type="text" name="paint" value={imgUrl} readonly />
+			<img src={img} alt="" class="pointer-events-none fixed h-auto w-full" />
+			<form id="form" hidden action="?/submit" method="post" enctype="multipart/form-data" use:enhance={enhanceHandler}>
 				<input type="text" name="cargo_type" value={inputState.cargoType} readonly />
 				<input type="number" name="draw_duration" value={inputState.drawDuration ?? 0} readonly />
 			</form>

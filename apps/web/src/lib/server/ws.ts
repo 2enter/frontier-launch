@@ -1,6 +1,7 @@
 import { BunWS, startHelperServer } from '@repo/lib/server';
+import { web_ws } from '@repo/config/dev-server.json' with { format: 'json' };
 
-import { WS_HELPER_PORT } from '$env/static/private';
+const { port } = web_ws;
 
 const ws = new BunWS<WSData>({
 	onopen: () => {
@@ -14,7 +15,7 @@ const ws = new BunWS<WSData>({
 	}
 });
 
-startHelperServer(ws, +WS_HELPER_PORT);
+startHelperServer(ws, port);
 
 export { ws };
 export type { WSData };

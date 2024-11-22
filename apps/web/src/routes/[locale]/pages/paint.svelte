@@ -198,6 +198,7 @@
 
 		return () => {
 			if (p5) p5.remove();
+			timer.stop();
 			inputState.drawDuration = Math.floor(timer.duration / 1000);
 			for (let i = 0; i < 1000; ++i) {
 				if (i !== version) dexie.versions.delete(i);

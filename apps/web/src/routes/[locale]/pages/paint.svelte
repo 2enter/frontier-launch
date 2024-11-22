@@ -18,8 +18,8 @@
 	type Tool = (typeof TOOLS)[number];
 
 	let timer: Timer;
-	let p5: P5;
 	let drawing = true;
+	let p5: P5;
 
 	let selectedTool = $state<Tool>('pen');
 	let selectedWeight = $state(randomItem(Object.keys(WEIGHT_VALUES).map((i) => +i))[0]);
@@ -64,7 +64,6 @@
 		}
 		p5.loadImage(dataUrl, (img) => {
 			if (!p5) return;
-			console.log(img);
 			eraseAll();
 			p5.image(img, 0, 0, p5.windowWidth, p5.windowHeight);
 		});
@@ -161,7 +160,7 @@
 			}
 		};
 
-		p.touchStarted = p.touchMoved;
+		// p.touchStarted = p.touchMoved;
 
 		p.touchEnded = async () => {
 			showUI = true;
@@ -197,7 +196,7 @@
 		timer = new Timer();
 
 		return () => {
-			if (p5) p5.remove();
+			p5?.remove();
 			timer.stop();
 			inputState.drawDuration = Math.floor(timer.duration / 1000);
 			for (let i = 0; i < 1000; ++i) {

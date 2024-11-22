@@ -4,13 +4,12 @@ import { CargoesTypeOptions } from '@repo/lib/pb';
 import { pb, ws } from '@/server';
 import { makeTextureImage } from '@/image';
 
-const submit: Action = async ({ request, fetch, url }) => {
+const submit: Action = async ({ request, url }) => {
 	const formData = await request.formData();
 	const draw_duration = +(formData.get('draw_duration') as string);
 	const type = formData.get('cargo_type') as CargoesTypeOptions;
 	const paint = formData.get('paint') as File;
 
-	console.log(Object.fromEntries(formData));
 	const buffer = await paint.arrayBuffer();
 	const texture = await makeTextureImage(buffer, type);
 

@@ -5,15 +5,12 @@
 	import { inputState, sysState } from '@/states';
 	import { ImgBtn } from '@/components/index.js';
 
-	let uploaded = $state(false);
-
 	const enhanceHandler = makeEnhanceHandler({
 		handlers: {
 			success: async (data) => {
 				console.log('success');
 				if (!data) return;
 				inputState.result = data;
-				uploaded = true;
 			},
 			failure: async () => {
 				console.log('failure');
@@ -24,7 +21,6 @@
 
 	async function getImage() {
 		const versions = await dexie.versions.toArray();
-		console.log(versions);
 		return versions[0];
 	}
 
@@ -32,10 +28,8 @@
 		let num = 2;
 		const interval = setInterval(() => {
 			num += num;
-			console.log('hello');
 			node.style.marginBottom = `${num}px`;
 			if (num > window.innerHeight * 1.5) {
-				console.log('navigating');
 				sysState.navigate();
 			}
 		}, 100);
@@ -52,7 +46,7 @@
 	loading
 {:then img}
 	{#if img}
-		{#if !uploaded}
+		{#if !inputState.result}
 			{@const imgUrl = img.value}
 			<img src={imgUrl} alt="" class="pointer-events-none fixed h-auto w-full" />
 			<form id="form" hidden action="?/submit" method="post" use:enhance={enhanceHandler}>

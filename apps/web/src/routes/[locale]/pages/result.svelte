@@ -67,4 +67,11 @@
 	<img src="/ui/texts/head_up.webp" alt="" />
 </div>
 
-<ImgBtn class="fixed bottom-12 w-56 z-[3000]" src="/ui/buttons/start.webp" onclick={() => sysState.routeTo(0)} />
+<ImgBtn
+	class="fixed bottom-12 z-[3000] w-56"
+	src="/ui/buttons/start.webp"
+	onclick={() => {
+		inputState.reset();
+		sysState.routeTo(0);
+	}}
+/>

@@ -6,6 +6,9 @@
 		"port": 5174,
 		"host": "0.0.0.0"
 	},
+	"web_ws": {
+		"port": 8001
+	},
 	"exhibit": {
 		"port": 5175
 	}

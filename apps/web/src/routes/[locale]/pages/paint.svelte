@@ -225,25 +225,28 @@
 		{/if}
 	</div>
 
-	<div transition:fly={{ x: -100 }} class="fixed left-1 z-[1000] flex flex-col justify-start gap-3">
+	<div transition:fly={{ x: -100 }} class="pointer-events-none fixed left-1 z-[1000] flex flex-col justify-start gap-3">
 		<div class="flex w-fit flex-col items-start pl-2">
 			{#each COLORS as { name }}
 				<input type="radio" bind:group={color} value={name} id="color-{name}" hidden />
-				<label ontouchstart={noDraw} for="color-{name}" class="transition-transform duration-100" style:transform="scale({name === color ? 1.3 : 1})">
+				<label
+					ontouchstart={noDraw}
+					for="color-{name}"
+					class="pointer-events-auto transition-transform duration-100"
+					style:transform="scale({name === color ? 1.3 : 1})"
+				>
 					<img class="size-18" src="/ui/paint/colors/{name}.webp" alt="" />
 				</label>
 			{/each}
+		</div>
 
-			<div class="mt-8 bg-contain bg-center bg-no-repeat" style:background-image="url(/ui/paint/bold/bg.png)">
-				<ImgBtn
-					src="/ui/paint/bold/{selectedWeight + 1}.webp"
-					ontouchstart={noDraw}
-					onclick={() => {
-						selectedWeight = (selectedWeight + 1) % WEIGHT_VALUES.length;
-					}}
-					class="w-40"
-				/>
-			</div>
+		<div class="mt-8 bg-contain bg-center bg-no-repeat" style:background-image="url(/ui/paint/bold/bg.png)">
+			<ImgBtn
+				src="/ui/paint/bold/{selectedWeight + 1}.webp"
+				ontouchstart={noDraw}
+				onclick={() => (selectedWeight = (selectedWeight + 1) % WEIGHT_VALUES.length)}
+				class="pointer-events-auto w-40"
+			/>
 		</div>
 	</div>
 {/if}

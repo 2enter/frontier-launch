@@ -18,14 +18,14 @@
 
 {#if dir}
 	<div
-		class="full-screen center-content font-dot-gothic whitespace-nowrap text-black {dir}"
+		class="full-screen center-content font-dot-gothic whitespace-nowrap font-bold tracking-widest text-black {dir}"
 		style:background-color="hsl({+(Math.random() * 200)}, 100%, 80%)"
 	>
 		<Marquee text={title} timeout={700} />
 	</div>
 {/if}
 
-<style>
+<style lang="postcss">
 	.ver {
 		writing-mode: vertical-rl;
 		text-orientation: mixed;

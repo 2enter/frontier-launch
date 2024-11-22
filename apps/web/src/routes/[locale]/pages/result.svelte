@@ -69,7 +69,7 @@
 
 <ImgBtn
 	class="fixed bottom-12 z-[3000] w-56"
-	src="/ui/buttons/start.webp"
+	src="/ui/buttons/restart.webp"
 	onclick={() => {
 		inputState.reset();
 		sysState.routeTo(0);

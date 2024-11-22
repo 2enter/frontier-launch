@@ -8,6 +8,12 @@ class InputState {
 	result = $state<CargoesResponse | null>(null);
 
 	readonly submittable = $derived(this.cargoType && this.drawDuration);
+
+	reset = () => {
+		this.cargoType = null;
+		this.drawDuration = 0;
+		this.result = null;
+	};
 }
 
 const inputState = new InputState();

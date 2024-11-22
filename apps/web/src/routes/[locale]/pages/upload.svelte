@@ -16,7 +16,10 @@
 				console.log('failure');
 				sysState.popError('failure');
 			}
-		}
+		},
+		onstart: () => (sysState.processing = true),
+		onfinish: () => (sysState.processing = false),
+		validate: () => inputState.submittable
 	});
 
 	async function getImage() {

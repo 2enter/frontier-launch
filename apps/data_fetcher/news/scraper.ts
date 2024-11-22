@@ -2,13 +2,22 @@ import type { RawNews } from './config';
 
 import chalk from 'chalk';
 import firefox from 'selenium-webdriver/firefox';
+import edge from 'selenium-webdriver/edge';
 import { Builder, By } from 'selenium-webdriver';
 
 import { sleep } from '@repo/lib/utils/runtime';
 import { URL, ELEMENT_IDENTIFIERS } from './config';
 
+console.log('platform: ', process.platform);
+
 class Scraper {
-	readonly driver = new Builder().forBrowser('firefox').setFirefoxOptions(new firefox.Options().addArguments('--headless')).build();
+	readonly driver =
+		process.platform === 'win32'
+			? new Builder()
+					.forBrowser('MicrosoftEdge')
+					.setEdgeOptions(new edge.Options().addArguments('--headless') as any)
+					.build()
+			: new Builder().forBrowser('firefox').setFirefoxOptions(new firefox.Options().addArguments('--headless')).build();
 
 	async getNews() {
 		await this.driver.get(URL);

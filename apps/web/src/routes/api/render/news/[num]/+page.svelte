@@ -17,7 +17,7 @@
 </svelte:head>
 
 {#if dir}
-	<div class="full-screen center-content whitespace-nowrap font-serif {dir}" style:background-color="hsl({+(Math.random() * 200)}, 100%, 80%)">
+	<div class="full-screen center-content font-dot-gothic whitespace-nowrap {dir}" style:background-color="hsl({+(Math.random() * 200)}, 100%, 80%)">
 		<Marquee text={title} timeout={500} />
 	</div>
 {/if}

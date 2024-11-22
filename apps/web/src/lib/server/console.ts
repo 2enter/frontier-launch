@@ -23,6 +23,7 @@ class ServerConsole {
 				},
 				{
 					// send weather data
+					runOnStart: true,
 					check: () => moment(this.timer.now).minute() === 0 && moment(this.timer.now).second() === 0,
 					action: async () => {
 						ws.broadcast({ data: { type: 'weather', raining: await getRaining() } });
@@ -45,6 +46,7 @@ class ServerConsole {
 				},
 				{
 					// update news
+					runOnStart: true,
 					check: () => moment(this.timer.now).second() === 0,
 					action: async () => {
 						const { items: news } = await pb.collection('news').getList(1, 20, { sort: '-created' });

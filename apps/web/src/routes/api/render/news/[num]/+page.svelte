@@ -17,8 +17,11 @@
 </svelte:head>
 
 {#if dir}
-	<div class="full-screen center-content font-dot-gothic whitespace-nowrap text-black {dir}" style:background-color="hsl({+(Math.random() * 200)}, 100%, 80%)">
-		<Marquee text={title} timeout={500} />
+	<div
+		class="full-screen center-content font-dot-gothic whitespace-nowrap text-black {dir}"
+		style:background-color="hsl({+(Math.random() * 200)}, 100%, 80%)"
+	>
+		<Marquee text={title} timeout={700} />
 	</div>
 {/if}
 
@@ -26,10 +29,10 @@
 	.ver {
 		writing-mode: vertical-rl;
 		text-orientation: mixed;
-		font-size: 90vw;
+		font-size: 70vw;
 	}
 
 	.hor {
-		font-size: 90vh;
+		font-size: 70vh;
 	}
 </style>

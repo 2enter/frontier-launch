@@ -52,7 +52,7 @@
 </script>
 
 {#await getImage()}
-	loading
+	圖片載入中
 {:then img}
 	{#if img}
 		{#if !inputState.result}
@@ -61,11 +61,13 @@
 				<input type="text" name="cargo_type" value={inputState.cargoType} readonly />
 				<input type="number" name="draw_duration" value={inputState.drawDuration ?? 0} readonly />
 			</form>
-			<ImgBtn src="/ui/buttons/upload.png" class="z-[2000]" form="form" type="submit" />
+			{#if !sysState.processing}
+				<ImgBtn src="/ui/buttons/upload.png" class="z-[2000]" form="form" type="submit" />
+			{/if}
 		{:else}
 			<img use:lightBeam class="h-[50vh] w-screen" src="/ui/animations/light_beam.webp" alt="" />
 		{/if}
 	{:else}
-		img not found
+		載入失敗
 	{/if}
 {/await}

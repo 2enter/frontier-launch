@@ -12,6 +12,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>News</title>
+</svelte:head>
+
 {#if dir}
 	<div class="full-screen center-content whitespace-nowrap font-serif {dir}" style:background-color="hsl({+(Math.random() * 200)}, 100%, 80%)">
 		<Marquee text={title} timeout={500} />

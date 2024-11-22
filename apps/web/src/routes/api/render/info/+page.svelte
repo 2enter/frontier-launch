@@ -35,6 +35,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Console Info</title>
+</svelte:head>
+
 {#if info}
 	<div class="full-screen font-dot-gothic flex items-center whitespace-nowrap bg-rose-800 text-[85vh] tracking-widest text-amber-500">
 		<Marquee {text} timeout={500} />

@@ -3,6 +3,7 @@
 	import { TimerState } from '@repo/lib/utils/runtime';
 	import moment from 'moment';
 	import { LAUNCH_TIMEOUT } from '@/config';
+	import { toFixedDigit } from '@repo/lib/utils/calc';
 
 	let info = $state<ConsoleInfo>();
 	const countDown = $derived(LAUNCH_TIMEOUT - (info?.duration ?? 0));
@@ -13,8 +14,8 @@
 		const second = time.second();
 		const { cargoes } = info;
 		return (
-			`距離下次火箭發射還有${minute}分${second}秒，今日貨物狀況：` +
-			`已發射${cargoes.launched ?? 0}件、待發射${cargoes.shipped ?? 0}件、集運中${cargoes.shipping ?? 0}件      `
+			`距離下次火箭發射還有${toFixedDigit(minute)}分${toFixedDigit(second)}秒，今日貨物狀況：` +
+			`已發射${cargoes.launched ?? 0}件、待發射${cargoes.shipped ?? 0}件、集運中${cargoes.shipping ?? 0}件~~~`
 		);
 	});
 

@@ -1,7 +1,7 @@
 import type { ActionResult, SubmitFunction } from '@sveltejs/kit';
 
-function makeEnhanceHandler(args: {
-	handlers: Partial<Record<ActionResult['type'], (data?: SubmitResult) => Promise<any>>>;
+function makeEnhanceHandler<T>(args: {
+	handlers: Partial<Record<ActionResult['type'], (data?: T) => Promise<any>>>;
 	getFiles?: () => Promise<{ name: string; file: File }[] | null>;
 	onstart?: () => void;
 	onfinish?: () => void;
@@ -33,7 +33,7 @@ function makeEnhanceHandler(args: {
 			if (!handler) return;
 
 			if ('data' in result) {
-				const data = result.data as SubmitResult;
+				const data = result.data as T;
 				await handler(data);
 			} else {
 				await handler();

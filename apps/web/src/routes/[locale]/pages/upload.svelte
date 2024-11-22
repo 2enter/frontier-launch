@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { dexie } from '@/dexie';
-	import { makeEnhanceHandler } from '@/form';
+	import { makeEnhanceHandler } from '@repo/lib/utils/browser';
 	import { inputState, sysState } from '@/states';
 	import { ImgBtn } from '@/components/index.js';
 
-	const enhanceHandler = makeEnhanceHandler({
+	const enhanceHandler = makeEnhanceHandler<SubmitResult>({
 		handlers: {
 			success: async (data) => {
 				console.log('success');

@@ -17,7 +17,6 @@
 
 	type Tool = (typeof TOOLS)[number];
 
-	let timer: Timer;
 	let drawing = true;
 	let p5: P5;
 
@@ -193,7 +192,7 @@
 		dexie.versions.clear();
 		p5 = new P5(sketch);
 
-		timer = new Timer();
+		const timer = new Timer();
 
 		return () => {
 			p5?.remove();

@@ -93,7 +93,7 @@
 						info.raining = data.raining;
 						break;
 					case 'population':
-						info.population = data.amount;
+						info.population = data.amount * 10 + ~~(Math.random() * 10);
 						break;
 					case 'cargo':
 						cargoIds.push(data.id);

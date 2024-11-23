@@ -1,5 +1,5 @@
-const LAUNCH_TIMEOUT = 5 * 60 * 1000;
-const SHIPPING_SECOND = 15;
+const LAUNCH_TIMEOUT = 10 * 60 * 1000;
+const SHIPPING_SECOND = 60;
 const RESULT_SIZE = 1000;
 const COLORS = [
 	{ name: 'red', value: '#EB0018' },

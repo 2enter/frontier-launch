@@ -240,12 +240,12 @@
 			{/each}
 		</div>
 
-		<div class="mt-8 bg-contain bg-center bg-no-repeat" style:background-image="url(/ui/paint/bold/bg.png)">
+		<div class="center-content mt-10 w-40 bg-cover bg-no-repeat" style:background-image="url(/ui/paint/bold/bg.webp)">
 			<ImgBtn
 				src="/ui/paint/bold/{selectedWeight + 1}.webp"
 				ontouchstart={noDraw}
 				onclick={() => (selectedWeight = (selectedWeight + 1) % WEIGHT_VALUES.length)}
-				class="pointer-events-auto w-40"
+				class="pointer-events-auto"
 			/>
 		</div>
 	</div>

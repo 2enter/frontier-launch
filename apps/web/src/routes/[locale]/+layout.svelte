@@ -49,7 +49,7 @@
 	{/if}
 </div>
 
-<div class="center-content fixed bottom-1 z-[1000] w-full">
+<div class="center-content fixed bottom-2 z-[1000] w-full">
 	<img src="/ui/texts/2enter.png" class="h-10" alt="" />
 </div>
 

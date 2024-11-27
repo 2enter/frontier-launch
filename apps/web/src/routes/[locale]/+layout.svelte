@@ -32,7 +32,7 @@
 	});
 </script>
 
-<div class="center-content fixed top-0 z-[1000] w-full *:h-8">
+<div class="center-content fixed top-1 z-[1000] w-full *:h-8">
 	{#if launchCountDown}
 		{@const time = moment(launchCountDown)}
 		{@const minute = time.minute()}
@@ -49,7 +49,7 @@
 	{/if}
 </div>
 
-<div class="center-content fixed bottom-0 z-[1000] w-full">
+<div class="center-content fixed bottom-1 z-[1000] w-full">
 	<img src="/ui/texts/2enter.png" class="h-10" alt="" />
 </div>
 

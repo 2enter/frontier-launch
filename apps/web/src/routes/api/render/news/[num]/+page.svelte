@@ -7,6 +7,12 @@
 	let dir = $state<'ver' | 'hor' | null>(null);
 
 	onMount(() => {
+		setTimeout(
+			() => {
+				window.location.reload();
+			},
+			60 * 1000 * 60
+		);
 		const { innerWidth: width, innerHeight: height } = window;
 		dir = width > height ? 'hor' : 'ver';
 	});

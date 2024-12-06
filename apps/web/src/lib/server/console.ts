@@ -24,7 +24,7 @@ class ServerConsole {
 				{
 					// send weather data
 					runOnStart: true,
-					check: () => moment(this.timer.now).minute() === 0 && moment(this.timer.now).second() === 0,
+					check: () => moment(this.timer.now).minute() % 10 === 0 && moment(this.timer.now).second() === 0,
 					action: async () => {
 						ws.broadcast({ data: { type: 'weather', raining: await getRaining() } });
 					}

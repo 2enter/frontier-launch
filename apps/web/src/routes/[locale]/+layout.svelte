@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { toFixedDigit } from '@repo/lib/utils/calc';
-
 	import moment from 'moment';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';

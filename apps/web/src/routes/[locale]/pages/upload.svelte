@@ -2,8 +2,10 @@
 	import { enhance } from '$app/forms';
 	import { dexie } from '@/dexie';
 	import { makeEnhanceHandler } from '@repo/lib/utils/browser';
-	import { inputState, sysState } from '@/states';
+	import { getInputState, getSysState } from '@/states';
 	import { ImgBtn } from '@/components/index.js';
+
+	const [inputState, sysState] = [getInputState(), getSysState()];
 
 	const enhanceHandler = makeEnhanceHandler<SubmitResult>({
 		handlers: {

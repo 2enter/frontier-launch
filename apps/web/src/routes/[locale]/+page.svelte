@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { sysState } from '@/states';
+	import { getSysState } from '@/states';
 	import { Pages } from './pages';
 	import { fade } from 'svelte/transition';
 
 	let { data } = $props();
 	const { locale } = data;
+
+	const sysState = getSysState();
+
 	const Page = $derived(Pages[sysState.pageNum]);
 
 	onMount(() => {

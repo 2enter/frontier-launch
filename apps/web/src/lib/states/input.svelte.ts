@@ -1,5 +1,8 @@
 import type { ParseEnum } from '@repo/lib/types';
-import { type CargoesResponse, CargoesTypeOptions } from '@repo/lib/pb';
+import type { CargoesResponse } from '@repo/lib/pb';
+
+import { getContext, setContext } from 'svelte';
+import { CargoesTypeOptions } from '@repo/lib/pb';
 
 class InputState {
 	cargoType = $state<ParseEnum<CargoesTypeOptions> | null>(null);
@@ -16,6 +19,14 @@ class InputState {
 	};
 }
 
-const inputState = new InputState();
+const INPUT_STATE_CTX = 'INPUT_STATE';
 
-export { inputState };
+function setInputState() {
+	return setContext(INPUT_STATE_CTX, new InputState());
+}
+
+function getInputState() {
+	return getContext<ReturnType<typeof setInputState>>(INPUT_STATE_CTX);
+}
+
+export { setInputState, getInputState };

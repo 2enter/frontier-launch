@@ -1,4 +1,5 @@
 import type { Locale } from '@/localizations';
+import { setContext, getContext } from 'svelte';
 import { DEFAULT_LOCALE, localizations } from '@/localizations';
 
 class SysState {
@@ -52,6 +53,14 @@ class SysState {
 	};
 }
 
-const sysState = new SysState();
+const SYS_STATE_CTX = 'SYS_STATE';
 
-export { sysState };
+function setSysState() {
+	return setContext(SYS_STATE_CTX, new SysState());
+}
+
+function getSysState() {
+	return getContext<ReturnType<typeof setSysState>>(SYS_STATE_CTX);
+}
+
+export { setSysState, getSysState };

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { getSysState } from '@/states';
 
-	import { sysState } from '@/states';
+	const sysState = getSysState();
 
 	let line = $state(0);
 

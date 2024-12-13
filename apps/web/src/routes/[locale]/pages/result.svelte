@@ -2,10 +2,12 @@
 	import * as THREE from 'three';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-	import { sysState, inputState } from '@/states';
+	import { getSysState, getInputState } from '@/states';
 	import { onDestroy, onMount } from 'svelte';
 
 	import { ImgBtn } from '@/components';
+
+	const [inputState, sysState] = [getInputState(), getSysState()];
 
 	const loader = new GLTFLoader();
 	const textureLoader = new THREE.TextureLoader();

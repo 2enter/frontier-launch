@@ -3,6 +3,10 @@
 	import '../app.css';
 
 	import { PUBLIC_FA_KIT_URL } from '$env/static/public';
+	import { setSysState, setInputState } from '@/states';
+
+	setSysState();
+	setInputState();
 
 	let { children } = $props();
 </script>

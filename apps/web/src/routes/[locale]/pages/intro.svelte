@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { ImgBtn } from '@/components';
-	import { sysState } from '@/states';
+	import { getSysState } from '@/states';
+
+	const sysState = getSysState();
 </script>
 
 <img class="pointer-events-none fixed h-full" src="/ui/layouts/intro_page.webp" alt="" />

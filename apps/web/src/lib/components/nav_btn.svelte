@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { sysState } from '@/states';
+	import { getSysState } from '@/states';
 
 	interface Props {
 		children?: Snippet;
@@ -10,6 +10,8 @@
 	}
 
 	let { children, action, class: className, onclick }: Props = $props();
+
+	const sysState = getSysState();
 </script>
 
 {#if children}

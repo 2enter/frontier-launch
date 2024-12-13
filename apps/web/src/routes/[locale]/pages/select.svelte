@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { CargoesTypeOptions } from '@repo/lib/pb';
 
-	import { inputState, sysState } from '@/states';
+	import { getInputState, getSysState } from '@/states';
 	import { ImgBtn } from '@/components';
 
+	const [inputState, sysState] = [getInputState(), getSysState()];
 	const CARGO_TYPES = Object.values(CargoesTypeOptions);
 
 	function choose(type: CargoesTypeOptions) {

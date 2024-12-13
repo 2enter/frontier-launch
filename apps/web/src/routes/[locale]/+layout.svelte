@@ -5,9 +5,11 @@
 	import { navigating } from '$app/stores';
 	import { dev } from '$app/environment';
 
-	import { sysState } from '@/states';
+	import { getSysState } from '@/states';
 	import { LAUNCH_TIMEOUT } from '@/config';
 	import { FullscreenChecker } from '@/components';
+
+	const sysState = getSysState();
 
 	let { children } = $props();
 	let launchCountDown = $state<number>();

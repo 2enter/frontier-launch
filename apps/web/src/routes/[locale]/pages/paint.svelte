@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { ColorName } from '@/config';
+
 	import P5 from 'p5';
 	import { onMount } from 'svelte';
 	import { slide, fly, fade } from 'svelte/transition';
@@ -7,9 +9,12 @@
 	import { randomItem } from '@repo/lib/utils/calc';
 
 	import { dexie } from '@/dexie';
-	import { type ColorName, COLORS } from '@/config';
-	import { inputState, sysState } from '@/states';
+	import { COLORS } from '@/config';
+	import { getInputState, getSysState } from '@/states';
+
 	import { ImgBtn } from '@/components';
+
+	const [inputState, sysState] = [getInputState(), getSysState()];
 
 	const TOOLS = ['pen', 'brush', 'eraser'] as const;
 	const WEIGHT_VALUES = [5, 20, 35, 50, 65, 80] as const;

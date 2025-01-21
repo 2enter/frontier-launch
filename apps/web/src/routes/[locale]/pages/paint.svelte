@@ -25,7 +25,7 @@
 	let drawing = true;
 	let p5: P5;
 
-	let selectedTool = $state<Tool>('brush');
+	let selectedTool = $state<Tool>('pen');
 	let selectedWeight = $state(randomItem(Object.keys(WEIGHT_VALUES).map((i) => +i))[0]);
 	let color = $state<ColorName>(randomItem(COLORS.map((c) => c.name))[0]);
 	let weight = $derived(WEIGHT_VALUES[selectedWeight]);
@@ -184,12 +184,12 @@
 	};
 
 	onMount(() => {
-		dexie.versions.clear();
+		// dexie.versions.clear();
 		p5 = new P5(sketch);
 
 		const timer = new Timer();
 
-		return async () => {
+		return () => {
 			p5?.remove();
 			timer.stop();
 			inputState.drawDuration = Math.floor(timer.duration / 1000);

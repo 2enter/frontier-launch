@@ -57,7 +57,7 @@
 	{@render children()}
 </div>
 
-<FullscreenChecker />
+<!--<FullscreenChecker />-->
 
 <dialog bind:this={sysState.dialog} class="modal modal-middle">
 	<div class="modal-box">

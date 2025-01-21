@@ -22,10 +22,12 @@
 			return;
 		}
 		let rotation = 0;
-		const model = await loader.loadAsync(`/cargoes/${inputState.result.type}.glb`);
-		const texture = await textureLoader.loadAsync(`/api/texture/${inputState.result.id}`);
 		
+		const { type, id } = inputState.result;
 		inputState.reset();
+		
+		const model = await loader.loadAsync(`/cargoes/${type}.glb`);
+		const texture = await textureLoader.loadAsync(`/api/texture/${id}`);
 
 		const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 		const renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -54,7 +56,7 @@
 				frame = requestAnimationFrame(animate);
 				renderer.render(scene, camera);
 				cargo.rotation.y = rotation;
-			}, 50);
+			}, 10);
 		}
 		animate();
 	});

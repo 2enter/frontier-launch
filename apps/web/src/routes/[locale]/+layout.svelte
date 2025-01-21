@@ -22,7 +22,7 @@
 
 		const interval = setInterval(async () => {
 			launchCountDown = LAUNCH_TIMEOUT - (await fetch('/api/console/duration').then((data) => data.json().then((result) => result)));
-		}, 1000);
+		}, 2000);
 
 		return {
 			destroy() {

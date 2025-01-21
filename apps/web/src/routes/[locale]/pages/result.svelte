@@ -15,7 +15,7 @@
 
 	let threeDom = $state<HTMLDivElement>();
 	let frame = 0;
-	const FRAME_RATE = 8;
+	const FRAME_RATE = 30;
 
 	onMount(async () => {
 		if (!inputState.result) {

@@ -54,7 +54,7 @@
 				frame = requestAnimationFrame(animate);
 				renderer.render(scene, camera);
 				cargo.rotation.y = rotation;
-			}, 10);
+			}, 50);
 		}
 		animate();
 	});

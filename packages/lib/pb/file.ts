@@ -28,7 +28,7 @@ class PBFile<T extends ParseEnum<Collections>> {
 		if (!record) return null;
 		await this.pb.collection(this.collection).getOne(this.id);
 		const token = await this.pb.files.getToken();
-		return this.pb.files.getUrl(record, record[this.field as string], { token });
+		return this.pb.files.getURL(record, record[this.field as string], { token });
 	}
 
 	async getRecord() {

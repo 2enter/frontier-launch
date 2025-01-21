@@ -74,7 +74,7 @@ class ServerConsole {
 							cargo.paint = paint;
 							cargo.texture = texture;
 
-							await pb.collection('cargoes_archived').create({ ...cargo, texture, paint });
+							await pb.collection('cargoes_archived').create(cargo);
 
 							await pb.collection('cargoes').delete(cargo.id);
 						}

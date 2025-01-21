@@ -22,8 +22,7 @@
 			console.log('result not found');
 			return;
 		}
-		let rotation = 0;
-
+		
 		const { type, id } = $state.snapshot(inputState.result);
 		inputState.reset();
 
@@ -53,10 +52,9 @@
 
 		function animate() {
 			setTimeout(() => {
-				rotation += 1 / FRAME_RATE;
 				frame = requestAnimationFrame(animate);
 				renderer.render(scene, camera);
-				cargo.rotation.y = rotation;
+				cargo.rotation.y += 1 / FRAME_RATE;
 			}, 1000 / FRAME_RATE);
 		}
 		animate();

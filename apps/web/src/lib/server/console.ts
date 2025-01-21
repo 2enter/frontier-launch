@@ -53,6 +53,18 @@ class ServerConsole {
 						const sorted = news.sort((a, b) => a.hype - b.hype);
 						this.news = sorted.slice(0, 10).map(({ title }) => title);
 					}
+				},
+				{
+					// archive outdated cargoes
+					runOnStart: true,
+					check: () => moment(this.timer.now).minute() === 0,
+					action: async () => {
+						const outdatedCargoes = await getRecordsByFilter({ pb, collection: 'cargoes', filter: `created<@todayStart` }).then((data) => data ?? []);
+						for (const cargo of outdatedCargoes) {
+							await pb.collection('cargoes_archived').create(cargo);
+							await pb.collection('cargoes').delete(cargo.id);
+						}
+					}
 				}
 			]
 		});

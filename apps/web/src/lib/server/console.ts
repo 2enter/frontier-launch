@@ -1,4 +1,4 @@
-import { CargoesStatusOptions, getRecordsByFilter } from '@repo/lib/pb';
+import { CargoesStatusOptions, getRecordsByFilter, PBFile } from '@repo/lib/pb';
 import { Timer } from '@repo/lib/utils/runtime';
 
 import moment from 'moment';
@@ -63,7 +63,19 @@ class ServerConsole {
 						if (outdatedCargoes.length === 0) return;
 						console.log(`Found ${outdatedCargoes.length} outdated cargoes`);
 						for (const cargo of outdatedCargoes) {
-							await pb.collection('cargoes_archived').create(cargo);
+							const paintBuffer = await new PBFile({ pb, collection: 'cargoes', id: cargo.id, field: 'paint' }).getBuffer();
+							const textureBuffer = await new PBFile({ pb, collection: 'cargoes', id: cargo.id, field: 'texture' }).getBuffer();
+
+							if (!paintBuffer || !textureBuffer) return;
+
+							const paint = new File([new Blob([paintBuffer])], 'paint.png');
+							const texture = new File([new Blob([textureBuffer])], 'texture.jpg');
+
+							cargo.paint = paint;
+							cargo.texture = texture;
+
+							await pb.collection('cargoes_archived').create({ ...cargo, texture, paint });
+
 							await pb.collection('cargoes').delete(cargo.id);
 						}
 						console.log(`Have archived outdated cargoes.`);

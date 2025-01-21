@@ -60,10 +60,13 @@ class ServerConsole {
 					check: () => moment(this.timer.now).minute() === 0,
 					action: async () => {
 						const outdatedCargoes = await getRecordsByFilter({ pb, collection: 'cargoes', filter: `created<@todayStart` }).then((data) => data ?? []);
+						if (outdatedCargoes.length === 0) return;
+						console.log(`Found ${outdatedCargoes.length} outdated cargoes`);
 						for (const cargo of outdatedCargoes) {
 							await pb.collection('cargoes_archived').create(cargo);
 							await pb.collection('cargoes').delete(cargo.id);
 						}
+						console.log(`Have archived outdated cargoes.`);
 					}
 				}
 			]

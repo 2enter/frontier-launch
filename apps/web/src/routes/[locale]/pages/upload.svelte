@@ -53,23 +53,23 @@
 	};
 </script>
 
-{#await getImage()}
-	圖片載入中
-{:then img}
-	{#if img}
-		{#if !inputState.result}
-			<img src={img} alt="" class="pointer-events-none fixed h-auto w-full" />
-			<form id="form" hidden action="?/submit" method="post" enctype="multipart/form-data" use:enhance={enhanceHandler}>
-				<input type="text" name="cargo_type" value={inputState.cargoType} readonly />
-				<input type="number" name="draw_duration" value={inputState.drawDuration ?? 0} readonly />
-			</form>
-			{#if !sysState.processing}
-				<ImgBtn src="/ui/buttons/upload.png" class="z-[2000]" form="form" type="submit" />
-			{/if}
-		{:else}
-			<img use:lightBeam class="h-[50vh] w-screen" src="/ui/animations/light_beam.webp" alt="" />
-		{/if}
-	{:else}
-		載入失敗
+<!--{#await getImage()}-->
+<!--	圖片載入中-->
+<!--{:then img}-->
+<!--	{#if img}-->
+{#if !inputState.result}
+	<!--			<img src={img} alt="" class="pointer-events-none fixed h-auto w-full" />-->
+	<form id="form" hidden action="?/submit" method="post" enctype="multipart/form-data" use:enhance={enhanceHandler}>
+		<input type="text" name="cargo_type" value={inputState.cargoType} readonly />
+		<input type="number" name="draw_duration" value={inputState.drawDuration ?? 0} readonly />
+	</form>
+	{#if !sysState.processing}
+		<ImgBtn src="/ui/buttons/upload.png" class="z-[2000]" form="form" type="submit" />
 	{/if}
-{/await}
+{:else}
+	<img use:lightBeam class="h-[50vh] w-screen" src="/ui/animations/light_beam.webp" alt="" />
+{/if}
+<!--	{:else}-->
+<!--		載入失敗-->
+<!--	{/if}-->
+<!--{/await}-->

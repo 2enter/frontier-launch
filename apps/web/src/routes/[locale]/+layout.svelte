@@ -15,10 +15,10 @@
 	let launchCountDown = $state<number>();
 
 	onMount(async () => {
-		if (dev) {
-			const eruda = (await import('eruda')).default;
-			eruda.init();
-		}
+		// if (dev) {
+		// 	const eruda = (await import('eruda')).default;
+		// 	eruda.init();
+		// }
 
 		const interval = setInterval(async () => {
 			launchCountDown = LAUNCH_TIMEOUT - (await fetch('/api/console/duration').then((data) => data.json().then((result) => result)));
@@ -79,6 +79,6 @@
 	</div>
 {/if}
 
-{#if dev}
-	<button class="btn btn-secondary fixed left-0 top-0 z-[3000]" onclick={() => window.location.reload()}>reload</button>
-{/if}
+<!--{#if dev}-->
+<!--	<button class="btn btn-secondary fixed left-0 top-0 z-[3000]" onclick={() => window.location.reload()}>reload</button>-->
+<!--{/if}-->

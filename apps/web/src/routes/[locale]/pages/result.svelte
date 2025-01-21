@@ -15,6 +15,7 @@
 
 	let threeDom = $state<HTMLDivElement>();
 	let frame = 0;
+	const FRAME_RATE = 8;
 
 	onMount(async () => {
 		if (!inputState.result) {
@@ -22,10 +23,10 @@
 			return;
 		}
 		let rotation = 0;
-		
-		const { type, id } = inputState.result;
+
+		const { type, id } = $state.snapshot(inputState.result);
 		inputState.reset();
-		
+
 		const model = await loader.loadAsync(`/cargoes/${type}.glb`);
 		const texture = await textureLoader.loadAsync(`/api/texture/${id}`);
 
@@ -52,11 +53,11 @@
 
 		function animate() {
 			setTimeout(() => {
-				rotation += 0.01;
+				rotation += 1 / FRAME_RATE;
 				frame = requestAnimationFrame(animate);
 				renderer.render(scene, camera);
 				cargo.rotation.y = rotation;
-			}, 10);
+			}, 1000 / FRAME_RATE);
 		}
 		animate();
 	});

@@ -25,7 +25,7 @@
 	let drawing = true;
 	let p5: P5;
 
-	let selectedTool = $state<Tool>('pen');
+	let selectedTool = $state<Tool>('brush');
 	let selectedWeight = $state(randomItem(Object.keys(WEIGHT_VALUES).map((i) => +i))[0]);
 	let color = $state<ColorName>(randomItem(COLORS.map((c) => c.name))[0]);
 	let weight = $derived(WEIGHT_VALUES[selectedWeight]);

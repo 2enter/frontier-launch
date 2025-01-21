@@ -9,6 +9,7 @@ class InputState {
 	drawDuration = $state(0);
 
 	result = $state<CargoesResponse | null>(null);
+	resultImgUrl = $state<string | null>(null);
 
 	readonly submittable = $derived(this.cargoType && this.drawDuration);
 
@@ -16,6 +17,7 @@ class InputState {
 		this.cargoType = null;
 		this.drawDuration = 0;
 		this.result = null;
+		this.resultImgUrl = null;
 	};
 }
 

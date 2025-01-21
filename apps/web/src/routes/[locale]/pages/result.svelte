@@ -22,8 +22,9 @@
 			console.log('result not found');
 			return;
 		}
-		
+
 		const { type, id } = $state.snapshot(inputState.result);
+
 		inputState.reset();
 
 		const model = await loader.loadAsync(`/cargoes/${type}.glb`);
@@ -67,6 +68,7 @@
 </script>
 
 <div bind:this={threeDom} class="full-screen z-[1000]"></div>
+
 <div class="full-screen flex flex-col justify-between px-12 py-40">
 	<img src="/ui/texts/upload_success.webp" alt="" />
 	<img src="/ui/texts/head_up.webp" alt="" />

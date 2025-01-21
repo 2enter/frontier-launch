@@ -23,6 +23,9 @@
 		}
 		let rotation = 0;
 		const model = await loader.loadAsync(`/cargoes/${inputState.result.type}.glb`);
+		const texture = await textureLoader.loadAsync(`/api/texture/${inputState.result.id}`);
+		
+		inputState.reset();
 
 		const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 		const renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -33,7 +36,6 @@
 		scene.add(light);
 
 		if (threeDom) threeDom.appendChild(renderer.domElement);
-		const texture = await textureLoader.loadAsync(`/api/texture/${inputState.result.id}`);
 		texture.flipY = false;
 		const material = new THREE.MeshToonMaterial({ map: texture });
 		const cargo = model.scene.children[0];

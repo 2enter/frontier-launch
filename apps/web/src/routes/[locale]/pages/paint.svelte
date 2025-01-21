@@ -18,7 +18,7 @@
 
 	const TOOLS = ['pen', 'brush', 'eraser'] as const;
 	const WEIGHT_VALUES = [5, 20, 35, 50, 65, 80] as const;
-	const MAX_VERSION = 20;
+	const MAX_VERSION = 10;
 
 	type Tool = (typeof TOOLS)[number];
 

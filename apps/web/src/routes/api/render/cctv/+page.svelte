@@ -80,7 +80,7 @@
 		? `ws://${$page.url.hostname}:8001/ws`
 		: $page.url.hostname.includes('2enter')
 			? `wss://${$page.url.hostname}/ws`
-			: `ws://${$page.url.hostname}:3000/ws`;
+			: `ws://${$page.url.hostname}:8001/ws`;
 
 	onMount(() => {
 		let ws = makeWSClient<WSData>({

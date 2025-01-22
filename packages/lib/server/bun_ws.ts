@@ -39,16 +39,16 @@ class BunWS<T> {
 		for (let client of this.clients) {
 			client.send(JSON.stringify(message));
 		}
-		console.log(chalk.cyan('broadcast message'), message);
+		console.log(chalk.cyan(`broadcast message to ${this.clients.size} clients`), message);
 	}
 }
 
 function startHelperServer(ws: BunWS<any>, port: number) {
-	const { MODE } = import.meta.env;
-	if (MODE !== 'development') {
-		console.log(chalk.cyan('Not in developing mode, no need to start helper WS server.'));
-		return;
-	}
+	// const { MODE } = import.meta.env;
+	// if (MODE !== 'development') {
+	// 	console.log(chalk.cyan('Not in developing mode, no need to start helper WS server.'));
+	// 	return;
+	// }
 
 	const server = Bun.serve({
 		port,

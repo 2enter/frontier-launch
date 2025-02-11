@@ -3,12 +3,11 @@ import validator from 'validator';
 
 export const load = async ({ params }) => {
 	const { num } = params;
-	let result = 0;
-	if (validator.isInt(num)) {
-		return { num: result };
-	}
+
+	if (validator.isInt(num)) return { num: 0 };
+
 	return {
-		num: +result
+		num: +num
 	};
 };
 

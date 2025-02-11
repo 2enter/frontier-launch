@@ -8,7 +8,7 @@ use sqlx::query_as;
 use std::str;
 use uuid::Uuid;
 
-const BG_COLOR: Rgb<u8> = Rgb([200, 138, 200]);
+const BG_COLOR: Rgb<u8> = Rgb([255, 222, 193]);
 
 pub async fn get_cargo_ids(State(app_state): State<AppState>) -> Json<Vec<String>> {
     let result = Cargo::get_20(&app_state.pool).await;

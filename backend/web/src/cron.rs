@@ -70,8 +70,8 @@ pub async fn run(app_state: AppState) -> Result<(), JobSchedulerError> {
         }
     })?;
 
-    // ship unshipped cargoes
-    let backup_database = Job::new_async("every 4 hours", {
+    // backup database
+    let backup_database = Job::new_async("every 12 hours", {
         let app_state = app_state.clone();
         move |_, _| {
             let pool = app_state.pool.clone();

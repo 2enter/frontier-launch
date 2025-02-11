@@ -3,7 +3,7 @@
 	import { ImgBtn } from '@2enter/web-kit/components';
 	import axios from 'axios';
 	import type { Cargo } from '@/types/model';
-	import { API_BASE_URL } from '@/url';
+	import { API_BASE_URL } from '@/api';
 
 	const [inputState, sysState] = [getInputState(), getSysState()];
 

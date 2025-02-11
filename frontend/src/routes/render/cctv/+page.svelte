@@ -9,7 +9,7 @@
 	import { dev } from '$app/environment';
 	import { page } from '$app/state';
 	import { Previous } from 'runed';
-	import { apiUrl, storageUrl } from '@/url';
+	import { apiUrl, storageUrl } from '@/api';
 
 	async function init() {
 		cargoIds = await axios.get<string[]>(apiUrl('/cargo/metadata')).then((res) => res.data);

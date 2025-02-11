@@ -5,7 +5,7 @@ import { getContext, setContext } from 'svelte';
 import axios from 'axios';
 
 class InputState {
-	cargoType = $state<ParseEnum<CargoType> | null>('water');
+	cargoType = $state<ParseEnum<CargoType> | null>(null);
 	drawDuration = $state(0);
 
 	result = $state<Cargo | null>(null);

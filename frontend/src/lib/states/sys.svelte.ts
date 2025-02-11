@@ -3,7 +3,7 @@ import { setContext, getContext } from 'svelte';
 class SysState {
 	processing = $state(false);
 	errorMessage = $state<string | null>(null);
-	pageNum = $state<PageNum>(3);
+	pageNum = $state<PageNum>(0);
 	dialog = $state<HTMLDialogElement>();
 	bg = $derived.by(() => {
 		switch (this.pageNum) {

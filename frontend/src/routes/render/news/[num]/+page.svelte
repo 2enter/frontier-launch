@@ -42,7 +42,7 @@
 	</div>
 {/if}
 
-<style lang="postcss">
+<style>
 	.ver {
 		writing-mode: vertical-rl;
 		text-orientation: mixed;

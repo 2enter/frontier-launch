@@ -1,8 +1,7 @@
 use crate::state::AppState;
 use axum::extract::{Json, Multipart, State};
-use axum::response::IntoResponse;
 use model::cargo::*;
-use reqwest::StatusCode;
+use model::util::ApiResponse;
 use std::str;
 use utils::texture::generate_texture;
 use uuid::Uuid;
@@ -15,13 +14,12 @@ pub async fn get_cargo_ids(State(app_state): State<AppState>) -> Json<Vec<String
 pub async fn send_cargo_metadata(
     State(app_state): State<AppState>,
     Json(input): Json<CargoInput>,
-) -> impl IntoResponse {
+) -> Json<ApiResponse<Cargo>> {
     let result = Cargo::create(&app_state.pool, input).await;
-    let response = serde_json::to_value(&result).unwrap();
-    Json(response)
+    Json(ApiResponse::new_success(result))
 }
 
-pub async fn send_cargo_image(mut multipart: Multipart) -> Result<String, StatusCode> {
+pub async fn send_cargo_image(mut multipart: Multipart) -> Json<ApiResponse<String>> {
     let mut id = None;
     let mut bytes = None;
 
@@ -42,8 +40,8 @@ pub async fn send_cargo_image(mut multipart: Multipart) -> Result<String, Status
     match (id, bytes) {
         (Some(id), Some(bytes)) => {
             generate_texture(&id, &bytes);
-            Ok(id)
+            Json(ApiResponse::new_success(id))
         }
-        _ => Err(StatusCode::BAD_REQUEST),
+        _ => Json(ApiResponse::new_error("nope".to_string())),
     }
 }

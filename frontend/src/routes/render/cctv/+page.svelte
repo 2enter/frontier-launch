@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { makeWSClient, Timer } from '@2enter/web-kit/runtime';
-	import { toFixedDigit } from '@2enter/web-kit/calc';
-	import { SpeedTester } from '@2enter/web-kit/browser';
-
 	import moment from 'moment';
 	import axios from 'axios';
 	import { onMount } from 'svelte';
+	import { Previous } from 'runed';
+	import { makeWSClient, Timer } from '@2enter/web-kit/runtime';
+	import { toFixedDigit } from '@2enter/web-kit/calc';
+	import { SpeedTester } from '@2enter/web-kit/browser';
 	import { dev } from '$app/environment';
 	import { page } from '$app/state';
-	import { Previous } from 'runed';
 	import { apiUrl, storageUrl } from '@/api';
 
 	async function init() {

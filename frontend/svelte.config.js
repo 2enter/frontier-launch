@@ -12,9 +12,6 @@ const config = {
 		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
-		prerender: {
-			entries: ['/render/news/0', '/render/news/1', '*']
-		},
 		alias: {
 			'@/*': './src/lib/*'
 		}

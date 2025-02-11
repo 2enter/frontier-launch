@@ -1,3 +1,4 @@
+import type { EntryGenerator } from './$types';
 import validator from 'validator';
 
 export const load = async ({ params }) => {
@@ -9,4 +10,10 @@ export const load = async ({ params }) => {
 	return {
 		num: +result
 	};
+};
+
+export const entries: EntryGenerator = () => {
+	return [0, 1].map((n) => {
+		return { num: n.toString() };
+	});
 };

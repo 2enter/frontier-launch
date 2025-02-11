@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Marquee } from '@2enter/web-kit/components';
-	import { onMount } from 'svelte';
-	import { apiUrl } from '@/url';
 	import axios from 'axios';
+	import { onMount } from 'svelte';
+	import { Marquee } from '@2enter/web-kit/components';
+	import { apiUrl } from '@/url';
 
 	let { data } = $props();
 	const { num } = data;

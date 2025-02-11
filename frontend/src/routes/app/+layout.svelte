@@ -12,7 +12,8 @@
 
 	let { children } = $props();
 	let launchCountDown = $state({
-		min: 0, sec:0
+		min: 0,
+		sec: 0
 	});
 
 	onMount(async () => {
@@ -26,7 +27,7 @@
 			const targetMin = Math.ceil(min / 10) * 10;
 			const seconds = targetMin * 60 - min * 60 - sec;
 			launchCountDown.min = Math.floor(seconds / 60);
-			launchCountDown.sec = seconds % 60
+			launchCountDown.sec = seconds % 60;
 		}, 1234);
 
 		return {

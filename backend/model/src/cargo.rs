@@ -1,7 +1,7 @@
 use crate::enums::{CargoStatus, CargoType};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use sqlx::{FromRow, PgPool, Postgres};
+use sqlx::{query_as, FromRow, PgPool, Postgres};
 use typeshare::typeshare;
 use uuid::Uuid;
 
@@ -55,5 +55,14 @@ impl Cargo {
         .await
         .unwrap_or_default()
         .len()
+    }
+
+    pub async fn create(pool: &PgPool, input: CargoInput) -> Self {
+        query_as("INSERT INTO cargo (type, paint_time) VALUES ($1, $2) RETURNING *;")
+            .bind(input.r#type)
+            .bind(input.paint_time)
+            .fetch_one(pool)
+            .await
+            .unwrap()
     }
 }

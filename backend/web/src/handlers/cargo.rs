@@ -16,14 +16,7 @@ pub async fn send_cargo_metadata(
     State(app_state): State<AppState>,
     Json(input): Json<CargoInput>,
 ) -> impl IntoResponse {
-    let CargoInput { r#type, paint_time } = input;
-    let result: Cargo =
-        query_as("INSERT INTO cargo (type, paint_time) VALUES ($1, $2) RETURNING *;")
-            .bind(r#type)
-            .bind(paint_time)
-            .fetch_one(&app_state.pool)
-            .await
-            .unwrap();
+    let result = Cargo::create(&app_state.pool, input).await;
     let response = serde_json::to_value(&result).unwrap();
     Json(response)
 }

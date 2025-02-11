@@ -60,7 +60,8 @@ CREATE TABLE public.news (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     title text NOT NULL,
-    hype integer DEFAULT 0 NOT NULL
+    hype integer DEFAULT 0 NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
@@ -112,4 +113,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20250202081403'),
     ('20250202090306'),
     ('20250202090911'),
-    ('20250202113745');
+    ('20250202113745'),
+    ('20250211075035');

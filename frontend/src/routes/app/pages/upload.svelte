@@ -3,6 +3,7 @@
 	import { ImgBtn } from '@2enter/web-kit/components';
 	import axios from 'axios';
 	import type { Cargo } from '@/types/model';
+	import { API_BASE_URL } from '@/url';
 
 	const [inputState, sysState] = [getInputState(), getSysState()];
 
@@ -23,8 +24,8 @@
 		};
 	};
 
-	const fetcher = axios.create({
-		baseURL: 'http://localhost:3080/'
+	const api = axios.create({
+		baseURL: API_BASE_URL
 		// headers: { 'access-control-allow-origin': '*' }
 	});
 
@@ -33,35 +34,37 @@
 
 		sysState.processing = true;
 		const metadata = inputState.requestMetadata;
-		let temp = await fetcher.get('/api/sys-temp').then((res) => res.data);
+		let temp = await api.get('/api/sys-temp').then((res) => res.data);
 		console.log(temp);
-		const cargo = await fetcher
+		const cargo = await api
 			.post<Cargo>('/api/cargo/metadata', metadata)
 			.then((res) => res.data)
 			.catch((err) => {
-				sysState.popError(err);
+				console.error(err);
+				sysState.popError('上傳失敗');
 				sysState.processing = false;
 				return null;
 			});
 		if (!cargo) return;
 
 		const { id } = cargo;
+		const paint = await inputState.getPaint();
+		if (!paint) return;
 
 		const fd = new FormData();
 		fd.append('id', id);
-
-		const paint = await inputState.getPaint();
-		if (!paint) return;
 		fd.append('file', paint);
 
-		const result = fetcher.postForm('/api/cargo/image', fd, {
-			onUploadProgress: (event) => {
-				console.log(event);
-			}
+		const result = await api.postForm('/api/cargo/image', fd).catch((err) => {
+			console.error(err);
+			sysState.popError('上傳失敗');
+			sysState.processing = false;
+			sysState.routeTo(0);
+			return;
 		});
+		console.log(result);
 
 		inputState.result = cargo;
-
 		sysState.processing = false;
 	}
 </script>

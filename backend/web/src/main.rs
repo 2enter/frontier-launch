@@ -8,6 +8,7 @@ mod handlers;
 mod routes;
 mod state;
 mod weather;
+mod webdriver;
 
 use crate::handlers::ws::ws_broadcast;
 use config::Config;

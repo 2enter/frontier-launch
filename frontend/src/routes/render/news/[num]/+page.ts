@@ -4,7 +4,7 @@ import validator from 'validator';
 export const load = async ({ params }) => {
 	const { num } = params;
 
-	if (validator.isInt(num)) return { num: 0 };
+	if (!validator.isInt(num)) return { num: 0 };
 
 	return {
 		num: +num

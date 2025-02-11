@@ -3,7 +3,7 @@ use axum::extract::{Json, Multipart, State};
 use axum::response::IntoResponse;
 use image::{GenericImageView, ImageBuffer, ImageFormat, Rgb};
 use model::cargo::*;
-use serde_json::{json, Value};
+use serde_json::json;
 use sqlx::query_as;
 use std::str;
 use uuid::Uuid;

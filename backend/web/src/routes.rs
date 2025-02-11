@@ -3,7 +3,7 @@ use crate::handlers::news::get_news;
 use crate::handlers::sys_info::get_temperature;
 use crate::handlers::ws::ws_handler;
 use crate::state::AppState;
-use axum::routing::{any, get, options, post};
+use axum::routing::{any, get, post};
 use axum::Router;
 use tower_http::cors::CorsLayer;
 use tower_http::services::ServeDir;

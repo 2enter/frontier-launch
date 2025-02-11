@@ -6,6 +6,7 @@ use model::cargo::Cargo;
 use model::news::News;
 use model::ws_msg::*;
 use tokio_cron_scheduler::{Job, JobScheduler, JobSchedulerError};
+use utils::db::db_backup;
 
 pub async fn run(app_state: AppState) -> Result<(), JobSchedulerError> {
     let sched = JobScheduler::new().await?;
@@ -69,11 +70,25 @@ pub async fn run(app_state: AppState) -> Result<(), JobSchedulerError> {
         }
     })?;
 
+    // ship unshipped cargoes
+    let backup_database = Job::new_async("every 4 hours", {
+        let app_state = app_state.clone();
+        move |_, _| {
+            let pool = app_state.pool.clone();
+            Box::pin(async move {
+                if let Err(error) = db_backup(&pool).await {
+                    println!("Failed to backup database: {error}");
+                }
+            })
+        }
+    })?;
+
     // add jobs to scheduler
     sched.add(send_weather).await?;
     sched.add(launch_rocket).await?;
     sched.add(ship_cargoes).await?;
     sched.add(fetch_remote_news).await?;
+    sched.add(backup_database).await?;
 
     // start scheduler
     sched.start().await?;

@@ -1,11 +1,9 @@
-use async_std::task::sleep;
 use chrono::{DateTime, Utc};
-use rand::random;
 use serde::{Deserialize, Serialize};
 use sqlx::{FromRow, PgPool};
 use std::error::Error;
-use std::time::Duration;
 use thirtyfour::prelude::*;
+use utils::runtime::rand_sleep;
 use uuid::Uuid;
 
 const URL: &'static str =
@@ -96,8 +94,4 @@ impl News {
 
         Ok(())
     }
-}
-
-async fn rand_sleep(max: u32) {
-    sleep(Duration::from_millis((random::<f32>() * max as f32) as u64)).await;
 }

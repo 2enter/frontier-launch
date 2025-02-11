@@ -1,14 +1,11 @@
 use crate::state::AppState;
 use axum::extract::{Json, Multipart, State};
 use axum::response::IntoResponse;
-use image::{GenericImageView, ImageBuffer, ImageFormat, Rgb};
 use model::cargo::*;
-use serde_json::json;
-use sqlx::query_as;
+use reqwest::StatusCode;
 use std::str;
+use utils::texture::generate_texture;
 use uuid::Uuid;
-
-const BG_COLOR: Rgb<u8> = Rgb([255, 222, 193]);
 
 pub async fn get_cargo_ids(State(app_state): State<AppState>) -> Json<Vec<String>> {
     let result = Cargo::get_20(&app_state.pool).await;
@@ -31,7 +28,7 @@ pub async fn send_cargo_metadata(
     Json(response)
 }
 
-pub async fn send_cargo_image(mut multipart: Multipart) -> impl IntoResponse {
+pub async fn send_cargo_image(mut multipart: Multipart) -> Result<String, StatusCode> {
     let mut id = None;
     let mut bytes = None;
 
@@ -51,35 +48,9 @@ pub async fn send_cargo_image(mut multipart: Multipart) -> impl IntoResponse {
 
     match (id, bytes) {
         (Some(id), Some(bytes)) => {
-            let mut img = image::load_from_memory(&bytes).unwrap();
-
-            img.save(format!("../db/storage/paint/{id}.png")).unwrap();
-
-            let (w, h) = img.dimensions();
-            img = img.crop(0, (h - w) / 2, w, w);
-
-            let mut bg = ImageBuffer::from_pixel(w, w, BG_COLOR);
-
-            let img = img.to_rgba8();
-
-            for y in 0..w {
-                for x in 0..w {
-                    let pixel = img.get_pixel(x, y);
-                    let bg_pixel = bg.get_pixel_mut(x, y);
-
-                    let alpha = pixel[3] as f32 / 255.0;
-                    for i in 0..3 {
-                        bg_pixel[i] =
-                            ((1.0 - alpha) * bg_pixel[i] as f32 + alpha * pixel[i] as f32) as u8;
-                    }
-                }
-            }
-
-            bg.save_with_format(format!("../db/storage/texture/{id}.jpg"), ImageFormat::Jpeg)
-                .expect("Failed to save texture image");
-
-            Json(json!({"status": "ok"}))
+            generate_texture(&id, &bytes);
+            Ok(id)
         }
-        _ => Json(json!({"status": "error"})),
+        _ => Err(StatusCode::BAD_REQUEST),
     }
 }

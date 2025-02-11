@@ -34,8 +34,7 @@
 
 		sysState.processing = true;
 		const metadata = inputState.requestMetadata;
-		let temp = await api.get('/api/sys-temp').then((res) => res.data);
-		console.log(temp);
+
 		const cargo = await api
 			.post<Cargo>('/api/cargo/metadata', metadata)
 			.then((res) => res.data)

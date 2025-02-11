@@ -1,9 +1,17 @@
+use async_std::task::sleep;
 use chrono::{DateTime, Utc};
-use serde::Serialize;
+use rand::random;
+use serde::{Deserialize, Serialize};
 use sqlx::{FromRow, PgPool};
+use std::error::Error;
+use std::time::Duration;
+use thirtyfour::prelude::*;
 use uuid::Uuid;
 
-#[derive(Debug, Serialize, FromRow)]
+const URL: &'static str =
+    "https://news.google.com/search?q=%E5%A4%AA%E7%A9%BA&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant";
+
+#[derive(Debug, Serialize, FromRow, Deserialize)]
 pub struct News {
     id: Uuid,
     created_at: DateTime<Utc>,
@@ -15,7 +23,7 @@ pub struct News {
 impl News {
     pub async fn get_10(pool: &PgPool) -> Vec<String> {
         let mut news: Vec<Self> =
-            sqlx::query_as("SELECT title, hype from news ORDER BY created_at DESC LIMIT 20")
+            sqlx::query_as("SELECT * from news ORDER BY updated_at DESC LIMIT 30")
                 .fetch_all(pool)
                 .await
                 .unwrap_or_default();
@@ -29,4 +37,67 @@ impl News {
         news.truncate(10);
         news.iter().map(|n| n.title.clone()).collect()
     }
+
+    pub async fn fetch_remote(pool: &PgPool, driver: &WebDriver) -> Result<(), Box<dyn Error>> {
+        println!("fetching news...");
+        driver.goto(URL).await?;
+        // scroll down
+        rand_sleep(3000).await;
+        driver
+            .execute(
+                "window.scrollTo(0, document.body.scrollHeight);",
+                Vec::new(),
+            )
+            .await?;
+        rand_sleep(3000).await;
+
+        // get sections
+        let sections = driver.find_all(By::Css("c-wiz .PO9Zff")).await?;
+        println!("{sections:?}");
+
+        let mut titles = Vec::new();
+
+        rand_sleep(3000).await;
+        // get titles in sections
+        for section in sections {
+            let title = section.find(By::Css(".JtKRv")).await?.text().await?;
+            println!("fetched news: {title}");
+            titles.push(title);
+        }
+
+        rand_sleep(3000).await;
+        // update existed news
+        let existed_titles: Vec<String> = sqlx::query!(
+            "UPDATE news SET hype = hype + 1, updated_at = now() WHERE title IN (SELECT unnest($1::VARCHAR[])) RETURNING *",
+            &titles
+        )
+            .fetch_all(pool)
+            .await?
+            .into_iter()
+            .map(|news| news.title).collect();
+
+        // filter out existed news
+        let new_titles: Vec<String> = titles
+            .into_iter()
+            .filter(|title| !existed_titles.contains(title))
+            .collect();
+
+        // insert new news
+        for title in new_titles {
+            let result = sqlx::query!(
+                "INSERT INTO news (title) VALUES ($1) RETURNING title",
+                title
+            )
+            .fetch_one(pool)
+            .await?
+            .title;
+            println!("inserted news: {result}");
+        }
+
+        Ok(())
+    }
+}
+
+async fn rand_sleep(max: u32) {
+    sleep(Duration::from_millis((random::<f32>() * max as f32) as u64)).await;
 }

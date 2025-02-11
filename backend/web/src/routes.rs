@@ -5,12 +5,12 @@ use crate::handlers::ws::ws_handler;
 use crate::state::AppState;
 use axum::routing::{any, get, post};
 use axum::Router;
-use tower_http::cors::CorsLayer;
 use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
+// use tower_http::cors::CorsLayer;
 
 pub fn get_routes(state: AppState) -> Router {
-    let cors = CorsLayer::permissive();
+    // let cors = CorsLayer::permissive();
     Router::new()
         .nest(
             "/api",
@@ -26,8 +26,8 @@ pub fn get_routes(state: AppState) -> Router {
                 .nest_service("/storage", ServeDir::new("../db/storage")),
         )
         .route("/ws", any(ws_handler))
-        .fallback_service(ServeDir::new("../../frontend/build"))
-        .layer(cors)
         .layer(TraceLayer::new_for_http())
+        .fallback_service(ServeDir::new("../../frontend/build"))
+        // .layer(cors)
         .with_state(state)
 }

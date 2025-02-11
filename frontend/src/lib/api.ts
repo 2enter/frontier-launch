@@ -1,6 +1,7 @@
 import { dev } from '$app/environment';
+import { PUBLIC_API_BASE_URL } from '$env/static/public';
 
-const API_BASE_URL = dev ? 'http://localhost:3080' : '';
+const API_BASE_URL = dev ? PUBLIC_API_BASE_URL : '';
 
 function storageUrl(filepath: string) {
 	return `${API_BASE_URL}/api/storage${filepath}`;

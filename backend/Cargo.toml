@@ -6,5 +6,5 @@ edition = "2021"
 [dependencies]
 
 [workspace]
-members = ["data_fetcher", "web", "model", "."]
+members = ["web", "model", "."]
 

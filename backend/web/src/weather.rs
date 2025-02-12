@@ -1,4 +1,3 @@
-// use anyhow::Result;
 use scraper::{Html, Selector};
 use std::error::Error;
 

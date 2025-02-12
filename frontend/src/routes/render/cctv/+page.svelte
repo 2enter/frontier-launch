@@ -3,11 +3,13 @@
 	import { onMount } from 'svelte';
 	import { CronJob } from 'cron';
 	import { Previous } from 'runed';
+	import { dev } from '$app/environment';
+	import { page } from '$app/state';
+
 	import { makeWSClient } from '@2enter/web-kit/runtime';
 	import { toFixedDigit } from '@2enter/web-kit/calc';
 	import { SpeedTester } from '@2enter/web-kit/browser';
-	import { dev } from '$app/environment';
-	import { page } from '$app/state';
+
 	import { apiUrl, getCargoes, getSysTemp } from '@/api';
 	import { DEFAULT_CRON_CONFIG } from '@/config';
 
@@ -40,7 +42,7 @@
 			measurements: [{ type: 'download', bytes: 1e5, count: 17 }],
 			autoStart: false
 		},
-		onFinish: (result) => {
+		onFinish(result) {
 			const summary = result.getSummary();
 			const { download } = summary;
 			if (download) {

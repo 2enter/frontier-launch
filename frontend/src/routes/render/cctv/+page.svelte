@@ -21,7 +21,16 @@
 	});
 
 	let cargoIds = $state<string[]>([]);
-	let weatherBg = $state<'sun' | 'rain'>('rain');
+	let weatherBg = $state<'sun' | 'rain'>('sun');
+
+	const previousRaining = new Previous(() => info.raining);
+	$effect(() => {
+		const { current } = previousRaining;
+		if (info.raining !== current) {
+			console.log('switching weather');
+			weatherBg = current ? 'rain' : 'sun';
+		}
+	});
 
 	const speedDegree = $derived.by<'slow' | 'medium' | 'fast'>(() => {
 		if (info.windSpeed > 6) return 'fast';
@@ -74,15 +83,6 @@
 			...DEFAULT_CRON_CONFIG
 		});
 	}
-
-	const previousRaining = new Previous(() => info.raining);
-
-	$effect(() => {
-		if (info.raining !== previousRaining.current) {
-			console.log('switching weather');
-			weatherBg = previousRaining.current ? 'sun' : 'rain';
-		}
-	});
 
 	onMount(async () => {
 		await init();

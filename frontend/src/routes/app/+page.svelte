@@ -6,7 +6,6 @@
 	const sysState = getSysState();
 
 	const Page = $derived(Pages[sysState.pageNum]);
-
 </script>
 
 {#key sysState.pageNum}

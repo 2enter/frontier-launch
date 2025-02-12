@@ -46,6 +46,7 @@
 			const fd = new FormData();
 			fd.append('id', id);
 			fd.append('file', paint);
+			fd.append('type', cargo.type);
 
 			// upload cargo image
 			const { data: result } = await postCargoImage(fd);

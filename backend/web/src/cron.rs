@@ -8,10 +8,9 @@ use model::ws_msg::*;
 use tokio_cron_scheduler::{Job, JobScheduler, JobSchedulerError};
 use utils::db::db_backup;
 
-pub async fn run(app_state: AppState) -> Result<(), JobSchedulerError> {
+pub async fn init(app_state: AppState) -> Result<(), JobSchedulerError> {
     let sched = JobScheduler::new().await?;
 
-    // send weather message
     let send_weather = Job::new_async("every 10 minutes", {
         let app_state = app_state.clone();
         move |_, _| {
@@ -24,7 +23,6 @@ pub async fn run(app_state: AppState) -> Result<(), JobSchedulerError> {
         }
     })?;
 
-    // send launch message
     let launch_rocket = Job::new_async("every 10 minutes", {
         let app_state = app_state.clone();
         move |_, _| {
@@ -39,7 +37,6 @@ pub async fn run(app_state: AppState) -> Result<(), JobSchedulerError> {
         }
     })?;
 
-    // ship unshipped cargoes
     let ship_cargoes = Job::new_async("every 60 seconds", {
         let app_state = app_state.clone();
         move |_, _| {
@@ -50,8 +47,7 @@ pub async fn run(app_state: AppState) -> Result<(), JobSchedulerError> {
         }
     })?;
 
-    // fetch remote news
-    let fetch_remote_news = Job::new_async("every 60 minutes", {
+    let fetch_remote_news = Job::new_async("every 4 hours", {
         let app_state = app_state.clone();
 
         move |_, _| {

@@ -30,7 +30,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let app = get_routes(app_state.clone());
 
-    cron::run(app_state.clone()).await?;
+    cron::init(app_state.clone()).await?;
     axum::serve(listener, app.into_make_service()).await?;
 
     Ok(())

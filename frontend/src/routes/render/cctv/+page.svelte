@@ -12,7 +12,7 @@
 	async function init() {
 		const { data } = await getCargoes();
 		if (!data) return;
-		cargoIds = data;
+		cargoIds = data.map((d) => d.id);
 	}
 
 	const speedTester = new SpeedTester({

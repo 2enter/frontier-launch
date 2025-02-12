@@ -1,19 +1,15 @@
 <script lang="ts">
 	import type { ColorName } from '@/config';
 
+	import moment from 'moment';
 	import P5 from 'p5';
 	import { onMount } from 'svelte';
 	import { slide, fly, fade } from 'svelte/transition';
-
-	import { Timer } from '@2enter/web-kit/runtime';
 	import { randomItem } from '@2enter/web-kit/calc';
-
-
+	import { ImgBtn } from '@2enter/web-kit/components';
 	import { dexie } from '@/dexie';
 	import { COLORS } from '@/config';
 	import { getInputState, getSysState } from '@/states';
-
-	import { ImgBtn } from '@2enter/web-kit/components';
 
 	const [inputState, sysState] = [getInputState(), getSysState()];
 
@@ -131,7 +127,12 @@
 						oldR += (r - oldR) / SPLIT_NUM;
 						if (oldR < 1) oldR = 1;
 						p.strokeWeight(oldR + DIFF);
-						p.line(smallX + p.random(0, 2), smallY + p.random(0, 2), oldX + p.random(0, 2), oldY + p.random(0, 2));
+						p.line(
+							smallX + p.random(0, 2),
+							smallY + p.random(0, 2),
+							oldX + p.random(0, 2),
+							oldY + p.random(0, 2)
+						);
 						p.strokeWeight(oldR); // ADD
 						p.line(
 							smallX + DIFF * p.random(0.1, 2),
@@ -188,14 +189,14 @@
 		// dexie.versions.clear();
 		p5 = new P5(sketch);
 
-		const timer = new Timer();
+		const start = moment();
 
 		return () => {
 			p5?.remove();
-			timer.stop();
-			inputState.drawDuration = Math.floor(timer.duration / 1000);
+			const timeDiff = moment().diff(start);
+			inputState.drawDuration = Math.floor(timeDiff / 1000);
 			inputState.resultImgUrl = takeScreenshot();
-			dexie.versions.clear()
+			dexie.versions.clear();
 
 			// for (let i = 0; i < 1000; ++i) {
 			// 	if (i !== version) dexie.versions.delete(i);
@@ -222,19 +223,34 @@
 			<img src="/ui/paint/{tool}.webp" class="" alt="" />
 		</label>
 	{/each}
-	<ImgBtn src="/ui/paint/undo.webp" class="" onclick={() => modifyVersion(-1)} ontouchstart={noDraw}></ImgBtn>
-	<ImgBtn src="/ui/paint/redo.webp" class="" onclick={() => modifyVersion(1)} ontouchstart={noDraw}></ImgBtn>
-	<ImgBtn src="/ui/paint/help.webp" class="" onclick={() => (showManual = true)} ontouchstart={noDraw}></ImgBtn>
+	<ImgBtn src="/ui/paint/undo.webp" class="" onclick={() => modifyVersion(-1)} ontouchstart={noDraw}
+	></ImgBtn>
+	<ImgBtn src="/ui/paint/redo.webp" class="" onclick={() => modifyVersion(1)} ontouchstart={noDraw}
+	></ImgBtn>
+	<ImgBtn
+		src="/ui/paint/help.webp"
+		class=""
+		onclick={() => (showManual = true)}
+		ontouchstart={noDraw}
+	></ImgBtn>
 </div>
 
 {#if showUI}
 	<div transition:fade class="fixed right-0 top-0">
 		{#if version !== 0}
-			<ImgBtn src="/ui/buttons/done.webp" class="w-[30vw]" ontouchstart={noDraw} onclick={sysState.navigate} />
+			<ImgBtn
+				src="/ui/buttons/done.webp"
+				class="w-[30vw]"
+				ontouchstart={noDraw}
+				onclick={sysState.navigate}
+			/>
 		{/if}
 	</div>
 
-	<div transition:fly={{ x: -100 }} class="pointer-events-none fixed left-1 z-[1000] flex flex-col justify-start gap-3">
+	<div
+		transition:fly={{ x: -100 }}
+		class="pointer-events-none fixed left-1 z-[1000] flex flex-col justify-start gap-3"
+	>
 		<div class="flex w-fit flex-col items-start pl-2">
 			{#each COLORS as { name }}
 				<input type="radio" bind:group={color} value={name} id="color-{name}" hidden />
@@ -249,7 +265,10 @@
 			{/each}
 		</div>
 
-		<div class="center-content mt-10 w-40 bg-cover bg-no-repeat" style:background-image="url(/ui/paint/bold/bg.webp)">
+		<div
+			class="center-content mt-10 w-40 bg-cover bg-no-repeat"
+			style:background-image="url(/ui/paint/bold/bg.webp)"
+		>
 			<ImgBtn
 				src="/ui/paint/bold/{selectedWeight + 1}.webp"
 				ontouchstart={noDraw}
@@ -266,7 +285,12 @@
 ></div>
 
 {#if showManual}
-	<button transition:fade class="full-screen center-content z-[2000] bg-black/60 px-8" ontouchstart={noDraw} onclick={() => (showManual = false)}>
+	<button
+		transition:fade
+		class="full-screen center-content z-[2000] bg-black/60 px-8"
+		ontouchstart={noDraw}
+		onclick={() => (showManual = false)}
+	>
 		<img src="/ui/paint/manual.webp" alt="" />
 	</button>
 {/if}

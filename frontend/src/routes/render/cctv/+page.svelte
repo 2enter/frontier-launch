@@ -1,8 +1,9 @@
 <script lang="ts">
 	import moment from 'moment';
 	import { onMount } from 'svelte';
+	import { CronJob } from 'cron';
 	import { Previous } from 'runed';
-	import { makeWSClient, Timer } from '@2enter/web-kit/runtime';
+	import { makeWSClient } from '@2enter/web-kit/runtime';
 	import { toFixedDigit } from '@2enter/web-kit/calc';
 	import { SpeedTester } from '@2enter/web-kit/browser';
 	import { dev } from '$app/environment';
@@ -31,28 +32,22 @@
 		}
 	});
 
-	const timer: Timer = new Timer({
-		triggers: [
-			{
-				// update info.temperature
-				check: () => moment(timer.now).second() % 3 === 0,
-				action: async () => {
-					const { data } = await getSysTemp();
-					if (!data) return;
-					info.temperature = data;
-				}
-			},
-			{
-				// update info.windSpeed
-				check: () => moment(timer.now).second() % 10 === 0,
-				action: () => speedTester.test()
-			}
-			// {
-			// 	// update info.raining (only for testing)
-			// 	check: () => moment(timer.now).seconds() % 8 === 0,
-			// 	action: () => (info.raining = !info.raining)
-			// }
-		]
+	// update temperature
+	CronJob.from({
+		cronTime: '*/3 * * * *',
+		onTick: async () => {
+			const { data } = await getSysTemp();
+			if (!data) return;
+			info.temperature = data;
+		},
+		start: true,
+		runOnInit: true
+	});
+
+	// update wind speed
+	CronJob.from({
+		cronTime: '*/10 * * * *',
+		onTick: speedTester.test
 	});
 
 	const info = $state({
@@ -115,7 +110,6 @@
 			destroy() {
 				console.log('destroy');
 				ws.close();
-				timer.stop();
 			}
 		};
 	});
@@ -129,12 +123,9 @@
 	class="full-screen bg-contain bg-center bg-no-repeat"
 	style:background-image="url(/ui/layouts/tv_bg.webp)"
 >
-	{#if timer}
-		{@const time = moment(timer.now)}
-		<div class="fixed right-0 top-0 p-8 text-7xl font-bold tracking-wider">
-			{toFixedDigit(time.hour())}:{toFixedDigit(time.minute())}
-		</div>
-	{/if}
+	<div class="fixed right-0 top-0 p-8 text-7xl font-bold tracking-wider">
+		{toFixedDigit(moment().hour())}:{toFixedDigit(moment().minute())}
+	</div>
 	<div class="fixed bottom-[8.7vh] right-0 flex h-[16vh] w-[200vw] justify-end gap-2 pr-2">
 		{#each cargoIds as cargoId}
 			<img src={apiUrl(`/storage/texture/${cargoId}.jpg`)} alt="" />

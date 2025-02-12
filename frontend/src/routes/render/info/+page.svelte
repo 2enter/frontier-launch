@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type { Cargo } from '@/types/model';
 
-	import moment from 'moment';
+	import { CronJob } from 'cron';
 	import { Marquee } from '@2enter/web-kit/components';
-	import { Timer } from '@2enter/web-kit/runtime';
 	import { toFixedDigit } from '@2enter/web-kit/calc';
 	import { getTodayCargoes } from '@/api';
 	import { getLaunchCountDown } from '@/time';
@@ -25,17 +24,15 @@
 		);
 	});
 
-	const timer: Timer = new Timer({
-		triggers: [
-			{
-				check: () => moment(timer.duration).second() % 10 === 0,
-				action: async () => {
-					const { data } = await getTodayCargoes();
-					if (!data) return;
-					cargoes = data;
-				}
-			}
-		]
+	CronJob.from({
+		cronTime: '*/20 * * * * *',
+		runOnInit: true,
+		onTick: async () => {
+			const { data } = await getTodayCargoes();
+			if (!data) return;
+			cargoes = data;
+		},
+		start: true
 	});
 </script>
 
@@ -43,10 +40,10 @@
 	<title>Console Info</title>
 </svelte:head>
 
-{#if cargoes.length}
-	<div
-		class="full-screen font-dot-gothic flex items-center whitespace-nowrap bg-rose-800 text-[85vh] tracking-widest text-amber-500"
-	>
+<div
+	class="full-screen font-dot-gothic flex items-center whitespace-nowrap bg-rose-800 text-[85vh] tracking-widest text-amber-500"
+>
+	{#if cargoes.length}
 		<Marquee {text} timeout={500} />
-	</div>
-{/if}k
+	{/if}
+</div>

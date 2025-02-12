@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 use typeshare::typeshare;
 
 #[typeshare]
@@ -12,6 +13,20 @@ pub enum CargoType {
     Star,
     Cake,
     Diamond,
+}
+
+impl From<&str> for CargoType {
+    fn from(value: &str) -> CargoType {
+        match value {
+            "water" => CargoType::Water,
+            "spring" => CargoType::Spring,
+            "stair" => CargoType::Stair,
+            "star" => CargoType::Star,
+            "cake" => CargoType::Cake,
+            "diamond" => CargoType::Diamond,
+            _ => CargoType::Water,
+        }
+    }
 }
 
 #[typeshare]

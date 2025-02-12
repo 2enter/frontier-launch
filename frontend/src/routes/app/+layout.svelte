@@ -1,5 +1,4 @@
 <script lang="ts">
-	import moment from 'moment';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { navigating } from '$app/state';
@@ -7,6 +6,7 @@
 
 	import { getSysState } from '@/states';
 	import { FullscreenChecker } from '@2enter/web-kit/components';
+	import { getCountDown } from '@/time';
 
 	const sysState = getSysState();
 
@@ -23,11 +23,7 @@
 		}
 
 		const interval = setInterval(() => {
-			const [sec, min] = [moment().seconds(), moment().minutes()];
-			const targetMin = Math.ceil(min / 10) * 10;
-			const seconds = targetMin * 60 - min * 60 - sec;
-			launchCountDown.min = Math.floor(seconds / 60) || 0;
-			launchCountDown.sec = seconds % 60 || 0;
+			launchCountDown = getCountDown();
 		}, 1234);
 
 		return {

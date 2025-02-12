@@ -1,5 +1,6 @@
 use crate::handlers::cargo::*;
 use crate::handlers::news::get_news;
+use crate::handlers::redirect;
 use crate::handlers::sys_info::get_temperature;
 use crate::handlers::ws::ws_handler;
 use crate::state::AppState;
@@ -21,6 +22,8 @@ pub fn get_routes(state: AppState) -> Router {
                 )
                 .route("/news", get(get_news))
                 .route("/sys-temp", get(get_temperature))
+                .route("/render/news/{num}", get(redirect::news))
+                .route("/render/cctv", get(redirect::cctv))
                 .nest_service(
                     "/storage",
                     ServeDir::new(format!("{}/../db/storage", state.config.root_dir)),
@@ -28,6 +31,8 @@ pub fn get_routes(state: AppState) -> Router {
         )
         .route("/ws", any(ws_handler))
         .layer(TraceLayer::new_for_http())
+        .route("/zh_tw", get(redirect::app))
+        .route("/zh-tw", get(redirect::app))
         .fallback_service(ServeDir::new(format!(
             "{}/../../frontend/build",
             state.config.root_dir

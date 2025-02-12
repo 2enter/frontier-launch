@@ -42,13 +42,6 @@ impl Cargo {
             .unwrap_or_default()
     }
 
-    pub async fn get_unshipped(pool: &PgPool) -> Vec<Self> {
-        sqlx::query_as("SELECT id, created_at FROM cargo WHERE status = 'shipping'")
-            .fetch_all(pool)
-            .await
-            .unwrap_or_default()
-    }
-
     pub async fn deliver(pool: &PgPool) -> Vec<Self> {
         let target_time = Utc::now() - chrono::Duration::seconds(60);
         sqlx::query_as(

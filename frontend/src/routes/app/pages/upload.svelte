@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { getInputState, getSysState } from '@/states';
-	import { ImgBtn } from '@2enter/web-kit/components';
-	import axios from 'axios';
 	import type { CargoInput } from '@/types/model';
-	import { API_BASE_URL, postCargoImage, postCargoMetadata } from '@/api';
+	import { ImgBtn } from '@2enter/web-kit/components';
+	import { getInputState, getSysState } from '@/states';
+	import { postCargoImage, postCargoMetadata } from '@/api';
 
 	const [inputState, sysState] = [getInputState(), getSysState()];
 
@@ -24,20 +23,9 @@
 		};
 	};
 
-	const api = axios.create({
-		baseURL: API_BASE_URL
-		// headers: { 'access-control-allow-origin': '*' }
-	});
-
-	function failure(err?: any) {
-		console.error(err);
-		sysState.popError('上傳失敗');
-		sysState.processing = false;
-	}
-
-	async function send() {
-		if (!inputState.submittable) return;
-		sysState.processing = true;
+	// if error occur, return error message
+	async function process(): Promise<string | undefined> {
+		if (!inputState.submittable) return '資料不足';
 
 		// extract metadata from `inputState`
 		const metadata = inputState.requestMetadata as CargoInput;
@@ -45,31 +33,31 @@
 		// upload metadata
 		const { data: cargo } = await postCargoMetadata(metadata);
 
-		if (!cargo) {
-			failure();
-			return;
-		}
+		if (!cargo) return '資料上傳失敗';
 
 		// make form data to submit
 		const { id } = cargo;
 		const paint = await inputState.getPaint();
-		if (!paint) {
-			failure();
-			return;
-		}
+
+		if (!paint) return '圖片上傳失敗';
 
 		const fd = new FormData();
 		fd.append('id', id);
 		fd.append('file', paint);
 
+		// upload cargo image
 		const { data: result } = await postCargoImage(fd);
 
-		if (!result) {
-			failure();
-			return;
-		}
+		if (!result) return '資料處理錯誤';
 
+		// assign result to state
 		inputState.result = cargo;
+	}
+
+	async function send() {
+		sysState.processing = true;
+		const error = await process();
+		if (error) sysState.popError(error);
 		sysState.processing = false;
 	}
 </script>

@@ -70,13 +70,12 @@ pub async fn run(app_state: AppState) -> Result<(), JobSchedulerError> {
         }
     })?;
 
-    // backup database
-    let backup_database = Job::new_async("every 12 hours", {
+    let backup_database = Job::new_async("every 8 hours", {
         let app_state = app_state.clone();
         move |_, _| {
             let pool = app_state.pool.clone();
             Box::pin(async move {
-                if let Err(error) = db_backup(&pool).await {
+                if let Err(error) = db_backup(&pool, vec!["news", "cargo"], "../db/backups").await {
                     println!("Failed to backup database: {error}");
                 }
             })

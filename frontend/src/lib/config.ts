@@ -15,6 +15,12 @@ const COLORS = [
 
 type ColorName = (typeof COLORS)[number]['name'];
 
-export { COLORS };
+const DEFAULT_CRON_CONFIG = {
+	timezone: 'Asia/Taipei',
+	start: true,
+	runOnInit: true
+} as const;
+
+export { COLORS, DEFAULT_CRON_CONFIG };
 
 export type { ColorName };

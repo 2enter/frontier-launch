@@ -6,6 +6,7 @@
 	import { toFixedDigit } from '@2enter/web-kit/calc';
 	import { getTodayCargoes } from '@/api';
 	import { getLaunchCountDown } from '@/time';
+	import { DEFAULT_CRON_CONFIG } from '@/config';
 
 	let cargoes = $state<Cargo[]>([]);
 
@@ -26,13 +27,12 @@
 
 	CronJob.from({
 		cronTime: '*/20 * * * * *',
-		runOnInit: true,
 		onTick: async () => {
 			const { data } = await getTodayCargoes();
 			if (!data) return;
 			cargoes = data;
 		},
-		start: true
+		...DEFAULT_CRON_CONFIG
 	});
 </script>
 

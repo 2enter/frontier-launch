@@ -25,6 +25,7 @@ pub fn get_routes(state: AppState) -> Router {
                 .route("/sys-temp", get(get_temperature))
                 .route("/render/news/{num}", get(redirect::news))
                 .route("/render/cctv", get(redirect::cctv))
+                .route("/render/info", get(redirect::info))
                 .nest_service(
                     "/storage",
                     ServeDir::new(format!("{}/../db/storage", state.config.root_dir)),

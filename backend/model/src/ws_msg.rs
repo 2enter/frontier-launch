@@ -1,16 +1,17 @@
 use crate::enums::CargoType;
 use serde_json::json;
-use uuid::Uuid;
 
 pub struct WSMsg;
 
 impl WSMsg {
-    pub fn cargo(cargo_type: CargoType, id: Uuid, directory: String) -> String {
+    pub fn cargo(cargo_type: CargoType, id: String) -> String {
         let value = json!({
-            "type": "cargo",
-            "cargo_type": cargo_type,
-            "id": id,
-            "directory": directory,
+            "data": {
+                "type": "cargo",
+                "cargo_type": cargo_type,
+                "id": id,
+                "directory": format!("http://192.168.1.2:3000/api/storage/texture/{id}.jpg"),
+            }
         });
 
         serde_json::to_string(&value).unwrap()
@@ -18,8 +19,10 @@ impl WSMsg {
 
     pub fn launch(cargo_amount: usize) -> String {
         let value = json!({
-            "type": "launch",
-            "cargo_amount": cargo_amount,
+            "data": {
+                "type": "launch",
+                "cargo_amount": cargo_amount,
+            }
         });
 
         serde_json::to_string(&value).unwrap()
@@ -27,8 +30,10 @@ impl WSMsg {
 
     pub fn weather(is_raining: bool) -> String {
         let value = json!({
-            "type": "weather",
-            "raining": is_raining,
+            "data": {
+                "type": "weather",
+                "raining": is_raining,
+            }
         });
 
         serde_json::to_string(&value).unwrap()
@@ -36,8 +41,10 @@ impl WSMsg {
 
     pub fn population(amount: u32) -> String {
         let value = json!({
-            "type": "population",
-            "amount": amount,
+            "data": {
+                "type": "population",
+                "amount": amount,
+            }
         });
 
         serde_json::to_string(&value).unwrap()
@@ -53,8 +60,7 @@ mod tests {
     fn cargo_msg() {
         let result = WSMsg::cargo(
             CargoType::Water,
-            Uuid::parse_str("de426c3d-67b4-47c4-8648-8339b0f69c8f").unwrap(),
-            "test".into(),
+            "de426c3d-67b4-47c4-8648-8339b0f69c8f".to_string(),
         );
         assert_eq!(
             serde_json::from_str::<Value>(&result).unwrap(),

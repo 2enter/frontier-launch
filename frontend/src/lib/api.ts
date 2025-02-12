@@ -30,7 +30,20 @@ async function postCargoImage(input: FormData) {
 }
 
 async function getCargoes() {
-	return api.fetch<string[]>({ url: '/api/cargo/metadata' });
+	return api.fetch<Cargo[]>({ url: '/api/cargo/metadata' });
 }
 
-export { API_BASE_URL, apiUrl, getCargoes, getNews, getSysTemp, postCargoMetadata, postCargoImage };
+async function getTodayCargoes() {
+	return api.fetch<Cargo[]>({ url: '/api/cargo/today' });
+}
+
+export {
+	API_BASE_URL,
+	apiUrl,
+	getCargoes,
+	getNews,
+	getSysTemp,
+	getTodayCargoes,
+	postCargoMetadata,
+	postCargoImage
+};

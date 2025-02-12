@@ -1808,10 +1808,13 @@ name = "model"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "http",
+ "regex",
  "serde",
  "serde_json",
  "sqlx",
  "thirtyfour",
+ "tracing",
  "typeshare",
  "utils",
  "uuid",

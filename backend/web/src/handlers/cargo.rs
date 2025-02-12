@@ -1,5 +1,6 @@
 use crate::state::AppState;
 use axum::extract::{Json, Multipart, State};
+use axum::http::StatusCode;
 use model::cargo::*;
 use model::util::ApiResponse;
 use std::str;
@@ -46,6 +47,6 @@ pub async fn send_cargo_image(mut multipart: Multipart) -> Json<ApiResponse<Stri
             generate_texture(&id, &bytes);
             ApiResponse::new_success(id).into()
         }
-        _ => ApiResponse::new_error("nope".to_string()).into(),
+        _ => ApiResponse::new_error(StatusCode::BAD_REQUEST).into(),
     }
 }

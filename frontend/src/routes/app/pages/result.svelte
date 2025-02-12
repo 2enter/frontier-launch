@@ -6,6 +6,7 @@
 	import { onDestroy, onMount } from 'svelte';
 
 	import { ImgBtn } from '@2enter/web-kit/components';
+	import { apiUrl } from '@/api';
 
 	const [inputState, sysState] = [getInputState(), getSysState()];
 
@@ -28,9 +29,7 @@
 		inputState.reset();
 
 		const model = await loader.loadAsync(`/cargoes/${type}.glb`);
-		const texture = await textureLoader.loadAsync(
-			`http://localhost:3080/api/storage/texture/${id}.jpg`
-		);
+		const texture = await textureLoader.loadAsync(apiUrl(`/storage/texture/${id}.jpg`));
 
 		const camera = new THREE.PerspectiveCamera(
 			75,

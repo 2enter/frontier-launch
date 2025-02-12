@@ -53,7 +53,10 @@
 		// make form data to submit
 		const { id } = cargo;
 		const paint = await inputState.getPaint();
-		if (!paint) return;
+		if (!paint) {
+			failure();
+			return;
+		}
 
 		const fd = new FormData();
 		fd.append('id', id);

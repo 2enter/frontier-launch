@@ -1,6 +1,8 @@
+use axum::Json;
+use model::util::ApiResponse;
 use sysinfo::System;
 
-pub async fn get_temperature() -> String {
+pub async fn get_temperature() -> Json<ApiResponse<String>> {
     let mut sys = System::new_all();
 
     sys.refresh_all();
@@ -11,5 +13,6 @@ pub async fn get_temperature() -> String {
     let load = sys.global_cpu_usage();
 
     let temp = (used as f32 * load) / (total as f32 * 10.0);
-    format!("{:.1}", temp)
+
+    ApiResponse::new_success(format!("{:.1}", temp)).into()
 }

@@ -8,7 +8,11 @@ use uuid::Uuid;
 
 pub async fn get_cargo_ids(State(app_state): State<AppState>) -> Json<Vec<String>> {
     let result = Cargo::get_20(&app_state.pool).await;
-    Json(result.iter().map(|c| c.id.to_string()).collect())
+    result
+        .iter()
+        .map(|c| c.id.to_string())
+        .collect::<Vec<_>>()
+        .into()
 }
 
 pub async fn send_cargo_metadata(
@@ -16,7 +20,7 @@ pub async fn send_cargo_metadata(
     Json(input): Json<CargoInput>,
 ) -> Json<ApiResponse<Cargo>> {
     let result = Cargo::create(&app_state.pool, input).await;
-    Json(ApiResponse::new_success(result))
+    ApiResponse::new_success(result).into()
 }
 
 pub async fn send_cargo_image(mut multipart: Multipart) -> Json<ApiResponse<String>> {
@@ -40,8 +44,8 @@ pub async fn send_cargo_image(mut multipart: Multipart) -> Json<ApiResponse<Stri
     match (id, bytes) {
         (Some(id), Some(bytes)) => {
             generate_texture(&id, &bytes);
-            Json(ApiResponse::new_success(id))
+            ApiResponse::new_success(id).into()
         }
-        _ => Json(ApiResponse::new_error("nope".to_string())),
+        _ => ApiResponse::new_error("nope".to_string()).into(),
     }
 }

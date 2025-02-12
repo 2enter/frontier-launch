@@ -7,10 +7,8 @@ use axum::routing::{any, get, post};
 use axum::Router;
 use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
-// use tower_http::cors::CorsLayer;
 
 pub fn get_routes(state: AppState) -> Router {
-    // let cors = CorsLayer::permissive();
     Router::new()
         .nest(
             "/api",
@@ -23,11 +21,16 @@ pub fn get_routes(state: AppState) -> Router {
                 )
                 .route("/news", get(get_news))
                 .route("/sys-temp", get(get_temperature))
-                .nest_service("/storage", ServeDir::new("../db/storage")),
+                .nest_service(
+                    "/storage",
+                    ServeDir::new(format!("{}/../db/storage", state.config.root_dir)),
+                ),
         )
         .route("/ws", any(ws_handler))
         .layer(TraceLayer::new_for_http())
-        .fallback_service(ServeDir::new("../../frontend/build"))
-        // .layer(cors)
+        .fallback_service(ServeDir::new(format!(
+            "{}/../../frontend/build",
+            state.config.root_dir
+        )))
         .with_state(state)
 }

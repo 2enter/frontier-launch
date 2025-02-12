@@ -4,6 +4,7 @@ pub struct Config {
     pub wd_port: u16,
     pub port: u16,
     pub host: String,
+    pub root_dir: String,
 }
 
 impl Config {
@@ -12,6 +13,7 @@ impl Config {
         let wd_port = dotenvy::var("WD_PORT").unwrap_or("4000".to_string());
         let port = dotenvy::var("PORT").unwrap_or("3000".to_string());
         let host = dotenvy::var("HOST").unwrap_or("0.0.0.0".to_string());
+        let root_dir = dotenvy::var("CARGO_MANIFEST_DIR").unwrap_or("../../".to_string());
 
         println!("configuration initialized: {host}:{port}, db: {database_url}, wd: {wd_port}");
 
@@ -20,6 +22,7 @@ impl Config {
             port: port.parse().unwrap_or(3000),
             wd_port: wd_port.parse().unwrap_or(4000),
             host,
+            root_dir,
         }
     }
 }

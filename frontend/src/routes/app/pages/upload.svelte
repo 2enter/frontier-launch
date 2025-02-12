@@ -3,7 +3,7 @@
 	import { ImgBtn } from '@2enter/web-kit/components';
 	import axios from 'axios';
 	import type { CargoInput } from '@/types/model';
-	import { API_BASE_URL, sendCargoImage, sendCargoMetadata } from '@/api';
+	import { API_BASE_URL, postCargoImage, postCargoMetadata } from '@/api';
 
 	const [inputState, sysState] = [getInputState(), getSysState()];
 
@@ -43,7 +43,7 @@
 		const metadata = inputState.requestMetadata as CargoInput;
 
 		// upload metadata
-		const { data: cargo } = await sendCargoMetadata(metadata);
+		const { data: cargo } = await postCargoMetadata(metadata);
 
 		if (!cargo) {
 			failure();
@@ -59,7 +59,7 @@
 		fd.append('id', id);
 		fd.append('file', paint);
 
-		const { data: result } = await sendCargoImage(fd);
+		const { data: result } = await postCargoImage(fd);
 
 		if (!result) {
 			failure();

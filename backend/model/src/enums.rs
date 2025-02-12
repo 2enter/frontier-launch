@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use sqlx::FromRow;
 use typeshare::typeshare;
 
 #[typeshare]

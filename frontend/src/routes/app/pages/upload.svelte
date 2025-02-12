@@ -2,8 +2,8 @@
 	import { getInputState, getSysState } from '@/states';
 	import { ImgBtn } from '@2enter/web-kit/components';
 	import axios from 'axios';
-	import type { ApiResponse, Cargo } from '@/types/model';
-	import { API_BASE_URL } from '@/api';
+	import type { ApiResponse, Cargo, CargoInput } from '@/types/model';
+	import { API_BASE_URL, sendCargoImage, sendCargoMetadata } from '@/api';
 
 	const [inputState, sysState] = [getInputState(), getSysState()];
 
@@ -40,12 +40,10 @@
 		sysState.processing = true;
 
 		// extract metadata from `inputState`
-		const metadata = inputState.requestMetadata;
+		const metadata = inputState.requestMetadata as CargoInput;
 
 		// upload metadata
-		const { data: cargo } = await api
-			.post<ApiResponse<Cargo>>('/api/cargo/metadata', metadata)
-			.then((res) => res.data);
+		const { data: cargo } = await sendCargoMetadata(metadata);
 
 		if (!cargo) {
 			failure();
@@ -62,9 +60,11 @@
 		fd.append('file', paint);
 
 		// upload image
-		const { data: result } = await api
-			.postForm<ApiResponse<string>>('/api/cargo/image', fd)
-			.then((res) => res.data);
+		// const { data: result } = await api
+		// 	.postForm<ApiResponse<string>>('/api/cargo/image', fd)
+		// 	.then((res) => res.data);
+
+		const { data: result } = await sendCargoImage(fd);
 
 		if (!result) {
 			failure();

@@ -8,10 +8,12 @@
 	import { SpeedTester } from '@2enter/web-kit/browser';
 	import { dev } from '$app/environment';
 	import { page } from '$app/state';
-	import { apiUrl, storageUrl } from '@/api';
+	import { apiUrl, getCargoes, getSysTemp, storageUrl } from '@/api';
 
 	async function init() {
-		cargoIds = await axios.get<string[]>(apiUrl('/cargo/metadata')).then((res) => res.data);
+		const { data } = await getCargoes();
+		if (!data) return;
+		cargoIds = data;
 	}
 
 	const speedTester = new SpeedTester({
@@ -35,7 +37,11 @@
 			{
 				// update info.temperature
 				check: () => moment(timer.now).second() % 3 === 0,
-				action: async () => (info.temperature = await getTemp())
+				action: async () => {
+					const { data } = await getSysTemp();
+					if (!data) return;
+					info.temperature = data;
+				}
 			},
 			{
 				// update info.windSpeed
@@ -49,10 +55,6 @@
 			// }
 		]
 	});
-
-	async function getTemp() {
-		return await axios.get<number>(apiUrl('/sys-temp')).then((res) => res.data);
-	}
 
 	const info = $state({
 		raining: false,
@@ -136,7 +138,7 @@
 	{/if}
 	<div class="fixed bottom-[8.7vh] right-0 flex h-[16vh] w-[200vw] justify-end gap-2 pr-2">
 		{#each cargoIds as cargoId}
-			<img src={storageUrl(`/texture/${cargoId}.jpg`)} alt="" />
+			<img src={apiUrl(`/storage/texture/${cargoId}.jpg`)} alt="" />
 		{/each}
 	</div>
 

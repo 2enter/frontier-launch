@@ -1,8 +1,7 @@
 <script lang="ts">
-	import axios from 'axios';
 	import { onMount } from 'svelte';
 	import { Marquee } from '@2enter/web-kit/components';
-	import { apiUrl } from '@/api';
+	import { getNews } from '@/api';
 
 	let { data } = $props();
 	const { num } = data;
@@ -11,7 +10,8 @@
 	let title = $state('');
 
 	async function init() {
-		const titles = await axios.get<string[]>(apiUrl('/news')).then((res) => res.data);
+		const { data: titles } = await getNews();
+		if (!titles) return;
 		title = titles[num ?? 0] ?? '';
 	}
 

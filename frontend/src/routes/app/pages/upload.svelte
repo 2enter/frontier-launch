@@ -59,11 +59,6 @@
 		fd.append('id', id);
 		fd.append('file', paint);
 
-		// upload image
-		// const { data: result } = await api
-		// 	.postForm<ApiResponse<string>>('/api/cargo/image', fd)
-		// 	.then((res) => res.data);
-
 		const { data: result } = await sendCargoImage(fd);
 
 		if (!result) {

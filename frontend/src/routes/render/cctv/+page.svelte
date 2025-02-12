@@ -9,12 +9,29 @@
 	import { dev } from '$app/environment';
 	import { page } from '$app/state';
 	import { apiUrl, getCargoes, getSysTemp } from '@/api';
+	import { DEFAULT_CRON_CONFIG } from '@/config';
 
-	async function init() {
-		const { data } = await getCargoes();
-		if (!data) return;
-		cargoIds = data.map((d) => d.id);
-	}
+	const info = $state({
+		raining: false,
+		temperature: 0,
+		population: 0,
+		windSpeed: 0
+	});
+
+	let cargoIds = $state<string[]>([]);
+	let weatherBg = $state<'sun' | 'rain'>('rain');
+
+	const speedDegree = $derived.by<'slow' | 'medium' | 'fast'>(() => {
+		if (info.windSpeed > 6) return 'fast';
+		else if (info.windSpeed > 3) return 'medium';
+		else return 'slow';
+	});
+
+	const wsUrl = dev
+		? `ws://${page.url.hostname}:3000/ws`
+		: page.url.hostname.includes('2enter')
+			? `wss://${page.url.hostname}/ws`
+			: `ws://${page.url.hostname}:3000/ws`;
 
 	const speedTester = new SpeedTester({
 		configs: {
@@ -32,39 +49,29 @@
 		}
 	});
 
-	// update temperature
-	CronJob.from({
-		cronTime: '*/3 * * * *',
-		onTick: async () => {
-			const { data } = await getSysTemp();
-			if (!data) return;
-			info.temperature = data;
-		},
-		start: true,
-		runOnInit: true
-	});
+	async function init() {
+		const { data } = await getCargoes();
+		if (!data) return;
+		cargoIds = data.map((d) => d.id);
 
-	// update wind speed
-	CronJob.from({
-		cronTime: '*/10 * * * *',
-		onTick: speedTester.test
-	});
+		// update temperature
+		CronJob.from({
+			cronTime: '*/3 * * * *',
+			onTick: async () => {
+				const { data } = await getSysTemp();
+				if (!data) return;
+				info.temperature = data;
+			},
+			...DEFAULT_CRON_CONFIG
+		});
 
-	const info = $state({
-		raining: false,
-		temperature: 0,
-		population: 0,
-		windSpeed: 0
-	});
-
-	const speedDegree = $derived.by<'slow' | 'medium' | 'fast'>(() => {
-		if (info.windSpeed > 6) return 'fast';
-		else if (info.windSpeed > 3) return 'medium';
-		else return 'slow';
-	});
-
-	let cargoIds = $state<string[]>([]);
-	let weatherBg = $state<'sun' | 'rain'>('rain');
+		// update wind speed
+		CronJob.from({
+			cronTime: '*/10 * * * *',
+			onTick: () => speedTester.test(),
+			...DEFAULT_CRON_CONFIG
+		});
+	}
 
 	const previousRaining = new Previous(() => info.raining);
 
@@ -74,12 +81,6 @@
 			weatherBg = previousRaining.current ? 'sun' : 'rain';
 		}
 	});
-
-	const wsUrl = dev
-		? `ws://${page.url.hostname}:3080/ws`
-		: page.url.hostname.includes('2enter')
-			? `wss://${page.url.hostname}/ws`
-			: `ws://${page.url.hostname}:3080/ws`;
 
 	onMount(async () => {
 		await init();

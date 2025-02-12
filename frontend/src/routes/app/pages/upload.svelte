@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { CargoInput } from '@/types/model';
 	import { ImgBtn } from '@2enter/web-kit/components';
+	import { makeSubmit } from '@2enter/web-kit/browser';
 	import { getInputState, getSysState } from '@/states';
 	import { postCargoImage, postCargoMetadata } from '@/api';
 
@@ -23,49 +24,44 @@
 		};
 	};
 
-	// if error occur, return error message
-	async function process(): Promise<string | undefined> {
-		if (!inputState.submittable) return '資料不足';
+	const submit = makeSubmit({
+		state: sysState,
+		process: async () => {
+			if (!inputState.submittable) return '資料不足';
 
-		// extract metadata from `inputState`
-		const metadata = inputState.requestMetadata as CargoInput;
+			// extract metadata from `inputState`
+			const metadata = inputState.requestMetadata as CargoInput;
 
-		// upload metadata
-		const { data: cargo } = await postCargoMetadata(metadata);
+			// upload metadata
+			const { data: cargo } = await postCargoMetadata(metadata);
 
-		if (!cargo) return '資料上傳失敗';
+			if (!cargo) return '資料上傳失敗';
 
-		// make form data to submit
-		const { id } = cargo;
-		const paint = await inputState.getPaint();
+			// make form data to submit
+			const { id } = cargo;
+			const paint = await inputState.getPaint();
 
-		if (!paint) return '圖片上傳失敗';
+			if (!paint) return '圖片上傳失敗';
 
-		const fd = new FormData();
-		fd.append('id', id);
-		fd.append('file', paint);
+			const fd = new FormData();
+			fd.append('id', id);
+			fd.append('file', paint);
 
-		// upload cargo image
-		const { data: result } = await postCargoImage(fd);
+			// upload cargo image
+			const { data: result } = await postCargoImage(fd);
 
-		if (!result) return '資料處理錯誤';
+			if (!result) return '資料處理錯誤';
 
-		// assign result to state
-		inputState.result = cargo;
-	}
-
-	async function send() {
-		sysState.processing = true;
-		const error = await process();
-		if (error) sysState.popError(error);
-		sysState.processing = false;
-	}
+			// assign result to state
+			inputState.result = cargo;
+		}
+	});
 </script>
 
 {#if !inputState.result}
 	<img src={inputState.resultImgUrl} alt="" class="pointer-events-none fixed h-auto w-full" />
 	{#if !sysState.processing}
-		<ImgBtn src="/ui/buttons/upload.png" class="z-[2000]" onclick={send} />
+		<ImgBtn src="/ui/buttons/upload.png" class="z-[2000]" onclick={submit} />
 	{/if}
 {:else}
 	<img use:lightBeam class="h-[50vh] w-screen" src="/ui/animations/light_beam.webp" alt="" />

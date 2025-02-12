@@ -4,7 +4,7 @@
     "": {
       "name": "frontend",
       "devDependencies": {
-        "@2enter/web-kit": "^0.4.6",
+        "@2enter/web-kit": "^0.4.8",
         "@fontsource/dotgothic16": "^5.1.1",
         "@fontsource/fira-code": "^5.1.1",
         "@sveltejs/adapter-static": "^3.0.8",
@@ -37,7 +37,7 @@
     },
   },
   "packages": {
-    "@2enter/web-kit": ["@2enter/web-kit@0.4.6", "", { "dependencies": { "@cloudflare/speedtest": "^1.4.1" }, "peerDependencies": { "svelte": "^5.0.0" } }, "sha512-cPuZPkJUymskM6UswlWM3J2Dj8sjBrCekiQrGd+DgEAiFksoF9lPCzw70Xjf/hoie0qljoXRN9SekjuD2pvigg=="],
+    "@2enter/web-kit": ["@2enter/web-kit@0.4.8", "", { "dependencies": { "@cloudflare/speedtest": "^1.4.1" }, "peerDependencies": { "svelte": "^5.0.0" } }, "sha512-+7eiq1IFuXuv29hB+75UrD9VVYDQRnTM8UfRfDzbHjd3DdT++101nbbsTbJrFUd9h1hrTa+Dd7SaB7WAjDXQ0w=="],
 
     "@alloc/quick-lru": ["@alloc/quick-lru@5.2.0", "", {}, "sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw=="],
 

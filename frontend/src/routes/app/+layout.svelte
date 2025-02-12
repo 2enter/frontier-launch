@@ -3,9 +3,9 @@
 	import { fade } from 'svelte/transition';
 	import { navigating } from '$app/state';
 	import { dev } from '$app/environment';
+	import { FullscreenChecker } from '@2enter/web-kit/components';
 
 	import { getSysState } from '@/states';
-	import { FullscreenChecker } from '@2enter/web-kit/components';
 	import { getCountDown } from '@/time';
 
 	const sysState = getSysState();

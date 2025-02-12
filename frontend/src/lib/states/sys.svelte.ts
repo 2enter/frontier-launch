@@ -5,6 +5,7 @@ class SysState {
 	errorMessage = $state<string | null>(null);
 	pageNum = $state<PageNum>(0);
 	dialog = $state<HTMLDialogElement>();
+
 	bg = $derived.by(() => {
 		switch (this.pageNum) {
 			case 0:
@@ -19,6 +20,14 @@ class SysState {
 		this.errorMessage = message;
 		if (!this.dialog) return;
 		this.dialog.showModal();
+	};
+
+	startProcess = () => {
+		this.processing = true;
+	};
+
+	endProcess = () => {
+		this.processing = false;
 	};
 
 	closeError = () => {

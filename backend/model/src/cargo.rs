@@ -29,7 +29,17 @@ impl Cargo {
         sqlx::query_as("SELECT * FROM cargo ORDER BY created_at DESC LIMIT 20")
             .fetch_all(pool)
             .await
-            .unwrap()
+            .unwrap_or_default()
+    }
+
+    pub async fn get_today(pool: &PgPool) -> Vec<Self> {
+        let today_start = Utc::now().date_naive();
+        println!("{today_start}");
+        sqlx::query_as("SELECT * FROM cargo WHERE created_at > $1")
+            .bind(today_start)
+            .fetch_all(pool)
+            .await
+            .unwrap_or_default()
     }
 
     pub async fn get_unshipped(pool: &PgPool) -> Vec<Self> {

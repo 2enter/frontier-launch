@@ -17,7 +17,8 @@ pub fn get_routes(state: AppState) -> Router {
                 .nest(
                     "/cargo",
                     Router::new()
-                        .route("/metadata", post(send_cargo_metadata).get(get_cargo_ids))
+                        .route("/metadata", post(send_cargo_metadata).get(get_cargoes))
+                        .route("/today", get(get_today_cargoes))
                         .route("/image", post(send_cargo_image)),
                 )
                 .route("/news", get(get_news))

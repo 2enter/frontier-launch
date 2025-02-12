@@ -7,13 +7,12 @@ use std::str;
 use utils::texture::generate_texture;
 use uuid::Uuid;
 
-pub async fn get_cargo_ids(State(app_state): State<AppState>) -> Json<Vec<String>> {
-    let result = Cargo::get_20(&app_state.pool).await;
-    result
-        .iter()
-        .map(|c| c.id.to_string())
-        .collect::<Vec<_>>()
-        .into()
+pub async fn get_cargoes(State(app_state): State<AppState>) -> Json<ApiResponse<Vec<Cargo>>> {
+    ApiResponse::new_success(Cargo::get_20(&app_state.pool).await).into()
+}
+
+pub async fn get_today_cargoes(State(app_state): State<AppState>) -> Json<ApiResponse<Vec<Cargo>>> {
+    ApiResponse::new_success(Cargo::get_today(&app_state.pool).await).into()
 }
 
 pub async fn send_cargo_metadata(

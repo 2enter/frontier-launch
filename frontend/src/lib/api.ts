@@ -1,7 +1,8 @@
+import type { Cargo, CargoInput } from '@/types/model';
+
 import axios from 'axios';
 import { dev } from '$app/environment';
 import { PUBLIC_API_BASE_URL } from '$env/static/public';
-import type { Cargo, CargoInput } from '@/types/model';
 import { Api } from '@2enter/web-kit/runtime';
 
 const API_BASE_URL = dev ? PUBLIC_API_BASE_URL : '';

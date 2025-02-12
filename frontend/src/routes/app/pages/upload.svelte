@@ -2,7 +2,7 @@
 	import { getInputState, getSysState } from '@/states';
 	import { ImgBtn } from '@2enter/web-kit/components';
 	import axios from 'axios';
-	import type { ApiResponse, Cargo, CargoInput } from '@/types/model';
+	import type { CargoInput } from '@/types/model';
 	import { API_BASE_URL, sendCargoImage, sendCargoMetadata } from '@/api';
 
 	const [inputState, sysState] = [getInputState(), getSysState()];

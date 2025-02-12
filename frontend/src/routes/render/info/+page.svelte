@@ -1,0 +1,52 @@
+<script lang="ts">
+	import type { Cargo } from '@/types/model';
+
+	import moment from 'moment';
+	import { Marquee } from '@2enter/web-kit/components';
+	import { Timer } from '@2enter/web-kit/runtime';
+	import { toFixedDigit } from '@2enter/web-kit/calc';
+	import { getTodayCargoes } from '@/api';
+	import { getCountDown } from '@/time';
+
+	let cargoes = $state<Cargo[]>([]);
+
+	const text = $derived.by<string>(() => {
+		if (!cargoes.length) return '';
+		const countDown = getCountDown();
+		const { min, sec } = countDown;
+
+		const info = ['launch', 'deliver', 'shipping'].map(
+			(status) => cargoes.filter((cargo) => cargo.status === status).length
+		);
+
+		return (
+			`距離下次火箭發射還有${toFixedDigit(min)}分${toFixedDigit(sec)}秒，今日貨物狀況：` +
+			`已發射${info[0] ?? 0}件、待發射${info[1] ?? 0}件、集運中${info[2] ?? 0}件~~~`
+		);
+	});
+
+	const timer: Timer = new Timer({
+		triggers: [
+			{
+				check: () => moment(timer.duration).second() % 10 === 0,
+				action: async () => {
+					const { data } = await getTodayCargoes();
+					if (!data) return;
+					cargoes = data;
+				}
+			}
+		]
+	});
+</script>
+
+<svelte:head>
+	<title>Console Info</title>
+</svelte:head>
+
+{#if cargoes.length}
+	<div
+		class="full-screen font-dot-gothic flex items-center whitespace-nowrap bg-rose-800 text-[85vh] tracking-widest text-amber-500"
+	>
+		<Marquee {text} timeout={500} />
+	</div>
+{/if}k

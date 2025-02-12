@@ -6,7 +6,7 @@
 	import { FullscreenChecker } from '@2enter/web-kit/components';
 
 	import { getSysState } from '@/states';
-	import { getCountDown } from '@/time';
+	import { getLaunchCountDown } from '@/time';
 
 	const sysState = getSysState();
 
@@ -23,7 +23,7 @@
 		}
 
 		const interval = setInterval(() => {
-			launchCountDown = getCountDown();
+			launchCountDown = getLaunchCountDown();
 		}, 1234);
 
 		return {

@@ -6,13 +6,13 @@
 	import { Timer } from '@2enter/web-kit/runtime';
 	import { toFixedDigit } from '@2enter/web-kit/calc';
 	import { getTodayCargoes } from '@/api';
-	import { getCountDown } from '@/time';
+	import { getLaunchCountDown } from '@/time';
 
 	let cargoes = $state<Cargo[]>([]);
 
 	const text = $derived.by<string>(() => {
 		if (!cargoes.length) return '';
-		const countDown = getCountDown();
+		const countDown = getLaunchCountDown();
 		const { min, sec } = countDown;
 
 		const info = ['launch', 'deliver', 'shipping'].map(

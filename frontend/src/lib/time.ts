@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-function getCountDown() {
+function getLaunchCountDown() {
 	const now = moment();
 	const [sec, min] = [now.seconds(), now.minutes()];
 	const targetMin = Math.ceil(min / 10) * 10;
@@ -11,4 +11,4 @@ function getCountDown() {
 	};
 }
 
-export { getCountDown };
+export { getLaunchCountDown };

@@ -1,7 +1,3 @@
-use crate::routes::get_routes;
-use sqlx::postgres::PgPoolOptions;
-use tokio::net::TcpListener;
-
 mod config;
 mod cron;
 mod handlers;
@@ -11,8 +7,11 @@ mod weather;
 mod webdriver;
 
 use crate::handlers::ws::ws_broadcast;
+use crate::routes::get_routes;
 use config::Config;
+use sqlx::postgres::PgPoolOptions;
 use state::AppState;
+use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -25,12 +24,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pool = PgPoolOptions::new().connect(&config.database_url).await?;
     let addr = format!("{}:{}", &config.host, &config.port);
 
-    let listener = TcpListener::bind(&addr).await?;
     let app_state = AppState::new(pool, config);
-
     let app = get_routes(app_state.clone());
 
-    cron::init(app_state.clone()).await?;
+    let listener = TcpListener::bind(&addr).await?;
+
+    cron::init(app_state).await?;
     axum::serve(listener, app.into_make_service()).await?;
 
     Ok(())

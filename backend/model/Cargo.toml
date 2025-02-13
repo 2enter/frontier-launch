@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 serde = { version = "1.0.217", features = ["derive"] }
 http = "1.2.0"
-tracing = "0.1.41"
 serde_json = "1.0.138"
 typeshare = "1.0.4"
 uuid = { version = "1.12.1", features = ["serde"] }

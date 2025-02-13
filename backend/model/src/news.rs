@@ -6,7 +6,7 @@ use thirtyfour::prelude::*;
 use utils::runtime::rand_sleep;
 use uuid::Uuid;
 
-const URL: &'static str =
+const URL: &str =
     "https://news.google.com/search?q=%E5%A4%AA%E7%A9%BA&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant";
 
 #[derive(Debug, Serialize, FromRow, Deserialize)]
@@ -25,10 +25,6 @@ impl News {
                 .fetch_all(pool)
                 .await
                 .unwrap_or_default();
-
-        if news.is_empty() {
-            return vec![];
-        }
 
         // sort news by hype
         news.sort_by(|a, b| b.hype.cmp(&a.hype));

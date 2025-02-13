@@ -28,5 +28,5 @@ async fn handle_socket(socket: WebSocket, state: AppState) {
 }
 
 pub fn ws_broadcast(msg: String, sender: &Sender<String>) {
-    let _ = sender.send(format!("{msg}"));
+    let _ = sender.send(msg);
 }

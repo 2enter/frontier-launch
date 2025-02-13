@@ -1814,7 +1814,6 @@ dependencies = [
  "serde_json",
  "sqlx",
  "thirtyfour",
- "tracing",
  "typeshare",
  "utils",
  "uuid",

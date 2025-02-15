@@ -1,3 +1,5 @@
+use project_root::get_project_root;
+
 #[derive(Clone, Debug)]
 pub struct Config {
     pub database_url: String,
@@ -13,7 +15,7 @@ impl Config {
         let wd_port = dotenvy::var("WD_PORT").unwrap_or("4000".to_string());
         let port = dotenvy::var("PORT").unwrap_or("3000".to_string());
         let host = dotenvy::var("HOST").unwrap_or("0.0.0.0".to_string());
-        let root_dir = dotenvy::var("CARGO_MANIFEST_DIR").unwrap_or("../web".to_string());
+        let root_dir = get_project_root().unwrap().to_str().unwrap().to_string();
 
         println!("configuration initialized: {host}:{port}, db: {database_url}, wd: {wd_port}, root: {root_dir}");
 

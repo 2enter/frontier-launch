@@ -8,6 +8,7 @@ axum = { version = "0.8.1", features = ["multipart", "ws"] }
 axum_typed_multipart = "0.15.1"
 dotenvy = "0.15.7"
 futures = "0.3.31"
+project-root = "0.2.2"
 reqwest = "0.12.12"
 scraper = "0.22.0"
 sqlx = { version = "0.8.3", features = ["uuid", "postgres", "runtime-tokio", "tls-native-tls", "chrono"] }

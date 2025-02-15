@@ -1,9 +1,10 @@
-import type { Cargo, CargoInput } from '@/types/model';
+import type { Cargo, CargoInput, CargoRequest } from '@/types/model';
 
 import axios from 'axios';
 import { dev } from '$app/environment';
 import { PUBLIC_API_BASE_URL } from '$env/static/public';
 import { Api } from '@2enter/web-kit/runtime';
+import { objToFD } from '@2enter/web-kit/calc';
 
 const API_BASE_URL = dev ? PUBLIC_API_BASE_URL : '';
 
@@ -21,29 +22,17 @@ async function getSysTemp() {
 	return api.fetch<number>({ url: '/api/sys-temp' });
 }
 
-async function postCargoMetadata(input: CargoInput) {
-	return api.fetch<Cargo>({ url: '/api/cargo/metadata', method: 'post', data: input });
-}
-
-async function postCargoImage(input: FormData) {
-	return api.fetch<string>({ url: '/api/cargo/image', method: 'post', data: input });
+async function postCargo(input: CargoRequest) {
+	const fd = objToFD({ ...input });
+	return api.fetch<Cargo>({ url: '/api/cargo', method: 'post', data: fd });
 }
 
 async function getCargoes() {
-	return api.fetch<Cargo[]>({ url: '/api/cargo/metadata' });
+	return api.fetch<Cargo[]>({ url: '/api/cargo' });
 }
 
 async function getTodayCargoes() {
 	return api.fetch<Cargo[]>({ url: '/api/cargo/today' });
 }
 
-export {
-	API_BASE_URL,
-	apiUrl,
-	getCargoes,
-	getNews,
-	getSysTemp,
-	getTodayCargoes,
-	postCargoMetadata,
-	postCargoImage
-};
+export { API_BASE_URL, apiUrl, getCargoes, getNews, getSysTemp, getTodayCargoes, postCargo };

@@ -12,11 +12,19 @@ use config::Config;
 use sqlx::postgres::PgPoolOptions;
 use state::AppState;
 use tokio::net::TcpListener;
+use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::DEBUG)
+        // .with_max_level(tracing::Level::DEBUG)
+        .with_env_filter(
+            EnvFilter::from_default_env()
+                .add_directive("web=debug".parse().unwrap())
+                .add_directive("sqlx=debug".parse().unwrap())
+                .add_directive("tokio_cron_scheduler=debug".parse().unwrap())
+                .add_directive("tower_http=debug".parse().unwrap()),
+        )
         .init();
 
     let config = Config::init();

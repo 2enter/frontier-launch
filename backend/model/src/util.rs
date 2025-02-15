@@ -1,3 +1,6 @@
+use axum::response::{IntoResponse, Response};
+use axum::Json;
+use axum_typed_multipart::TypedMultipartError;
 use http::StatusCode;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
@@ -8,7 +11,10 @@ pub struct IdOnly {
 }
 
 #[derive(Serialize, Debug)]
-pub struct ApiResponse<T> {
+pub struct ApiResponse<T>
+where
+    T: Serialize,
+{
     data: Option<T>,
     error: Option<ApiError>,
 }
@@ -40,6 +46,11 @@ impl ApiError {
         }
     }
 
+    pub fn from_u16(code_number: u16) -> Self {
+        let code = StatusCode::from_u16(code_number).unwrap();
+        Self::new(code)
+    }
+
     pub fn new_with_details(code: StatusCode, details: String, hint: Option<String>) -> Self {
         Self {
             code: code.as_u16(),
@@ -50,7 +61,10 @@ impl ApiError {
     }
 }
 
-impl<T> ApiResponse<T> {
+impl<T> ApiResponse<T>
+where
+    T: Serialize,
+{
     pub fn new_success(data: T) -> Self {
         Self {
             data: Some(data),
@@ -70,5 +84,27 @@ impl<T> ApiResponse<T> {
             data: None,
             error: Some(ApiError::new_with_details(code, details, hint)),
         }
+    }
+}
+
+impl IntoResponse for ApiError {
+    fn into_response(self) -> Response {
+        let status_code = StatusCode::from_u16(self.code).unwrap();
+        Json(ApiResponse::<String>::new_error(status_code)).into_response()
+    }
+}
+
+impl From<TypedMultipartError> for ApiError {
+    fn from(err: TypedMultipartError) -> Self {
+        ApiError::new_with_details(StatusCode::BAD_REQUEST, err.to_string(), None)
+    }
+}
+
+impl<T> IntoResponse for ApiResponse<T>
+where
+    T: Serialize,
+{
+    fn into_response(self) -> Response {
+        Json(self).into_response()
     }
 }

@@ -17,9 +17,8 @@ pub fn get_routes(state: AppState) -> Router {
                 .nest(
                     "/cargo",
                     Router::new()
-                        .route("/metadata", post(send_cargo_metadata).get(get_cargoes))
                         .route("/today", get(get_today_cargoes))
-                        .route("/image", post(send_cargo_image)),
+                        .route("/", post(send_cargo).get(get_cargoes)),
                 )
                 .route("/news", get(get_news))
                 .route("/sys-temp", get(get_temperature))
@@ -37,7 +36,6 @@ pub fn get_routes(state: AppState) -> Router {
         )
         .route("/ws", any(ws_handler))
         .layer(TraceLayer::new_for_http())
-        .route("/zh_tw", get(redirect::app))
         .route("/zh-tw", get(redirect::app))
         .fallback_service(ServeDir::new(format!(
             "{}/../../frontend/build",

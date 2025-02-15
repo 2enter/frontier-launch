@@ -1,8 +1,10 @@
+use axum_typed_multipart::TryFromField;
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
 #[typeshare]
-#[derive(Serialize, Deserialize, Debug, sqlx::Type)]
+#[derive(Serialize, Deserialize, Debug, sqlx::Type, TryFromField, Clone)]
+#[try_from_field(rename_all = "lowercase")]
 #[serde(rename_all = "lowercase")]
 #[sqlx(rename_all = "lowercase", type_name = "cargo_type")]
 pub enum CargoType {
@@ -12,20 +14,6 @@ pub enum CargoType {
     Star,
     Cake,
     Diamond,
-}
-
-impl From<&str> for CargoType {
-    fn from(value: &str) -> CargoType {
-        match value {
-            "water" => CargoType::Water,
-            "spring" => CargoType::Spring,
-            "stair" => CargoType::Stair,
-            "star" => CargoType::Star,
-            "cake" => CargoType::Cake,
-            "diamond" => CargoType::Diamond,
-            _ => CargoType::Water,
-        }
-    }
 }
 
 #[typeshare]

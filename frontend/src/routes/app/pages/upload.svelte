@@ -3,7 +3,7 @@
 	import { ImgBtn } from '@2enter/web-kit/components';
 	import { makeSubmit } from '@2enter/web-kit/browser';
 	import { getInputState, getSysState } from '@/states';
-	import { postCargoImage, postCargoMetadata } from '@/api';
+	import { postCargo } from '@/api';
 
 	const [inputState, sysState] = [getInputState(), getSysState()];
 
@@ -29,32 +29,20 @@
 		process: async () => {
 			if (!inputState.submittable) return '資料不足';
 
+			const file = await inputState.getPaint();
+			if (!file) return '圖片上傳失敗';
+
 			// extract metadata from `inputState`
-			const metadata = inputState.requestMetadata as CargoInput;
-
-			// upload metadata
-			const { data: cargo } = await postCargoMetadata(metadata);
-
-			if (!cargo) return '資料上傳失敗';
-
-			// make form data to submit
-			const { id } = cargo;
-			const paint = await inputState.getPaint();
-
-			if (!paint) return '圖片上傳失敗';
-
-			const fd = new FormData();
-			fd.append('id', id);
-			fd.append('file', paint);
-			fd.append('type', cargo.type);
+			const { type: cargoType, paintTime } = inputState.requestMetadata as CargoInput;
+			const input = { paintTime, cargoType, file };
 
 			// upload cargo image
-			const { data: result } = await postCargoImage(fd);
+			const { data: result } = await postCargo(input);
 
 			if (!result) return '資料處理錯誤';
 
 			// assign result to state
-			inputState.result = cargo;
+			inputState.result = result;
 		}
 	});
 </script>

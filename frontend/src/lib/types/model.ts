@@ -29,3 +29,8 @@ export interface CargoInput {
 	paintTime: number;
 	type: CargoType;
 }
+
+export interface CargoRequest {
+	cargoType: CargoType;
+	paintTime: number;
+}

@@ -1,6 +1,6 @@
 use crate::enums::{CargoStatus, CargoType};
 use axum::body::Bytes;
-use axum_typed_multipart::{FieldData, TryFromMultipart};
+use axum_typed_multipart::TryFromMultipart;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::{query_as, FromRow, PgPool, Postgres};
@@ -34,7 +34,7 @@ pub struct CargoRequest {
     pub cargo_type: CargoType,
     pub paint_time: f32,
     #[serde(skip)]
-    pub file: FieldData<Bytes>,
+    pub file: Bytes,
 }
 
 impl Cargo {

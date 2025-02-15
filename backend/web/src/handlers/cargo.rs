@@ -37,7 +37,7 @@ pub async fn send_cargo(
 
     let id = &cargo.id.to_string();
 
-    generate_texture(id, &file.contents);
+    generate_texture(id, &file);
 
     let Config { host, port, .. } = app_state.config;
 

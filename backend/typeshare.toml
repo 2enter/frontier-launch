@@ -1,4 +1,4 @@
 [typescript.type_mappings]
 "Uuid" = "string"
 "DateTime" = "Date"
-"FieldData" = "Blob"
+"Bytes" = "Blob"

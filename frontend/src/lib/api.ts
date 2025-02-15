@@ -1,4 +1,4 @@
-import type { Cargo, CargoInput, CargoRequest } from '@/types/model';
+import type { Cargo, CargoRequest } from '@/types/model';
 
 import axios from 'axios';
 import { dev } from '$app/environment';

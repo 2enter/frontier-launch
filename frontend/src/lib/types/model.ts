@@ -3,18 +3,18 @@
 */
 
 export enum CargoType {
-	Water = 'water',
-	Spring = 'spring',
-	Stair = 'stair',
-	Star = 'star',
-	Cake = 'cake',
-	Diamond = 'diamond'
+	Water = "water",
+	Spring = "spring",
+	Stair = "stair",
+	Star = "star",
+	Cake = "cake",
+	Diamond = "diamond",
 }
 
 export enum CargoStatus {
-	Shipping = 'shipping',
-	Delivered = 'delivered',
-	Launched = 'launched'
+	Shipping = "shipping",
+	Delivered = "delivered",
+	Launched = "launched",
 }
 
 export interface Cargo {
@@ -33,4 +33,6 @@ export interface CargoInput {
 export interface CargoRequest {
 	cargoType: CargoType;
 	paintTime: number;
+	file: Blob;
 }
+

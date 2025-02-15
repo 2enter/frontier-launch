@@ -33,7 +33,7 @@ pub struct CargoInput {
 pub struct CargoRequest {
     pub cargo_type: CargoType,
     pub paint_time: f32,
-    #[serde(skip)]
+    #[serde(skip)] // comment this line before generating typeshare types
     pub file: Bytes,
 }
 

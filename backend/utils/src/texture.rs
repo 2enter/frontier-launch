@@ -3,10 +3,10 @@ use image::{GenericImageView, ImageBuffer, ImageFormat, Rgb};
 
 const BG_COLOR: Rgb<u8> = Rgb([255, 222, 193]);
 
-pub fn generate_texture(id: &str, bytes: &Bytes) {
+pub fn generate_texture(id: &str, bytes: &Bytes, path: &str) {
     let mut img = image::load_from_memory(bytes).unwrap();
 
-    img.save(format!("../db/storage/paint/{id}.png")).unwrap();
+    img.save(format!("{path}/paint/{id}.png")).unwrap();
 
     let (w, h) = img.dimensions();
     img = img.crop(0, (h - w) / 2, w, w);
@@ -27,6 +27,6 @@ pub fn generate_texture(id: &str, bytes: &Bytes) {
         }
     }
 
-    bg.save_with_format(format!("../db/storage/texture/{id}.jpg"), ImageFormat::Jpeg)
+    bg.save_with_format(format!("{path}/texture/{id}.jpg"), ImageFormat::Jpeg)
         .expect("Failed to save texture image");
 }

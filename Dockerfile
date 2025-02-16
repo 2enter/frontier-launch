@@ -31,6 +31,11 @@ COPY --from=builder /bin/backend ./bin/backend
 COPY --from=site_builder /app/build ./frontend/build
 RUN mkdir /app/backend/db/storage/texture -p
 RUN mkdir /app/backend/db/storage/paint -p
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    ca-certificates curl \
+    && rm -rf /var/lib/apt/lists/*
+
 EXPOSE 3000
 RUN chmod +x ./bin/backend
 CMD ["./bin/backend"]

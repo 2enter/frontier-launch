@@ -9,11 +9,11 @@ axum_typed_multipart = "0.15.1"
 futures = "0.3.31"
 openssl = { version = "0.10.71", features = ["vendored"] } # This is more docker environment
 project-root = "0.2.2"
-reqwest = "0.12.12"
+reqwest = { version = "0.12.12" }
 scraper = "0.22.0"
 sqlx = { version = "0.8.3", features = ["uuid", "postgres", "runtime-tokio", "tls-native-tls", "chrono"] }
 sysinfo = "0.33.1"
-thirtyfour = "0.35.0"
+thirtyfour = { version = "0.35.0" }
 tokio = { version = "1.43.0", features = ["full"] }
 tokio-cron-scheduler = { version = "0.13.0", features = ["english"] }
 tower-http = { version = "0.6.2", features = ["fs", "trace"] }

@@ -1,12 +1,13 @@
 services:
   backend:
     build:
-      context: ./backend
+      context: .
     container_name: backend
     volumes:
-      - ./backend/db/storage:${BACKEND_ROOT}/db/storage
-      - ./backend/db/backups:${BACKEND_ROOT}/db/backups
+      - ./backend/db/storage:${APP_ROOT}/backend/db/storage
+      - ./backend/db/backups:${APP_ROOT}/backend/db/backups
       - ./frontend/build:/app/frontend/build
+    restart: always
     env_file:
       - .env
     ports:
@@ -15,18 +16,6 @@ services:
     depends_on:
       - db
       - chromedriver
-
-  frontend:
-    build:
-      context: ./frontend
-    container_name: frontend
-    depends_on:
-      - backend
-    volumes:
-      - ./frontend/build:/app/build
-    environment:
-      PUBLIC_API_BASE_URL: "http://${BACKEND_HOST}:${BACKEND_PORT}"
-      PUBLIC_FA_KIT_URL: ${PUBLIC_FA_KIT_URL}
 
   db:
     image: postgres:17

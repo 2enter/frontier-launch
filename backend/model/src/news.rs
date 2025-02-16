@@ -61,14 +61,12 @@ impl News {
 
         rand_sleep(3000).await;
         // update existed news
-        let existed_titles: Vec<String> = sqlx::query!(
-            "UPDATE news SET hype = hype + 1, updated_at = now() WHERE title IN (SELECT unnest($1::VARCHAR[])) RETURNING *",
-            &titles
+        let existed_titles: Vec<String> = sqlx::query_scalar(
+            "UPDATE news SET hype = hype + 1, updated_at = NOW() WHERE title IN (SELECT UNNEST($1::VARCHAR[])) RETURNING title"
         )
+            .bind(&titles)
             .fetch_all(pool)
-            .await?
-            .into_iter()
-            .map(|news| news.title).collect();
+            .await?;
 
         // filter out existed news
         let new_titles: Vec<String> = titles
@@ -78,13 +76,11 @@ impl News {
 
         // insert new news
         for title in new_titles {
-            let result = sqlx::query!(
-                "INSERT INTO news (title) VALUES ($1) RETURNING title",
-                title
-            )
-            .fetch_one(pool)
-            .await?
-            .title;
+            let result: String =
+                sqlx::query_scalar("INSERT INTO news (title) VALUES ($1) RETURNING title")
+                    .bind(title)
+                    .fetch_one(pool)
+                    .await?;
             println!("inserted news: {result}");
         }
 

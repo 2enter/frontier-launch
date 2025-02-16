@@ -33,9 +33,10 @@ impl Config {
 
 fn get_root_dir() -> String {
     let path = get_project_root();
-    if let Ok(path) = path {
+    if let Ok(mut path) = path {
+        path.pop();
         path.to_str().unwrap().to_string()
     } else {
-        get_env("BACKEND_ROOT")
+        get_env("APP_ROOT")
     }
 }

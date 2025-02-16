@@ -31,14 +31,14 @@ pub fn get_routes(state: AppState) -> Router {
                 )
                 .nest_service(
                     "/storage",
-                    ServeDir::new(format!("{}/db/storage", state.config.root_dir)),
+                    ServeDir::new(format!("{}/backend/db/storage", state.config.root_dir)),
                 ),
         )
         .route("/ws", any(ws_handler))
         .layer(TraceLayer::new_for_http())
         .route("/zh-tw", get(redirect::app))
         .fallback_service(ServeDir::new(format!(
-            "{}/../frontend/build",
+            "{}/frontend/build",
             state.config.root_dir
         )))
         .with_state(state)

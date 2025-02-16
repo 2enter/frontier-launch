@@ -6,8 +6,8 @@ edition = "2021"
 [dependencies]
 axum = { version = "0.8.1", features = ["multipart", "ws"] }
 axum_typed_multipart = "0.15.1"
-dotenvy = "0.15.7"
 futures = "0.3.31"
+openssl = { version = "0.10.71", features = ["vendored"] } # This is more docker environment
 project-root = "0.2.2"
 reqwest = "0.12.12"
 scraper = "0.22.0"

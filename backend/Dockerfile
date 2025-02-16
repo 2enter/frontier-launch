@@ -13,11 +13,9 @@ RUN --mount=type=bind,source=src,target=src \
     --mount=type=bind,source=Cargo.lock,target=Cargo.lock \
     --mount=type=cache,target=/app/target/ \
     --mount=type=cache,target=/usr/local/cargo/registry/ \
-    <<EOF
-set -e
-cargo build --release
-cp ./target/release/backend /bin/backend
-EOF
+    cargo build --release \
+    && cp ./target/release/backend /bin/backend
+
 
 # Stage 2: Create a minimal runtime image
 FROM debian:bookworm-slim

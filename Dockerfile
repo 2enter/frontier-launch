@@ -22,19 +22,25 @@ RUN --mount=type=bind,source=./backend/src,target=src \
 FROM oven/bun:latest AS site_builder
 WORKDIR /app
 COPY ./frontend .
-RUN bun install && bun run build;
+RUN bun install && bun run build
 
 # Stage 2: Create a minimal runtime image
 FROM debian:bookworm-slim
 WORKDIR /app
-COPY --from=builder /bin/backend ./bin/backend
-COPY --from=site_builder /app/build ./frontend/build
+
 RUN mkdir /app/backend/db/storage/texture -p
 RUN mkdir /app/backend/db/storage/paint -p
-# Install runtime dependencies
-RUN apt-get update && apt-get install -y \
-    ca-certificates curl \
-    && rm -rf /var/lib/apt/lists/*
+RUN mkdir /app/frontend/build -p
+
+COPY --from=builder /bin/backend ./bin/backend
+COPY --from=site_builder /app/build ./frontend/build
+
+Install runtime dependencies
+RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean \
+    && apt-get update \
+    && apt-get install -y ca-certificates curl
 
 EXPOSE 3000
 RUN chmod +x ./bin/backend

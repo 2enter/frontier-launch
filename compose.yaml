@@ -6,7 +6,7 @@ services:
     volumes:
       - ./backend/db/storage:${APP_ROOT}/backend/db/storage
       - ./backend/db/backups:${APP_ROOT}/backend/db/backups
-      - ./frontend/build:/app/frontend/build
+      # - ./frontend/build:/app/frontend/build
     restart: always
     env_file:
       - .env

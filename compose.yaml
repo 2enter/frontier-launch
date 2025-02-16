@@ -1,0 +1,51 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    volumes:
+      - ./backend/db/storage:${BACKEND_ROOT}/db/storage
+      - ./backend/db/backups:${BACKEND_ROOT}/db/backups
+      - ./frontend/build:/app/frontend/build
+    env_file:
+      - .env
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    network_mode: host
+    depends_on:
+      - db
+      - chromedriver
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    volumes:
+      - ./frontend/build:/app/build
+    environment:
+      PUBLIC_API_BASE_URL: "http://${BACKEND_HOST}:${BACKEND_PORT}"
+      PUBLIC_FA_KIT_URL: ${PUBLIC_FA_KIT_URL}
+
+  db:
+    image: postgres:17
+    container_name: db
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - db_data:/var/lib/postgresql/data
+
+  chromedriver:
+    image: spryker/chromedriver
+    init: true
+    container_name: chromedriver
+    expose:
+      - "${CHROMEDRIVER_PORT}"
+    restart: unless-stopped
+
+volumes:
+  db_data:
+

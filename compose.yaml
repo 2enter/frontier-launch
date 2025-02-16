@@ -20,6 +20,8 @@ services:
     build:
       context: ./frontend
     container_name: frontend
+    depends_on:
+      - backend
     volumes:
       - ./frontend/build:/app/build
     environment:

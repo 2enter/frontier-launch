@@ -2,6 +2,7 @@
 *.zip
 *.fbx
 *.png
+!static/favicon.png
 
 node_modules
 

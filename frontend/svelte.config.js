@@ -15,6 +15,7 @@ const config = {
 		prerender: {
 			handleHttpError: (info) => {
 				console.table(info);
+				throw new Error(info.message);
 			}
 		},
 		alias: {

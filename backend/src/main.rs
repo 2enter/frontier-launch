@@ -20,7 +20,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         // .with_max_level(tracing::Level::DEBUG)
         .with_env_filter(
             EnvFilter::from_default_env()
-                .add_directive("web=debug".parse().unwrap())
+                .add_directive("backend=debug".parse().unwrap())
                 .add_directive("sqlx=debug".parse().unwrap())
                 .add_directive("tokio_cron_scheduler=debug".parse().unwrap())
                 .add_directive("tower_http=debug".parse().unwrap()),

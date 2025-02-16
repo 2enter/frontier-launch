@@ -35,7 +35,7 @@ RUN mkdir /app/frontend/build -p
 COPY --from=builder /bin/backend ./bin/backend
 COPY --from=site_builder /app/build ./frontend/build
 
-Install runtime dependencies
+# Install runtime dependencies
 RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     rm -f /etc/apt/apt.conf.d/docker-clean \

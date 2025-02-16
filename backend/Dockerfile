@@ -25,7 +25,6 @@ WORKDIR /app
 COPY --from=builder /bin/backend ./bin/backend
 RUN mkdir /app/backend/db/storage/texture -p
 RUN mkdir /app/backend/db/storage/paint -p
-RUN ls
 EXPOSE 3000
 RUN chmod +x ./bin/backend
 CMD ["./bin/backend"]

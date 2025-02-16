@@ -33,7 +33,7 @@ impl News {
     }
 
     pub async fn fetch_remote(pool: &PgPool, driver: &WebDriver) -> Result<(), Box<dyn Error>> {
-        println!("fetching news...");
+        tracing::info!("fetching news...");
         driver.goto(URL).await?;
         // scroll down
         rand_sleep(3000).await;
@@ -47,7 +47,7 @@ impl News {
 
         // get sections
         let sections = driver.find_all(By::Css("c-wiz .PO9Zff")).await?;
-        println!("{sections:?}");
+        tracing::debug!("got {} sections", sections.len());
 
         let mut titles = Vec::new();
 
@@ -55,7 +55,6 @@ impl News {
         // get titles in sections
         for section in sections {
             let title = section.find(By::Css(".JtKRv")).await?.text().await?;
-            println!("fetched news: {title}");
             titles.push(title);
         }
 
@@ -81,7 +80,7 @@ impl News {
                     .bind(title)
                     .fetch_one(pool)
                     .await?;
-            println!("inserted news: {result}");
+            tracing::debug!("news inserted: {result}");
         }
 
         Ok(())

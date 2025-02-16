@@ -1,4 +1,5 @@
 use project_root::get_project_root;
+use utils::env::get_env;
 
 #[derive(Clone, Debug)]
 pub struct Config {
@@ -11,11 +12,12 @@ pub struct Config {
 
 impl Config {
     pub fn init() -> Self {
-        let database_url = dotenvy::var("DATABASE_URL").expect("DATABASE_URL must be set");
-        let wd_port = dotenvy::var("WD_PORT").unwrap_or("4000".to_string());
-        let port = dotenvy::var("PORT").unwrap_or("3000".to_string());
-        let host = dotenvy::var("HOST").unwrap_or("0.0.0.0".to_string());
-        let root_dir = get_project_root().unwrap().to_str().unwrap().to_string();
+        let database_url = get_env("DATABASE_URL");
+        let wd_port = get_env("CHROMEDRIVER_PORT");
+        let port = get_env("BACKEND_PORT");
+        // let host = get_env("BACKEND_HOST");
+        let host = "0.0.0.0".to_string();
+        let root_dir = get_root_dir();
 
         println!("configuration initialized: {host}:{port}, db: {database_url}, wd: {wd_port}, root: {root_dir}");
 
@@ -26,5 +28,14 @@ impl Config {
             host,
             root_dir,
         }
+    }
+}
+
+fn get_root_dir() -> String {
+    let path = get_project_root();
+    if let Ok(path) = path {
+        path.to_str().unwrap().to_string()
+    } else {
+        get_env("BACKEND_ROOT")
     }
 }

@@ -49,7 +49,7 @@
 </div>
 
 <div class="center-content fixed bottom-3 z-[1000] w-full">
-	<img src="/ui/texts/2enter.png" class="h-10" alt="" />
+	<img src="/ui/texts/2enter.webp" class="h-10" alt="" />
 </div>
 
 <div

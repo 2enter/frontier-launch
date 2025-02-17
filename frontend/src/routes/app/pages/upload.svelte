@@ -50,7 +50,7 @@
 {#if !inputState.result}
 	<img src={inputState.resultImgUrl} alt="" class="pointer-events-none fixed h-auto w-full" />
 	{#if !sysState.processing}
-		<ImgBtn src="/ui/buttons/upload.png" class="z-[2000]" onclick={submit} />
+		<ImgBtn src="/ui/buttons/upload.webp" class="z-[2000]" onclick={submit} />
 	{/if}
 {:else}
 	<img use:lightBeam class="h-[50vh] w-screen" src="/ui/animations/light_beam.webp" alt="" />

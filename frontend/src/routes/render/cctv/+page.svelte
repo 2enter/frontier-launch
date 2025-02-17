@@ -10,7 +10,7 @@
 	import { toFixedDigit } from '@2enter/web-kit/calc';
 	import { SpeedTester } from '@2enter/web-kit/browser';
 
-	import { apiUrl, getCargoes, getSysTemp } from '@/api';
+	import { getCargoes, getSysTemp } from '@/api';
 	import { DEFAULT_CRON_CONFIG } from '@/config';
 
 	const info = $state({
@@ -131,7 +131,7 @@
 	</div>
 	<div class="fixed bottom-[8.7vh] right-0 flex h-[16vh] w-[200vw] justify-end gap-2 pr-2">
 		{#each cargoIds as cargoId}
-			<img src={apiUrl(`/storage/texture/${cargoId}.jpg`)} alt="" />
+			<img src="/api/storage/texture/{cargoId}.jpg" alt="" />
 		{/each}
 	</div>
 

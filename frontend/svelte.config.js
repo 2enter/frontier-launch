@@ -18,6 +18,9 @@ const config = {
 				throw new Error(info.message);
 			}
 		},
+		env: {
+			dir: '../'
+		},
 		alias: {
 			'@/*': './src/lib/*'
 		}

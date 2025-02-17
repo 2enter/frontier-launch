@@ -39,7 +39,9 @@ async fn handle_socket(socket: WebSocket, state: AppState) {
         tracing::info!("received websocket message: {msg:?}");
         if let Message::Text(text) = msg {
             if let Ok(value) = serde_json::from_str::<PopulationWsMsg>(text.to_string().as_str()) {
-                ws_broadcast(WSMsg::population(value.data.amount), &state.ws_sender);
+                if value.data.r#type == "population" {
+                    ws_broadcast(WSMsg::population(value.data.amount), &state.ws_sender);
+                }
             }
         }
     }

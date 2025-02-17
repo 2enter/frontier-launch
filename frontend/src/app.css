@@ -1,51 +1,11 @@
 @import '@fontsource/fira-code';
-@import '@fontsource/dotgothic16';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* {
-	@apply touch-pan-x touch-pan-y overflow-hidden !important;
-	-webkit-user-select: none; /* Safari */
-	-ms-user-select: none; /* IE 10 and IE 11 */
-	user-select: none; /* Standard syntax */
-}
-
 @layer base {
 	html {
 		font-family: 'Fira Code', monospace;
-	}
-}
-
-@layer components {
-	.full-screen {
-		width: 100vw;
-		height: 100vh;
-		position: fixed;
-		top: 0;
-		left: 0;
-	}
-
-	.center-content {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.round-btn {
-		@apply center-content size-12 rounded-full text-xl;
-	}
-
-	input {
-		@apply bg-white text-center text-black;
-	}
-
-	.font-dot-gothic {
-		font-family: 'DotGothic16', sans-serif;
-	}
-
-	.btn {
-		@apply bg-white center-content text-xl;
 	}
 }

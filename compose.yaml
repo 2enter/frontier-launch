@@ -1,12 +1,12 @@
 services:
   backend:
+    container_name: backend
+    restart: always
     build:
       context: .
-    container_name: backend
     volumes:
       - ./backend/db/storage:${APP_ROOT}/backend/db/storage
       - ./backend/db/backups:${APP_ROOT}/backend/db/backups
-    restart: always
     env_file:
       - .env
     ports:
@@ -30,11 +30,11 @@ services:
 
   chromedriver:
     image: spryker/chromedriver
-    init: true
     container_name: chromedriver
+    restart: always
+    init: true
     ports:
       - "${CHROMEDRIVER_PORT}:4444"
-    restart: always
 
 volumes:
   db_data:

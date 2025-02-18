@@ -18,7 +18,7 @@ fn get_period(job_name: &str) -> Option<&'static str> {
         "backup_database" => Some("every 8 hours"),
         "test_short" => Some("every 20 seconds"),
         "test_long" => Some("every 1 minutes"),
-        _ => None,
+        _ => panic!("Unknown job name"),
     }
 }
 

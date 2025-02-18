@@ -14,7 +14,7 @@ fn get_period(job_name: &str) -> Option<&'static str> {
         "launch_rocket" => Some("every 10 minutes"),
         "ship_cargoes" => Some("every 60 seconds"),
         "send_weather" => Some("every 5 minutes"),
-        "fetch_remote_news" => Some("every 2 hours"),
+        "fetch_remote_news" => Some("every 6 hours"),
         "backup_database" => Some("every 8 hours"),
         "test_short" => Some("every 20 seconds"),
         "test_long" => Some("every 1 minutes"),

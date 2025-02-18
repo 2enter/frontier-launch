@@ -1,0 +1,10 @@
+Dockerfile
+.dockerignore
+
+backend/db/storage
+backend/db/backups
+backend/target
+
+frontend/.svelte-kit
+frontend/build
+

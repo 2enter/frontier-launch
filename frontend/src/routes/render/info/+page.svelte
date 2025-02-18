@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Cargo } from '@/types/model';
+	import { type Cargo, CargoStatus } from '@/types/model';
 
 	import { CronJob } from 'cron';
 	import { Marquee } from '@2enter/web-kit/components';
@@ -15,7 +15,7 @@
 		const countDown = getLaunchCountDown();
 		const { min, sec } = countDown;
 
-		const info = ['launch', 'deliver', 'shipping'].map(
+		const info = Object.values(CargoStatus).map(
 			(status) => cargoes.filter((cargo) => cargo.status === status).length
 		);
 
@@ -30,6 +30,7 @@
 		onTick: async () => {
 			const { data } = await getTodayCargoes();
 			if (!data) return;
+			console.log(data);
 			cargoes = data;
 		},
 		...DEFAULT_CRON_CONFIG
@@ -41,7 +42,7 @@
 </svelte:head>
 
 <div
-	class="full-screen font-dot-gothic flex items-center whitespace-nowrap bg-rose-800 text-[85vh] tracking-widest text-amber-500"
+	class="flex items-center whitespace-nowrap bg-rose-800 text-[85vh] tracking-widest text-amber-500 full-screen font-dot-gothic"
 >
 	{#if cargoes.length}
 		<Marquee {text} timeout={500} />

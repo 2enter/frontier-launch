@@ -26,7 +26,7 @@
 	});
 
 	CronJob.from({
-		cronTime: '*/20 * * * * *',
+		cronTime: '*/6 * * * * *',
 		onTick: async () => {
 			const { data } = await getTodayCargoes();
 			if (!data) return;

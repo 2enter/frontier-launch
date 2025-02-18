@@ -6,8 +6,8 @@ function getLaunchCountDown() {
 	const targetMin = Math.ceil(min / 10) * 10;
 	const seconds = targetMin * 60 - min * 60 - sec;
 	return {
-		min: Math.floor(seconds / 60) || 0,
-		sec: seconds % 60 || 0
+		min: Math.abs(Math.floor(seconds / 60)) || 0,
+		sec: Math.abs(seconds % 60) || 0
 	};
 }
 

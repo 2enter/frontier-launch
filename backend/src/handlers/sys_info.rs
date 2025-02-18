@@ -12,7 +12,9 @@ pub async fn get_temperature() -> Json<ApiResponse<String>> {
     let used = sys.used_memory();
     let load = sys.global_cpu_usage();
 
-    let temp = (used as f32 * load) / (total as f32 * 10.0);
+    tracing::info!("cpu load: {load}, mem used: {used}, mem total: {total}");
+
+    let temp = (used as f32 * load) / (total as f32);
 
     ApiResponse::new_success(format!("{:.1}", temp)).into()
 }

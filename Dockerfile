@@ -22,6 +22,7 @@ RUN --mount=type=bind,source=./backend/src,target=src \
 FROM oven/bun:latest AS site_builder
 WORKDIR /app
 COPY ./frontend .
+COPY ./.env /
 RUN bun install && bun run build
 
 # Stage 2: Create a minimal runtime image

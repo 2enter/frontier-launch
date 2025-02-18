@@ -80,7 +80,7 @@ pub async fn init(app_state: AppState) -> Result<(), JobSchedulerError> {
             Box::pin(async move {
                 tracing::info!("initializing webdriver");
                 let webdriver = get_webdriver(app_state.config.wd_port).await;
-                rand_sleep(3000).await;
+                rand_sleep(30000).await;
                 tracing::info!("Fetching remote news");
                 if let Ok(driver) = webdriver {
                     if let Err(err) = News::fetch_remote(&pool, &driver).await {

@@ -63,7 +63,7 @@
 	async function init() {
 		const { data } = await getCargoes();
 		if (!data) return;
-		cargoIds = data.map((d) => d.id);
+		cargoIds = data.map((d) => d.id).toReversed();
 
 		// update temperature
 		CronJob.from({
@@ -123,7 +123,7 @@
 </svelte:head>
 
 <div
-	class="full-screen bg-contain bg-center bg-no-repeat"
+	class="bg-contain bg-center bg-no-repeat full-screen"
 	style:background-image="url(/ui/layouts/tv_bg.webp)"
 >
 	<div class="fixed right-0 top-0 p-8 text-7xl font-bold tracking-wider">
@@ -135,7 +135,7 @@
 		{/each}
 	</div>
 
-	<div class="info-value center-content left-[68vw] top-[5vh] gap-4">
+	<div class="info-value left-[68vw] top-[5vh] gap-4 center-content">
 		<i class="fa-solid fa-alien-8bit"></i>
 		{info.population}
 	</div>

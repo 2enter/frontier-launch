@@ -48,5 +48,6 @@ async fn handle_socket(socket: WebSocket, state: AppState) {
 }
 
 pub fn ws_broadcast(msg: String, sender: &Sender<String>) {
+    tracing::info!("broadcasting websocket message: {msg:?}");
     let _ = sender.send(msg);
 }

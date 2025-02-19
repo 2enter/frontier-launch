@@ -30,7 +30,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = Config::init();
 
     let pool = PgPoolOptions::new().connect(&config.database_url).await?;
-    let addr = format!("{}:{}", &config.host, &config.port);
+    let addr = format!("{}:{}", "0.0.0.0", &config.port);
 
     let app_state = AppState::new(pool, config);
     let app = get_routes(app_state.clone());

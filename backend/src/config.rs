@@ -15,8 +15,7 @@ impl Config {
         let database_url = get_env("DATABASE_URL");
         let wd_port = get_env("CHROMEDRIVER_PORT");
         let port = get_env("BACKEND_PORT");
-        // let host = get_env("BACKEND_HOST");
-        let host = "0.0.0.0".to_string();
+        let host = get_env("BACKEND_HOST");
         let root_dir = get_root_dir();
 
         println!("configuration initialized: {host}:{port}, db: {database_url}, wd: {wd_port}, root: {root_dir}");

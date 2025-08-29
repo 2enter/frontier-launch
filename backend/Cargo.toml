@@ -23,6 +23,9 @@ tracing = "0.1.41"
 tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
 utils = { path = "./utils" }
 model = { path = "./model" }
+rustls = { version = "0.23.31", features = ["ring"] }
+axum-extra = "0.10.1"
+axum-server = { version = "0.7.2", features = ["tls-rustls"] }
 
 [workspace]
 members = ["utils", "model", "."]

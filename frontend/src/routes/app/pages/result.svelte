@@ -72,9 +72,9 @@
 	});
 </script>
 
-<div bind:this={threeDom} class="full-screen z-[1000]"></div>
+<div bind:this={threeDom} class="z-[1000] full-screen"></div>
 
-<div class="full-screen flex flex-col justify-between px-12 py-40">
+<div class="flex flex-col justify-between px-12 py-40 full-screen">
 	<img src="/ui/texts/upload_success.webp" alt="" />
 	<img src="/ui/texts/head_up.webp" alt="" />
 </div>
@@ -83,7 +83,6 @@
 	class="fixed bottom-12 z-[3000] w-56"
 	src="/ui/buttons/restart.webp"
 	onclick={() => {
-		inputState.reset();
-		sysState.routeTo(0);
+		window.location.reload();
 	}}
 />

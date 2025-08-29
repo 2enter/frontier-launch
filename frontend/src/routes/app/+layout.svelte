@@ -3,7 +3,6 @@
 	import { fade } from 'svelte/transition';
 	import { navigating } from '$app/state';
 	import { dev } from '$app/environment';
-	import { FullscreenChecker } from '@2enter/web-kit/components';
 
 	import { getSysState } from '@/states';
 	import { getLaunchCountDown } from '@/time';
@@ -26,15 +25,37 @@
 			launchCountDown = getLaunchCountDown();
 		}, 1234);
 
+		setInterval(() => {
+			detectSWUpdate();
+		}, 20000);
+
 		return {
 			destroy() {
 				clearInterval(interval);
 			}
 		};
 	});
+
+	async function detectSWUpdate() {
+		const registration = await navigator.serviceWorker.ready;
+
+		registration.addEventListener('updatefound', () => {
+			const newSW = registration.installing;
+
+			newSW?.addEventListener('statechange', () => {
+				if (newSW.state === 'installed') {
+					if (confirm('New update available! Reload to update?')) {
+						newSW.postMessage({ type: 'SKIP_WAITING' });
+
+						window.location.reload();
+					}
+				}
+			});
+		});
+	}
 </script>
 
-<div class="center-content fixed top-1 z-[1000] w-full *:h-8">
+<div class="fixed top-1 z-[1000] w-full center-content *:h-8">
 	{#if launchCountDown}
 		<img src="/ui/launch_time/distance.webp" alt="" />
 		{#each launchCountDown.min.toString() as digit}
@@ -48,18 +69,16 @@
 	{/if}
 </div>
 
-<div class="center-content fixed bottom-3 z-[1000] w-full">
+<div class="fixed bottom-3 z-[1000] w-full center-content">
 	<img src="/ui/texts/2enter.webp" class="h-10" alt="" />
 </div>
 
 <div
-	class="full-screen center-content bg-cover bg-center bg-no-repeat"
+	class="bg-cover bg-center bg-no-repeat full-screen center-content"
 	style:background-image="url({sysState.bg})"
 >
 	{@render children()}
 </div>
-
-<FullscreenChecker />
 
 <dialog bind:this={sysState.dialog} class="modal modal-middle">
 	<div class="modal-box">
@@ -74,7 +93,7 @@
 </dialog>
 
 {#if sysState.processing || navigating.to}
-	<div transition:fade class="full-screen center-content z-[100000] bg-black/10 backdrop-blur-sm">
+	<div transition:fade class="z-[100000] bg-black/10 backdrop-blur-sm full-screen center-content">
 		<i class="fa-solid fa-loader fa-duotone animate-spin text-8xl"></i>
 	</div>
 {/if}

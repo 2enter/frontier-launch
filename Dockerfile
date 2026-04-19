@@ -26,7 +26,7 @@ COPY ./.env /
 RUN bun install && bun run build
 
 # Stage 2: Create a minimal runtime image
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 WORKDIR /app
 
 RUN mkdir /app/backend/db/storage/texture -p
